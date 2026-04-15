@@ -1,0 +1,161 @@
+﻿<Window x:Class="Manitas_WPF_Admin.Views.Main.MainDashboard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Manitas Admin" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Background="{StaticResource BrushAmbient}"
+        WindowStyle="None" AllowsTransparency="True">
+
+    <Border Background="{StaticResource BrushAmbient}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ══════════════ SIDEBAR ══════════════ -->
+            <Border Grid.Column="0" Background="{StaticResource BrushSidebarBg}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Marca / Logotipo -->
+                    <Border Grid.Row="0" Padding="22,28,22,22" 
+                            BorderBrush="#2A3245" BorderThickness="0,0,0,1">
+                        <StackPanel>
+                            <Image Source="https://tu-web-unach.com/logo-manitas.png" 
+                                   Height="32" HorizontalAlignment="Left"
+                                   RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Text="PANEL ADMINISTRATIVO" 
+                                       FontSize="9" FontWeight="SemiBold" 
+                                       Foreground="#4A5568"
+                                       Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sección de navegación -->
+                    <StackPanel Grid.Row="2" Margin="12,18,12,0">
+                        <TextBlock Text="PRINCIPAL" FontSize="9" FontWeight="SemiBold" 
+                                   Foreground="#4A5568"
+                                   Margin="14,0,0,8"/>
+                        <Button x:Name="BtnDashboard" Style="{StaticResource BtnGhostActive}" 
+                                Margin="0,2" Click="BtnDashboard_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Path Data="M2,9 L9,2 L16,9 L16,16 L11,16 L11,11 L7,11 L7,16 L2,16 Z" 
+                                          Fill="White" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="13"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnManitas" Style="{StaticResource BtnGhost}" 
+                                Margin="0,2" Click="BtnManitas_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Path Data="M10,5 A3,3 0 1,1 4,5 A3,3 0 1,1 10,5 M1,15 C1,11 3,9 7,9 C11,9 13,11 13,15" 
+                                          Stroke="{StaticResource BrushSidebarText}" StrokeThickness="1.2" 
+                                          Fill="Transparent" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="Gestión de Manitas" VerticalAlignment="Center" FontSize="13"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BtnServicios" Style="{StaticResource BtnGhost}" Margin="0,2">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Path Data="M8,1 L10,6 L15,6 L11,9 L13,14 L8,11 L3,14 L5,9 L1,6 L6,6 Z" 
+                                          Stroke="{StaticResource BrushSidebarText}" StrokeThickness="1" 
+                                          Fill="Transparent" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="Servicios Activos" VerticalAlignment="Center" FontSize="13"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock Text="SISTEMA" FontSize="9" FontWeight="SemiBold" 
+                                   Foreground="#4A5568"
+                                   Margin="14,20,0,8"/>
+                        <Button x:Name="BtnUsuarios" Style="{StaticResource BtnGhost}" Margin="0,2">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Path Data="M1,14 C1,10 4,8 8,8 C12,8 15,10 15,14 M8,7 A3.5,3.5 0 1,0 8,0 A3.5,3.5 0 0,0 8,7" 
+                                          Stroke="{StaticResource BrushSidebarText}" StrokeThickness="1.2" 
+                                          Fill="Transparent" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="Usuarios Sistema" VerticalAlignment="Center" FontSize="13"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Usuario logueado -->
+                    <Border Grid.Row="3" Padding="14,14" 
+                            BorderBrush="#2A3245" BorderThickness="0,1,0,0">
+                        <Grid Cursor="Hand" MouseLeftButtonUp="BtnLogout_Click">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Width="36" Height="36" CornerRadius="18" 
+                                    Background="{StaticResource BrushAction}" ClipToBounds="True">
+                                <Image Source="https://i.pravatar.cc/150?u=misael" Stretch="UniformToFill"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtNombreAdminSidebar" Text="Misael" 
+                                           FontWeight="SemiBold" FontSize="13" Foreground="White"/>
+                                <TextBlock x:Name="TxtRolAdmin" Text="Super Admin" 
+                                           FontSize="11" Foreground="{StaticResource BrushSidebarText}"/>
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="2" Text="→" FontSize="14" 
+                                       Foreground="#4A5568" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ══════════════ ÁREA PRINCIPAL ══════════════ -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Topbar -->
+                <Border Grid.Row="0" Background="{StaticResource BrushWork}" 
+                        BorderBrush="{StaticResource BrushDivider}" BorderThickness="0,0,0,1"
+                        Padding="32,0">
+                    <Grid Height="60">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtNombreAdmin" Text="Buenos días, Misael" 
+                                       Style="{StaticResource TextH2}"/>
+                            <TextBlock x:Name="TxtModuloActual" Text="Panel de Control Principal" 
+                                       Style="{StaticResource TextMuted}" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Center"
+                                Background="{StaticResource BrushAmbient}" CornerRadius="6" 
+                                Width="260" Height="36" 
+                                BorderBrush="{StaticResource BrushDivider}" BorderThickness="1">
+                            <Grid Margin="12,0">
+                                <TextBlock Text="Buscar..." VerticalAlignment="Center" 
+                                           Foreground="#CBD5E1" FontSize="13"
+                                           IsHitTestVisible="False"/>
+                                <TextBox x:Name="TxtSearch" Background="Transparent" 
+                                         BorderThickness="0" VerticalContentAlignment="Center"
+                                         FontSize="13"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Frame x:Name="MainFrame" Grid.Row="1" Margin="28,24,28,28" 
+                       NavigationUIVisibility="Hidden"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

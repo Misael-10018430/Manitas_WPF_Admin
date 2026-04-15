@@ -1,0 +1,3093 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Manitas_DBPilotoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="calificaciones_manitas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cliente_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="puntualidad" Type="smallint" Nullable="false" />
+          <Property Name="calidad" Type="smallint" Nullable="false" />
+          <Property Name="limpieza" Type="smallint" Nullable="false" />
+          <Property Name="trato" Type="smallint" Nullable="false" />
+          <Property Name="precio_justo" Type="smallint" Nullable="false" />
+          <Property Name="es_negativa" Type="bit" Nullable="false" />
+          <Property Name="comentario" Type="nvarchar(max)" />
+          <Property Name="fecha" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="cargos_comision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ciclo_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="mano_obra_base" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="porcentaje_aplicado" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="monto_comision" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="fecha_cargo" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ciclos_comision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fecha_inicio" Type="date" Nullable="false" />
+          <Property Name="fecha_corte" Type="date" Nullable="false" />
+          <Property Name="fecha_limite_pago" Type="date" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="total_acumulado" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="notificacion_corte_enviada" Type="bit" Nullable="false" />
+          <Property Name="notificacion_aviso_enviada" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="colonias">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="codigo_postal" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="municipio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ciudad" Type="varchar" MaxLength="100" />
+          <Property Name="zona_postal" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="configuracion_sistema">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="clave" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="valor" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="editable" Type="bit" Nullable="false" />
+          <Property Name="modificado_por_id" Type="uniqueidentifier" />
+          <Property Name="fecha_modificacion" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="controles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="modulo" Type="varchar" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="conversaciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cliente_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" />
+          <Property Name="estado" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="fecha_inicio" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_cierre" Type="datetime2" Precision="7" />
+          <Property Name="primer_mensaje_descripcion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="cotizaciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="numero_ronda" Type="smallint" Nullable="false" />
+          <Property Name="total_mano_obra" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="total_materiales" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="sesiones_estimadas" Type="smallint" />
+          <Property Name="tiempo_estimado_texto" Type="varchar" MaxLength="200" />
+          <Property Name="estado" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fecha_envio" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_respuesta" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="diagnosticos">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fecha_propuesta" Type="date" Nullable="false" />
+          <Property Name="hora_propuesta" Type="time" Precision="7" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fecha_confirmacion" Type="datetime2" Precision="7" />
+          <Property Name="recordatorio_24h_enviado" Type="bit" Nullable="false" />
+          <Property Name="recordatorio_1h_enviado" Type="bit" Nullable="false" />
+          <Property Name="confirmacion_asistencia_manitas" Type="bit" />
+          <Property Name="inasistencia_reportada_por" Type="varchar" MaxLength="10" />
+          <Property Name="fecha_inasistencia" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="direcciones_cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="usuario_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="colonia_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="calle" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="numero_ext" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="numero_int" Type="varchar" MaxLength="20" />
+          <Property Name="referencias" Type="nvarchar(max)" />
+          <Property Name="etiqueta" Type="varchar" MaxLength="100" />
+          <Property Name="activa" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="disputas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cliente_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="agente_id" Type="uniqueidentifier" />
+          <Property Name="motivo_cliente" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="resolucion" Type="varchar" MaxLength="20" />
+          <Property Name="justificacion_agente" Type="nvarchar(max)" />
+          <Property Name="nota_advertencia_manitas" Type="nvarchar(max)" />
+          <Property Name="fecha_apertura" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_resolucion" Type="datetime2" Precision="7" />
+          <Property Name="sla_limite" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="fotos_contacto_inicial">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="conversacion_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="fecha_subida" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="fotos_galeria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="total_reportes" Type="smallint" Nullable="false" />
+          <Property Name="fecha_subida" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_retiro" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="fotos_sesion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="sesion_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="fecha_subida" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="identidades_bloqueadas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="255" />
+          <Property Name="ine_hash" Type="varchar" MaxLength="255" />
+          <Property Name="motivo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="fecha_bloqueo" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="manitas_servicios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="perfil_manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tipo_servicio_id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="manitas_zonas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="perfil_manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="zona_id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mensajes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="conversacion_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="remitente_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="contenido" Type="nvarchar(max)" />
+          <Property Name="archivo_url" Type="varchar" MaxLength="500" />
+          <Property Name="fecha_envio" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="leido" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="notificaciones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="usuario_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tipo_evento" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="urgencia" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="canal" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="destinatario_correo" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="asunto" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="cuerpo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="intentos" Type="smallint" Nullable="false" />
+          <Property Name="fecha_programada" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_envio" Type="datetime2" Precision="7" />
+          <Property Name="reenviada_por_admin_id" Type="uniqueidentifier" />
+          <Property Name="fecha_reenvio" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="pagos_comision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ciclo_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="monto" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="clabe_origen" Type="char" MaxLength="18" />
+          <Property Name="metodo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="detectado_automaticamente" Type="bit" Nullable="false" />
+          <Property Name="registrado_por_admin_id" Type="uniqueidentifier" />
+          <Property Name="fecha_pago" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_registro" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="partidas_cotizacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cotizacion_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="monto" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="perfiles_clientes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="usuario_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="inasistencias_consecutivas" Type="smallint" Nullable="false" />
+          <Property Name="suspensiones_en_6_meses" Type="smallint" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fecha_reactivacion" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="perfiles_manitas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="usuario_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="apodo" Type="varchar" MaxLength="100" />
+          <Property Name="descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="anios_experiencia" Type="smallint" />
+          <Property Name="disponibilidad_texto" Type="varchar" MaxLength="200" />
+          <Property Name="foto_perfil_url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ine_frente_url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ine_reverso_url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="comprobante_url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="motivo_rechazo" Type="nvarchar(max)" />
+          <Property Name="servicios_completados_total" Type="int" Nullable="false" />
+          <Property Name="calificaciones_neg_consecutivas" Type="smallint" Nullable="false" />
+          <Property Name="terminos_calidad_aceptados" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reportes_galeria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="foto_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="reportado_por_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="motivo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="fecha_reporte" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ignorado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol_controles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="rol_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="control_id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="descripcion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="servicios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="cliente_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="manitas_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="tipo_servicio_id" Type="uniqueidentifier" />
+          <Property Name="zona_id" Type="uniqueidentifier" />
+          <Property Name="direccion_id" Type="uniqueidentifier" />
+          <Property Name="conversacion_id" Type="uniqueidentifier" />
+          <Property Name="estado" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="motivo_cierre" Type="varchar" MaxLength="30" />
+          <Property Name="fecha_inicio" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_cierre" Type="datetime2" Precision="7" />
+          <Property Name="autocierre_programado" Type="datetime2" Precision="7" />
+          <Property Name="cancelado_por" Type="varchar" MaxLength="10" />
+          <Property Name="motivo_cancelacion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="sesiones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="servicio_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="numero_sesion" Type="smallint" Nullable="false" />
+          <Property Name="fecha_programada" Type="date" Nullable="false" />
+          <Property Name="hora_programada" Type="time" Precision="7" Nullable="false" />
+          <Property Name="estado" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="ocurrio" Type="bit" />
+          <Property Name="bitacora_texto" Type="nvarchar" MaxLength="512" />
+          <Property Name="fecha_completada" Type="datetime2" Precision="7" />
+          <Property Name="inasistencia_reportada_por" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="suspensiones">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="usuario_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="rol_afectado" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="tipo" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="motivo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="fecha_inicio" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="fecha_fin" Type="datetime2" Precision="7" />
+          <Property Name="reactivacion_automatica" Type="bit" Nullable="false" />
+          <Property Name="reactivado" Type="bit" Nullable="false" />
+          <Property Name="aplicada_por_admin_id" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="tipos_servicio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usuario_roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="usuario_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="rol_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+          <Property Name="fecha_asignacion" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="contrasena_hash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre_completo" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="correo_verificado" Type="bit" Nullable="false" />
+          <Property Name="activo" Type="bit" Nullable="false" />
+          <Property Name="fecha_registro" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="terminos_aceptados" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="zonas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="80" Nullable="false" />
+          <Property Name="ciudad" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="activa" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_calificaciones_cliente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="calificaciones_manitas" Type="Self.calificaciones_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="calificaciones_manitas">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calificaciones_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="calificaciones_manitas" Type="Self.calificaciones_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="calificaciones_manitas">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calificaciones_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="1" />
+          <End Role="calificaciones_manitas" Type="Self.calificaciones_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="calificaciones_manitas">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cargos_ciclo">
+          <End Role="ciclos_comision" Type="Self.ciclos_comision" Multiplicity="1" />
+          <End Role="cargos_comision" Type="Self.cargos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciclos_comision">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cargos_comision">
+              <PropertyRef Name="ciclo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cargos_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="1" />
+          <End Role="cargos_comision" Type="Self.cargos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cargos_comision">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ciclos_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="ciclos_comision" Type="Self.ciclos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ciclos_comision">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_configuracion_admin">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="configuracion_sistema" Type="Self.configuracion_sistema" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="configuracion_sistema">
+              <PropertyRef Name="modificado_por_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_conversaciones_cliente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="conversaciones" Type="Self.conversaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="conversaciones">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_conversaciones_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="conversaciones" Type="Self.conversaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="conversaciones">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_conversaciones_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="0..1" />
+          <End Role="conversaciones" Type="Self.conversaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="conversaciones">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cotizaciones_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="1" />
+          <End Role="cotizaciones" Type="Self.cotizaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cotizaciones">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_diagnosticos_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="1" />
+          <End Role="diagnosticos" Type="Self.diagnosticos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="diagnosticos">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_direcciones_cliente_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="direcciones_cliente" Type="Self.direcciones_cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="direcciones_cliente">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_direcciones_colonia">
+          <End Role="colonias" Type="Self.colonias" Multiplicity="1" />
+          <End Role="direcciones_cliente" Type="Self.direcciones_cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="colonias">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="direcciones_cliente">
+              <PropertyRef Name="colonia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_agente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="disputas" Type="Self.disputas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="agente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_cliente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="disputas" Type="Self.disputas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="disputas" Type="Self.disputas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="1" />
+          <End Role="disputas" Type="Self.disputas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fotos_contacto_conversacion">
+          <End Role="conversaciones" Type="Self.conversaciones" Multiplicity="1" />
+          <End Role="fotos_contacto_inicial" Type="Self.fotos_contacto_inicial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="conversaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fotos_contacto_inicial">
+              <PropertyRef Name="conversacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fotos_galeria_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="fotos_galeria" Type="Self.fotos_galeria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fotos_galeria">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fotos_sesion_sesion">
+          <End Role="sesiones" Type="Self.sesiones" Multiplicity="1" />
+          <End Role="fotos_sesion" Type="Self.fotos_sesion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sesiones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fotos_sesion">
+              <PropertyRef Name="sesion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_servicios_perfil">
+          <End Role="perfiles_manitas" Type="Self.perfiles_manitas" Multiplicity="1" />
+          <End Role="manitas_servicios" Type="Self.manitas_servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="perfiles_manitas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_servicios">
+              <PropertyRef Name="perfil_manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_servicios_tipo">
+          <End Role="tipos_servicio" Type="Self.tipos_servicio" Multiplicity="1" />
+          <End Role="manitas_servicios" Type="Self.manitas_servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipos_servicio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_servicios">
+              <PropertyRef Name="tipo_servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_zonas_perfil">
+          <End Role="perfiles_manitas" Type="Self.perfiles_manitas" Multiplicity="1" />
+          <End Role="manitas_zonas" Type="Self.manitas_zonas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="perfiles_manitas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_zonas">
+              <PropertyRef Name="perfil_manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_zonas_zona">
+          <End Role="zonas" Type="Self.zonas" Multiplicity="1" />
+          <End Role="manitas_zonas" Type="Self.manitas_zonas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zonas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_zonas">
+              <PropertyRef Name="zona_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mensajes_conversacion">
+          <End Role="conversaciones" Type="Self.conversaciones" Multiplicity="1" />
+          <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="conversaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="conversacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mensajes_remitente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="mensajes" Type="Self.mensajes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="remitente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notificaciones_admin">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="notificaciones" Type="Self.notificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notificaciones">
+              <PropertyRef Name="reenviada_por_admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notificaciones_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="notificaciones" Type="Self.notificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notificaciones">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pagos_admin">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="pagos_comision" Type="Self.pagos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pagos_comision">
+              <PropertyRef Name="registrado_por_admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pagos_ciclo">
+          <End Role="ciclos_comision" Type="Self.ciclos_comision" Multiplicity="1" />
+          <End Role="pagos_comision" Type="Self.pagos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciclos_comision">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pagos_comision">
+              <PropertyRef Name="ciclo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pagos_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="pagos_comision" Type="Self.pagos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pagos_comision">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_partidas_cotizacion_cotizacion">
+          <End Role="cotizaciones" Type="Self.cotizaciones" Multiplicity="1" />
+          <End Role="partidas_cotizacion" Type="Self.partidas_cotizacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cotizaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="partidas_cotizacion">
+              <PropertyRef Name="cotizacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_perfiles_clientes_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="perfiles_clientes" Type="Self.perfiles_clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="perfiles_clientes">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_perfiles_manitas_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="perfiles_manitas" Type="Self.perfiles_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="perfiles_manitas">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reportes_foto">
+          <End Role="fotos_galeria" Type="Self.fotos_galeria" Multiplicity="1" />
+          <End Role="reportes_galeria" Type="Self.reportes_galeria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fotos_galeria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reportes_galeria">
+              <PropertyRef Name="foto_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reportes_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="reportes_galeria" Type="Self.reportes_galeria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reportes_galeria">
+              <PropertyRef Name="reportado_por_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_controles_control">
+          <End Role="controles" Type="Self.controles" Multiplicity="1" />
+          <End Role="rol_controles" Type="Self.rol_controles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="controles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_controles">
+              <PropertyRef Name="control_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_controles_rol">
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="rol_controles" Type="Self.rol_controles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_controles">
+              <PropertyRef Name="rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_cliente">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="servicios" Type="Self.servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_conversacion">
+          <End Role="conversaciones" Type="Self.conversaciones" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="conversaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="conversacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_direccion">
+          <End Role="direcciones_cliente" Type="Self.direcciones_cliente" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="direcciones_cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="direccion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_manitas">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="servicios" Type="Self.servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_tipo">
+          <End Role="tipos_servicio" Type="Self.tipos_servicio" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipos_servicio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="tipo_servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_zona">
+          <End Role="zonas" Type="Self.zonas" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zonas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="zona_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sesiones_servicio">
+          <End Role="servicios" Type="Self.servicios" Multiplicity="1" />
+          <End Role="sesiones" Type="Self.sesiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sesiones">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_suspensiones_admin">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="0..1" />
+          <End Role="suspensiones" Type="Self.suspensiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="suspensiones">
+              <PropertyRef Name="aplicada_por_admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_suspensiones_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="suspensiones" Type="Self.suspensiones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="suspensiones">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuario_roles_rol">
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="usuario_roles" Type="Self.usuario_roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_roles">
+              <PropertyRef Name="rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuario_roles_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="usuario_roles" Type="Self.usuario_roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_roles">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Manitas_DBPilotoModelStoreContainer">
+          <EntitySet Name="calificaciones_manitas" EntityType="Self.calificaciones_manitas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cargos_comision" EntityType="Self.cargos_comision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ciclos_comision" EntityType="Self.ciclos_comision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="colonias" EntityType="Self.colonias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="configuracion_sistema" EntityType="Self.configuracion_sistema" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="controles" EntityType="Self.controles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="conversaciones" EntityType="Self.conversaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cotizaciones" EntityType="Self.cotizaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="diagnosticos" EntityType="Self.diagnosticos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="direcciones_cliente" EntityType="Self.direcciones_cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="disputas" EntityType="Self.disputas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fotos_contacto_inicial" EntityType="Self.fotos_contacto_inicial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fotos_galeria" EntityType="Self.fotos_galeria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="fotos_sesion" EntityType="Self.fotos_sesion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="identidades_bloqueadas" EntityType="Self.identidades_bloqueadas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="manitas_servicios" EntityType="Self.manitas_servicios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="manitas_zonas" EntityType="Self.manitas_zonas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mensajes" EntityType="Self.mensajes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notificaciones" EntityType="Self.notificaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pagos_comision" EntityType="Self.pagos_comision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="partidas_cotizacion" EntityType="Self.partidas_cotizacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="perfiles_clientes" EntityType="Self.perfiles_clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="perfiles_manitas" EntityType="Self.perfiles_manitas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="reportes_galeria" EntityType="Self.reportes_galeria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rol_controles" EntityType="Self.rol_controles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="servicios" EntityType="Self.servicios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sesiones" EntityType="Self.sesiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="suspensiones" EntityType="Self.suspensiones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipos_servicio" EntityType="Self.tipos_servicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuario_roles" EntityType="Self.usuario_roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="zonas" EntityType="Self.zonas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_calificaciones_cliente" Association="Self.FK_calificaciones_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="calificaciones_manitas" EntitySet="calificaciones_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calificaciones_manitas" Association="Self.FK_calificaciones_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="calificaciones_manitas" EntitySet="calificaciones_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calificaciones_servicio" Association="Self.FK_calificaciones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="calificaciones_manitas" EntitySet="calificaciones_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cargos_ciclo" Association="Self.FK_cargos_ciclo">
+            <End Role="ciclos_comision" EntitySet="ciclos_comision" />
+            <End Role="cargos_comision" EntitySet="cargos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cargos_servicio" Association="Self.FK_cargos_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="cargos_comision" EntitySet="cargos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ciclos_manitas" Association="Self.FK_ciclos_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="ciclos_comision" EntitySet="ciclos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_configuracion_admin" Association="Self.FK_configuracion_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="configuracion_sistema" EntitySet="configuracion_sistema" />
+          </AssociationSet>
+          <AssociationSet Name="FK_conversaciones_cliente" Association="Self.FK_conversaciones_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="conversaciones" EntitySet="conversaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_conversaciones_manitas" Association="Self.FK_conversaciones_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="conversaciones" EntitySet="conversaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_conversaciones_servicio" Association="Self.FK_conversaciones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="conversaciones" EntitySet="conversaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cotizaciones_servicio" Association="Self.FK_cotizaciones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="cotizaciones" EntitySet="cotizaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_diagnosticos_servicio" Association="Self.FK_diagnosticos_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="diagnosticos" EntitySet="diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_direcciones_cliente_usuario" Association="Self.FK_direcciones_cliente_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="direcciones_cliente" EntitySet="direcciones_cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_direcciones_colonia" Association="Self.FK_direcciones_colonia">
+            <End Role="colonias" EntitySet="colonias" />
+            <End Role="direcciones_cliente" EntitySet="direcciones_cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_agente" Association="Self.FK_disputas_agente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_cliente" Association="Self.FK_disputas_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_manitas" Association="Self.FK_disputas_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_servicio" Association="Self.FK_disputas_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fotos_contacto_conversacion" Association="Self.FK_fotos_contacto_conversacion">
+            <End Role="conversaciones" EntitySet="conversaciones" />
+            <End Role="fotos_contacto_inicial" EntitySet="fotos_contacto_inicial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fotos_galeria_manitas" Association="Self.FK_fotos_galeria_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="fotos_galeria" EntitySet="fotos_galeria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fotos_sesion_sesion" Association="Self.FK_fotos_sesion_sesion">
+            <End Role="sesiones" EntitySet="sesiones" />
+            <End Role="fotos_sesion" EntitySet="fotos_sesion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_servicios_perfil" Association="Self.FK_manitas_servicios_perfil">
+            <End Role="perfiles_manitas" EntitySet="perfiles_manitas" />
+            <End Role="manitas_servicios" EntitySet="manitas_servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_servicios_tipo" Association="Self.FK_manitas_servicios_tipo">
+            <End Role="tipos_servicio" EntitySet="tipos_servicio" />
+            <End Role="manitas_servicios" EntitySet="manitas_servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_zonas_perfil" Association="Self.FK_manitas_zonas_perfil">
+            <End Role="perfiles_manitas" EntitySet="perfiles_manitas" />
+            <End Role="manitas_zonas" EntitySet="manitas_zonas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_zonas_zona" Association="Self.FK_manitas_zonas_zona">
+            <End Role="zonas" EntitySet="zonas" />
+            <End Role="manitas_zonas" EntitySet="manitas_zonas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mensajes_conversacion" Association="Self.FK_mensajes_conversacion">
+            <End Role="conversaciones" EntitySet="conversaciones" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mensajes_remitente" Association="Self.FK_mensajes_remitente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notificaciones_admin" Association="Self.FK_notificaciones_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="notificaciones" EntitySet="notificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notificaciones_usuario" Association="Self.FK_notificaciones_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="notificaciones" EntitySet="notificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pagos_admin" Association="Self.FK_pagos_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="pagos_comision" EntitySet="pagos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pagos_ciclo" Association="Self.FK_pagos_ciclo">
+            <End Role="ciclos_comision" EntitySet="ciclos_comision" />
+            <End Role="pagos_comision" EntitySet="pagos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pagos_manitas" Association="Self.FK_pagos_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="pagos_comision" EntitySet="pagos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_partidas_cotizacion_cotizacion" Association="Self.FK_partidas_cotizacion_cotizacion">
+            <End Role="cotizaciones" EntitySet="cotizaciones" />
+            <End Role="partidas_cotizacion" EntitySet="partidas_cotizacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_perfiles_clientes_usuario" Association="Self.FK_perfiles_clientes_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="perfiles_clientes" EntitySet="perfiles_clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_perfiles_manitas_usuario" Association="Self.FK_perfiles_manitas_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="perfiles_manitas" EntitySet="perfiles_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reportes_foto" Association="Self.FK_reportes_foto">
+            <End Role="fotos_galeria" EntitySet="fotos_galeria" />
+            <End Role="reportes_galeria" EntitySet="reportes_galeria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reportes_usuario" Association="Self.FK_reportes_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="reportes_galeria" EntitySet="reportes_galeria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_controles_control" Association="Self.FK_rol_controles_control">
+            <End Role="controles" EntitySet="controles" />
+            <End Role="rol_controles" EntitySet="rol_controles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_controles_rol" Association="Self.FK_rol_controles_rol">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="rol_controles" EntitySet="rol_controles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_cliente" Association="Self.FK_servicios_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_conversacion" Association="Self.FK_servicios_conversacion">
+            <End Role="conversaciones" EntitySet="conversaciones" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_direccion" Association="Self.FK_servicios_direccion">
+            <End Role="direcciones_cliente" EntitySet="direcciones_cliente" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_manitas" Association="Self.FK_servicios_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_tipo" Association="Self.FK_servicios_tipo">
+            <End Role="tipos_servicio" EntitySet="tipos_servicio" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_zona" Association="Self.FK_servicios_zona">
+            <End Role="zonas" EntitySet="zonas" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sesiones_servicio" Association="Self.FK_sesiones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="sesiones" EntitySet="sesiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_suspensiones_admin" Association="Self.FK_suspensiones_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="suspensiones" EntitySet="suspensiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_suspensiones_usuario" Association="Self.FK_suspensiones_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="suspensiones" EntitySet="suspensiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuario_roles_rol" Association="Self.FK_usuario_roles_rol">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="usuario_roles" EntitySet="usuario_roles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuario_roles_usuario" Association="Self.FK_usuario_roles_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="usuario_roles" EntitySet="usuario_roles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Manitas_DBPilotoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="calificaciones_manitas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" Nullable="false" />
+          <Property Name="cliente_id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="puntualidad" Type="Int16" Nullable="false" />
+          <Property Name="calidad" Type="Int16" Nullable="false" />
+          <Property Name="limpieza" Type="Int16" Nullable="false" />
+          <Property Name="trato" Type="Int16" Nullable="false" />
+          <Property Name="precio_justo" Type="Int16" Nullable="false" />
+          <Property Name="es_negativa" Type="Boolean" Nullable="false" />
+          <Property Name="comentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_calificaciones_cliente" FromRole="calificaciones_manitas" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_calificaciones_manitas" FromRole="calificaciones_manitas" ToRole="usuarios" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_calificaciones_servicio" FromRole="calificaciones_manitas" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="cargos_comision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="ciclo_id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" Nullable="false" />
+          <Property Name="mano_obra_base" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="porcentaje_aplicado" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="monto_comision" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="fecha_cargo" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="ciclos_comision" Relationship="Self.FK_cargos_ciclo" FromRole="cargos_comision" ToRole="ciclos_comision" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_cargos_servicio" FromRole="cargos_comision" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="ciclos_comision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fecha_corte" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fecha_limite_pago" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="estado" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="total_acumulado" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="notificacion_corte_enviada" Type="Boolean" Nullable="false" />
+          <Property Name="notificacion_aviso_enviada" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="cargos_comision" Relationship="Self.FK_cargos_ciclo" FromRole="ciclos_comision" ToRole="cargos_comision" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_ciclos_manitas" FromRole="ciclos_comision" ToRole="usuarios" />
+          <NavigationProperty Name="pagos_comision" Relationship="Self.FK_pagos_ciclo" FromRole="ciclos_comision" ToRole="pagos_comision" />
+        </EntityType>
+        <EntityType Name="colonia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="codigo_postal" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="municipio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="zona_postal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="direcciones_cliente" Relationship="Self.FK_direcciones_colonia" FromRole="colonias" ToRole="direcciones_cliente" />
+        </EntityType>
+        <EntityType Name="configuracion_sistema">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="clave" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="valor" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="editable" Type="Boolean" Nullable="false" />
+          <Property Name="modificado_por_id" Type="Guid" />
+          <Property Name="fecha_modificacion" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_configuracion_admin" FromRole="configuracion_sistema" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="controle">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="modulo" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="rol_controles" Relationship="Self.FK_rol_controles_control" FromRole="controles" ToRole="rol_controles" />
+        </EntityType>
+        <EntityType Name="conversacione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="cliente_id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" />
+          <Property Name="estado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_cierre" Type="DateTime" Precision="7" />
+          <Property Name="primer_mensaje_descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_conversaciones_cliente" FromRole="conversaciones" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_conversaciones_manitas" FromRole="conversaciones" ToRole="usuarios" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_conversaciones_servicio" FromRole="conversaciones" ToRole="servicios" />
+          <NavigationProperty Name="fotos_contacto_inicial" Relationship="Self.FK_fotos_contacto_conversacion" FromRole="conversaciones" ToRole="fotos_contacto_inicial" />
+          <NavigationProperty Name="mensajes" Relationship="Self.FK_mensajes_conversacion" FromRole="conversaciones" ToRole="mensajes" />
+          <NavigationProperty Name="servicios" Relationship="Self.FK_servicios_conversacion" FromRole="conversaciones" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="cotizacione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="numero_ronda" Type="Int16" Nullable="false" />
+          <Property Name="total_mano_obra" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="total_materiales" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="sesiones_estimadas" Type="Int16" />
+          <Property Name="tiempo_estimado_texto" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_envio" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_respuesta" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_cotizaciones_servicio" FromRole="cotizaciones" ToRole="servicios" />
+          <NavigationProperty Name="partidas_cotizacion" Relationship="Self.FK_partidas_cotizacion_cotizacion" FromRole="cotizaciones" ToRole="partidas_cotizacion" />
+        </EntityType>
+        <EntityType Name="diagnostico">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" Nullable="false" />
+          <Property Name="fecha_propuesta" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="hora_propuesta" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_confirmacion" Type="DateTime" Precision="7" />
+          <Property Name="recordatorio_24h_enviado" Type="Boolean" Nullable="false" />
+          <Property Name="recordatorio_1h_enviado" Type="Boolean" Nullable="false" />
+          <Property Name="confirmacion_asistencia_manitas" Type="Boolean" />
+          <Property Name="inasistencia_reportada_por" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_inasistencia" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_diagnosticos_servicio" FromRole="diagnosticos" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="direcciones_cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="usuario_id" Type="Guid" Nullable="false" />
+          <Property Name="colonia_id" Type="Guid" Nullable="false" />
+          <Property Name="calle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="numero_ext" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="numero_int" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="referencias" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="etiqueta" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="activa" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="colonia" Relationship="Self.FK_direcciones_colonia" FromRole="direcciones_cliente" ToRole="colonias" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_direcciones_cliente_usuario" FromRole="direcciones_cliente" ToRole="usuarios" />
+          <NavigationProperty Name="servicios" Relationship="Self.FK_servicios_direccion" FromRole="direcciones_cliente" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="disputa">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" Nullable="false" />
+          <Property Name="cliente_id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="agente_id" Type="Guid" />
+          <Property Name="motivo_cliente" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="resolucion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="justificacion_agente" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nota_advertencia_manitas" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_apertura" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_resolucion" Type="DateTime" Precision="7" />
+          <Property Name="sla_limite" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_disputas_agente" FromRole="disputas" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_disputas_cliente" FromRole="disputas" ToRole="usuarios" />
+          <NavigationProperty Name="usuario2" Relationship="Self.FK_disputas_manitas" FromRole="disputas" ToRole="usuarios" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_disputas_servicio" FromRole="disputas" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="fotos_contacto_inicial">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="conversacion_id" Type="Guid" Nullable="false" />
+          <Property Name="url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_subida" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="conversacione" Relationship="Self.FK_fotos_contacto_conversacion" FromRole="fotos_contacto_inicial" ToRole="conversaciones" />
+        </EntityType>
+        <EntityType Name="fotos_galeria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="total_reportes" Type="Int16" Nullable="false" />
+          <Property Name="fecha_subida" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_retiro" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_fotos_galeria_manitas" FromRole="fotos_galeria" ToRole="usuarios" />
+          <NavigationProperty Name="reportes_galeria" Relationship="Self.FK_reportes_foto" FromRole="fotos_galeria" ToRole="reportes_galeria" />
+        </EntityType>
+        <EntityType Name="fotos_sesion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="sesion_id" Type="Guid" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_subida" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="sesione" Relationship="Self.FK_fotos_sesion_sesion" FromRole="fotos_sesion" ToRole="sesiones" />
+        </EntityType>
+        <EntityType Name="identidades_bloqueadas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="correo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ine_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="motivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_bloqueo" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="manitas_servicios">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="perfil_manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="tipo_servicio_id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="perfiles_manitas" Relationship="Self.FK_manitas_servicios_perfil" FromRole="manitas_servicios" ToRole="perfiles_manitas" />
+          <NavigationProperty Name="tipos_servicio" Relationship="Self.FK_manitas_servicios_tipo" FromRole="manitas_servicios" ToRole="tipos_servicio" />
+        </EntityType>
+        <EntityType Name="manitas_zonas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="perfil_manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="zona_id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="perfiles_manitas" Relationship="Self.FK_manitas_zonas_perfil" FromRole="manitas_zonas" ToRole="perfiles_manitas" />
+          <NavigationProperty Name="zona" Relationship="Self.FK_manitas_zonas_zona" FromRole="manitas_zonas" ToRole="zonas" />
+        </EntityType>
+        <EntityType Name="mensaje">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="conversacion_id" Type="Guid" Nullable="false" />
+          <Property Name="remitente_id" Type="Guid" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contenido" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="archivo_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_envio" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="leido" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="conversacione" Relationship="Self.FK_mensajes_conversacion" FromRole="mensajes" ToRole="conversaciones" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_mensajes_remitente" FromRole="mensajes" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="notificacione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="usuario_id" Type="Guid" Nullable="false" />
+          <Property Name="tipo_evento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="urgencia" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="canal" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="destinatario_correo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="asunto" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cuerpo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="intentos" Type="Int16" Nullable="false" />
+          <Property Name="fecha_programada" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_envio" Type="DateTime" Precision="7" />
+          <Property Name="reenviada_por_admin_id" Type="Guid" />
+          <Property Name="fecha_reenvio" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_notificaciones_admin" FromRole="notificaciones" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_notificaciones_usuario" FromRole="notificaciones" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="pagos_comision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="ciclo_id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="monto" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="clabe_origen" Type="String" MaxLength="18" FixedLength="true" Unicode="false" />
+          <Property Name="metodo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="detectado_automaticamente" Type="Boolean" Nullable="false" />
+          <Property Name="registrado_por_admin_id" Type="Guid" />
+          <Property Name="fecha_pago" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="ciclos_comision" Relationship="Self.FK_pagos_ciclo" FromRole="pagos_comision" ToRole="ciclos_comision" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_pagos_admin" FromRole="pagos_comision" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_pagos_manitas" FromRole="pagos_comision" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="partidas_cotizacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="cotizacion_id" Type="Guid" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="monto" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="cotizacione" Relationship="Self.FK_partidas_cotizacion_cotizacion" FromRole="partidas_cotizacion" ToRole="cotizaciones" />
+        </EntityType>
+        <EntityType Name="perfiles_clientes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="usuario_id" Type="Guid" Nullable="false" />
+          <Property Name="inasistencias_consecutivas" Type="Int16" Nullable="false" />
+          <Property Name="suspensiones_en_6_meses" Type="Int16" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha_reactivacion" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_perfiles_clientes_usuario" FromRole="perfiles_clientes" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="perfiles_manitas">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="usuario_id" Type="Guid" Nullable="false" />
+          <Property Name="apodo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="anios_experiencia" Type="Int16" />
+          <Property Name="disponibilidad_texto" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="foto_perfil_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ine_frente_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ine_reverso_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="comprobante_url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="estado" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="motivo_rechazo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="servicios_completados_total" Type="Int32" Nullable="false" />
+          <Property Name="calificaciones_neg_consecutivas" Type="Int16" Nullable="false" />
+          <Property Name="terminos_calidad_aceptados" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="manitas_servicios" Relationship="Self.FK_manitas_servicios_perfil" FromRole="perfiles_manitas" ToRole="manitas_servicios" />
+          <NavigationProperty Name="manitas_zonas" Relationship="Self.FK_manitas_zonas_perfil" FromRole="perfiles_manitas" ToRole="manitas_zonas" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_perfiles_manitas_usuario" FromRole="perfiles_manitas" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="reportes_galeria">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="foto_id" Type="Guid" Nullable="false" />
+          <Property Name="reportado_por_id" Type="Guid" Nullable="false" />
+          <Property Name="motivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_reporte" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ignorado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="fotos_galeria" Relationship="Self.FK_reportes_foto" FromRole="reportes_galeria" ToRole="fotos_galeria" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_reportes_usuario" FromRole="reportes_galeria" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="rol_controles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="rol_id" Type="Guid" Nullable="false" />
+          <Property Name="control_id" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="controle" Relationship="Self.FK_rol_controles_control" FromRole="rol_controles" ToRole="controles" />
+          <NavigationProperty Name="role" Relationship="Self.FK_rol_controles_rol" FromRole="rol_controles" ToRole="roles" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="rol_controles" Relationship="Self.FK_rol_controles_rol" FromRole="roles" ToRole="rol_controles" />
+          <NavigationProperty Name="usuario_roles" Relationship="Self.FK_usuario_roles_rol" FromRole="roles" ToRole="usuario_roles" />
+        </EntityType>
+        <EntityType Name="servicio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="cliente_id" Type="Guid" Nullable="false" />
+          <Property Name="manitas_id" Type="Guid" Nullable="false" />
+          <Property Name="tipo_servicio_id" Type="Guid" />
+          <Property Name="zona_id" Type="Guid" />
+          <Property Name="direccion_id" Type="Guid" />
+          <Property Name="conversacion_id" Type="Guid" />
+          <Property Name="estado" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="motivo_cierre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_cierre" Type="DateTime" Precision="7" />
+          <Property Name="autocierre_programado" Type="DateTime" Precision="7" />
+          <Property Name="cancelado_por" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="motivo_cancelacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="calificaciones_manitas" Relationship="Self.FK_calificaciones_servicio" FromRole="servicios" ToRole="calificaciones_manitas" />
+          <NavigationProperty Name="cargos_comision" Relationship="Self.FK_cargos_servicio" FromRole="servicios" ToRole="cargos_comision" />
+          <NavigationProperty Name="conversaciones" Relationship="Self.FK_conversaciones_servicio" FromRole="servicios" ToRole="conversaciones" />
+          <NavigationProperty Name="conversacione" Relationship="Self.FK_servicios_conversacion" FromRole="servicios" ToRole="conversaciones" />
+          <NavigationProperty Name="cotizaciones" Relationship="Self.FK_cotizaciones_servicio" FromRole="servicios" ToRole="cotizaciones" />
+          <NavigationProperty Name="diagnosticos" Relationship="Self.FK_diagnosticos_servicio" FromRole="servicios" ToRole="diagnosticos" />
+          <NavigationProperty Name="direcciones_cliente" Relationship="Self.FK_servicios_direccion" FromRole="servicios" ToRole="direcciones_cliente" />
+          <NavigationProperty Name="disputas" Relationship="Self.FK_disputas_servicio" FromRole="servicios" ToRole="disputas" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_servicios_cliente" FromRole="servicios" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_servicios_manitas" FromRole="servicios" ToRole="usuarios" />
+          <NavigationProperty Name="tipos_servicio" Relationship="Self.FK_servicios_tipo" FromRole="servicios" ToRole="tipos_servicio" />
+          <NavigationProperty Name="zona" Relationship="Self.FK_servicios_zona" FromRole="servicios" ToRole="zonas" />
+          <NavigationProperty Name="sesiones" Relationship="Self.FK_sesiones_servicio" FromRole="servicios" ToRole="sesiones" />
+        </EntityType>
+        <EntityType Name="sesione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="servicio_id" Type="Guid" Nullable="false" />
+          <Property Name="numero_sesion" Type="Int16" Nullable="false" />
+          <Property Name="fecha_programada" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="hora_programada" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="estado" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ocurrio" Type="Boolean" />
+          <Property Name="bitacora_texto" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_completada" Type="DateTime" Precision="7" />
+          <Property Name="inasistencia_reportada_por" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="fotos_sesion" Relationship="Self.FK_fotos_sesion_sesion" FromRole="sesiones" ToRole="fotos_sesion" />
+          <NavigationProperty Name="servicio" Relationship="Self.FK_sesiones_servicio" FromRole="sesiones" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="suspensione">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="usuario_id" Type="Guid" Nullable="false" />
+          <Property Name="rol_afectado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="tipo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="motivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fecha_inicio" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="fecha_fin" Type="DateTime" Precision="7" />
+          <Property Name="reactivacion_automatica" Type="Boolean" Nullable="false" />
+          <Property Name="reactivado" Type="Boolean" Nullable="false" />
+          <Property Name="aplicada_por_admin_id" Type="Guid" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_suspensiones_admin" FromRole="suspensiones" ToRole="usuarios" />
+          <NavigationProperty Name="usuario1" Relationship="Self.FK_suspensiones_usuario" FromRole="suspensiones" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="tipos_servicio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="manitas_servicios" Relationship="Self.FK_manitas_servicios_tipo" FromRole="tipos_servicio" ToRole="manitas_servicios" />
+          <NavigationProperty Name="servicios" Relationship="Self.FK_servicios_tipo" FromRole="tipos_servicio" ToRole="servicios" />
+        </EntityType>
+        <EntityType Name="usuario_roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="usuario_id" Type="Guid" Nullable="false" />
+          <Property Name="rol_id" Type="Guid" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="fecha_asignacion" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="role" Relationship="Self.FK_usuario_roles_rol" FromRole="usuario_roles" ToRole="roles" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_usuario_roles_usuario" FromRole="usuario_roles" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="correo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contrasena_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre_completo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="correo_verificado" Type="Boolean" Nullable="false" />
+          <Property Name="activo" Type="Boolean" Nullable="false" />
+          <Property Name="fecha_registro" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="terminos_aceptados" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="calificaciones_manitas" Relationship="Self.FK_calificaciones_cliente" FromRole="usuarios" ToRole="calificaciones_manitas" />
+          <NavigationProperty Name="calificaciones_manitas1" Relationship="Self.FK_calificaciones_manitas" FromRole="usuarios" ToRole="calificaciones_manitas" />
+          <NavigationProperty Name="ciclos_comision" Relationship="Self.FK_ciclos_manitas" FromRole="usuarios" ToRole="ciclos_comision" />
+          <NavigationProperty Name="configuracion_sistema" Relationship="Self.FK_configuracion_admin" FromRole="usuarios" ToRole="configuracion_sistema" />
+          <NavigationProperty Name="conversaciones" Relationship="Self.FK_conversaciones_cliente" FromRole="usuarios" ToRole="conversaciones" />
+          <NavigationProperty Name="conversaciones1" Relationship="Self.FK_conversaciones_manitas" FromRole="usuarios" ToRole="conversaciones" />
+          <NavigationProperty Name="direcciones_cliente" Relationship="Self.FK_direcciones_cliente_usuario" FromRole="usuarios" ToRole="direcciones_cliente" />
+          <NavigationProperty Name="disputas" Relationship="Self.FK_disputas_agente" FromRole="usuarios" ToRole="disputas" />
+          <NavigationProperty Name="disputas1" Relationship="Self.FK_disputas_cliente" FromRole="usuarios" ToRole="disputas" />
+          <NavigationProperty Name="disputas2" Relationship="Self.FK_disputas_manitas" FromRole="usuarios" ToRole="disputas" />
+          <NavigationProperty Name="fotos_galeria" Relationship="Self.FK_fotos_galeria_manitas" FromRole="usuarios" ToRole="fotos_galeria" />
+          <NavigationProperty Name="mensajes" Relationship="Self.FK_mensajes_remitente" FromRole="usuarios" ToRole="mensajes" />
+          <NavigationProperty Name="notificaciones" Relationship="Self.FK_notificaciones_admin" FromRole="usuarios" ToRole="notificaciones" />
+          <NavigationProperty Name="notificaciones1" Relationship="Self.FK_notificaciones_usuario" FromRole="usuarios" ToRole="notificaciones" />
+          <NavigationProperty Name="pagos_comision" Relationship="Self.FK_pagos_admin" FromRole="usuarios" ToRole="pagos_comision" />
+          <NavigationProperty Name="pagos_comision1" Relationship="Self.FK_pagos_manitas" FromRole="usuarios" ToRole="pagos_comision" />
+          <NavigationProperty Name="perfiles_clientes" Relationship="Self.FK_perfiles_clientes_usuario" FromRole="usuarios" ToRole="perfiles_clientes" />
+          <NavigationProperty Name="perfiles_manitas" Relationship="Self.FK_perfiles_manitas_usuario" FromRole="usuarios" ToRole="perfiles_manitas" />
+          <NavigationProperty Name="reportes_galeria" Relationship="Self.FK_reportes_usuario" FromRole="usuarios" ToRole="reportes_galeria" />
+          <NavigationProperty Name="servicios" Relationship="Self.FK_servicios_cliente" FromRole="usuarios" ToRole="servicios" />
+          <NavigationProperty Name="servicios1" Relationship="Self.FK_servicios_manitas" FromRole="usuarios" ToRole="servicios" />
+          <NavigationProperty Name="suspensiones" Relationship="Self.FK_suspensiones_admin" FromRole="usuarios" ToRole="suspensiones" />
+          <NavigationProperty Name="suspensiones1" Relationship="Self.FK_suspensiones_usuario" FromRole="usuarios" ToRole="suspensiones" />
+          <NavigationProperty Name="usuario_roles" Relationship="Self.FK_usuario_roles_usuario" FromRole="usuarios" ToRole="usuario_roles" />
+        </EntityType>
+        <EntityType Name="zona">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Guid" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="activa" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="manitas_zonas" Relationship="Self.FK_manitas_zonas_zona" FromRole="zonas" ToRole="manitas_zonas" />
+          <NavigationProperty Name="servicios" Relationship="Self.FK_servicios_zona" FromRole="zonas" ToRole="servicios" />
+        </EntityType>
+        <Association Name="FK_calificaciones_cliente">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="calificaciones_manitas" Type="Self.calificaciones_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="calificaciones_manitas">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calificaciones_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="calificaciones_manitas" Type="Self.calificaciones_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="calificaciones_manitas">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_calificaciones_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="1" />
+          <End Role="calificaciones_manitas" Type="Self.calificaciones_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="calificaciones_manitas">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cargos_ciclo">
+          <End Role="ciclos_comision" Type="Self.ciclos_comision" Multiplicity="1" />
+          <End Role="cargos_comision" Type="Self.cargos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciclos_comision">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cargos_comision">
+              <PropertyRef Name="ciclo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cargos_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="1" />
+          <End Role="cargos_comision" Type="Self.cargos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cargos_comision">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ciclos_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="ciclos_comision" Type="Self.ciclos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ciclos_comision">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pagos_ciclo">
+          <End Role="ciclos_comision" Type="Self.ciclos_comision" Multiplicity="1" />
+          <End Role="pagos_comision" Type="Self.pagos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ciclos_comision">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pagos_comision">
+              <PropertyRef Name="ciclo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_direcciones_colonia">
+          <End Role="colonias" Type="Self.colonia" Multiplicity="1" />
+          <End Role="direcciones_cliente" Type="Self.direcciones_cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="colonias">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="direcciones_cliente">
+              <PropertyRef Name="colonia_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_configuracion_admin">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="configuracion_sistema" Type="Self.configuracion_sistema" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="configuracion_sistema">
+              <PropertyRef Name="modificado_por_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_controles_control">
+          <End Role="controles" Type="Self.controle" Multiplicity="1" />
+          <End Role="rol_controles" Type="Self.rol_controles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="controles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_controles">
+              <PropertyRef Name="control_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_conversaciones_cliente">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="conversaciones" Type="Self.conversacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="conversaciones">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_conversaciones_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="conversaciones" Type="Self.conversacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="conversaciones">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_conversaciones_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="0..1" />
+          <End Role="conversaciones" Type="Self.conversacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="conversaciones">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fotos_contacto_conversacion">
+          <End Role="conversaciones" Type="Self.conversacione" Multiplicity="1" />
+          <End Role="fotos_contacto_inicial" Type="Self.fotos_contacto_inicial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="conversaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fotos_contacto_inicial">
+              <PropertyRef Name="conversacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mensajes_conversacion">
+          <End Role="conversaciones" Type="Self.conversacione" Multiplicity="1" />
+          <End Role="mensajes" Type="Self.mensaje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="conversaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="conversacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_conversacion">
+          <End Role="conversaciones" Type="Self.conversacione" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="conversaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="conversacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cotizaciones_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="1" />
+          <End Role="cotizaciones" Type="Self.cotizacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cotizaciones">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_partidas_cotizacion_cotizacion">
+          <End Role="cotizaciones" Type="Self.cotizacione" Multiplicity="1" />
+          <End Role="partidas_cotizacion" Type="Self.partidas_cotizacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cotizaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="partidas_cotizacion">
+              <PropertyRef Name="cotizacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_diagnosticos_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="1" />
+          <End Role="diagnosticos" Type="Self.diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="diagnosticos">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_direcciones_cliente_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="direcciones_cliente" Type="Self.direcciones_cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="direcciones_cliente">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_direccion">
+          <End Role="direcciones_cliente" Type="Self.direcciones_cliente" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="direcciones_cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="direccion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_agente">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="disputas" Type="Self.disputa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="agente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_cliente">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="disputas" Type="Self.disputa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="disputas" Type="Self.disputa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_disputas_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="1" />
+          <End Role="disputas" Type="Self.disputa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="disputas">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fotos_galeria_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="fotos_galeria" Type="Self.fotos_galeria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fotos_galeria">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reportes_foto">
+          <End Role="fotos_galeria" Type="Self.fotos_galeria" Multiplicity="1" />
+          <End Role="reportes_galeria" Type="Self.reportes_galeria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fotos_galeria">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reportes_galeria">
+              <PropertyRef Name="foto_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_fotos_sesion_sesion">
+          <End Role="sesiones" Type="Self.sesione" Multiplicity="1" />
+          <End Role="fotos_sesion" Type="Self.fotos_sesion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sesiones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fotos_sesion">
+              <PropertyRef Name="sesion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_servicios_perfil">
+          <End Role="perfiles_manitas" Type="Self.perfiles_manitas" Multiplicity="1" />
+          <End Role="manitas_servicios" Type="Self.manitas_servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="perfiles_manitas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_servicios">
+              <PropertyRef Name="perfil_manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_servicios_tipo">
+          <End Role="tipos_servicio" Type="Self.tipos_servicio" Multiplicity="1" />
+          <End Role="manitas_servicios" Type="Self.manitas_servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipos_servicio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_servicios">
+              <PropertyRef Name="tipo_servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_zonas_perfil">
+          <End Role="perfiles_manitas" Type="Self.perfiles_manitas" Multiplicity="1" />
+          <End Role="manitas_zonas" Type="Self.manitas_zonas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="perfiles_manitas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_zonas">
+              <PropertyRef Name="perfil_manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_manitas_zonas_zona">
+          <End Role="zonas" Type="Self.zona" Multiplicity="1" />
+          <End Role="manitas_zonas" Type="Self.manitas_zonas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zonas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="manitas_zonas">
+              <PropertyRef Name="zona_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_mensajes_remitente">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="mensajes" Type="Self.mensaje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mensajes">
+              <PropertyRef Name="remitente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notificaciones_admin">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="notificaciones" Type="Self.notificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notificaciones">
+              <PropertyRef Name="reenviada_por_admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notificaciones_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="notificaciones" Type="Self.notificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notificaciones">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pagos_admin">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="pagos_comision" Type="Self.pagos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pagos_comision">
+              <PropertyRef Name="registrado_por_admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pagos_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="pagos_comision" Type="Self.pagos_comision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pagos_comision">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_perfiles_clientes_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="perfiles_clientes" Type="Self.perfiles_clientes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="perfiles_clientes">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_perfiles_manitas_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="perfiles_manitas" Type="Self.perfiles_manitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="perfiles_manitas">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reportes_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="reportes_galeria" Type="Self.reportes_galeria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reportes_galeria">
+              <PropertyRef Name="reportado_por_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_controles_rol">
+          <End Role="roles" Type="Self.role" Multiplicity="1" />
+          <End Role="rol_controles" Type="Self.rol_controles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_controles">
+              <PropertyRef Name="rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuario_roles_rol">
+          <End Role="roles" Type="Self.role" Multiplicity="1" />
+          <End Role="usuario_roles" Type="Self.usuario_roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_roles">
+              <PropertyRef Name="rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_cliente">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="servicios" Type="Self.servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="cliente_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_manitas">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="servicios" Type="Self.servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="manitas_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_tipo">
+          <End Role="tipos_servicio" Type="Self.tipos_servicio" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipos_servicio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="tipo_servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_servicios_zona">
+          <End Role="zonas" Type="Self.zona" Multiplicity="0..1" />
+          <End Role="servicios" Type="Self.servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="zonas">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="servicios">
+              <PropertyRef Name="zona_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sesiones_servicio">
+          <End Role="servicios" Type="Self.servicio" Multiplicity="1" />
+          <End Role="sesiones" Type="Self.sesione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="servicios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sesiones">
+              <PropertyRef Name="servicio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_suspensiones_admin">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="0..1" />
+          <End Role="suspensiones" Type="Self.suspensione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="suspensiones">
+              <PropertyRef Name="aplicada_por_admin_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_suspensiones_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="suspensiones" Type="Self.suspensione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="suspensiones">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuario_roles_usuario">
+          <End Role="usuarios" Type="Self.usuario" Multiplicity="1" />
+          <End Role="usuario_roles" Type="Self.usuario_roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usuario_roles">
+              <PropertyRef Name="usuario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Manitas_DBPilotoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="calificaciones_manitas" EntityType="Self.calificaciones_manitas" />
+          <EntitySet Name="cargos_comision" EntityType="Self.cargos_comision" />
+          <EntitySet Name="ciclos_comision" EntityType="Self.ciclos_comision" />
+          <EntitySet Name="colonias" EntityType="Self.colonia" />
+          <EntitySet Name="configuracion_sistema" EntityType="Self.configuracion_sistema" />
+          <EntitySet Name="controles" EntityType="Self.controle" />
+          <EntitySet Name="conversaciones" EntityType="Self.conversacione" />
+          <EntitySet Name="cotizaciones" EntityType="Self.cotizacione" />
+          <EntitySet Name="diagnosticos" EntityType="Self.diagnostico" />
+          <EntitySet Name="direcciones_cliente" EntityType="Self.direcciones_cliente" />
+          <EntitySet Name="disputas" EntityType="Self.disputa" />
+          <EntitySet Name="fotos_contacto_inicial" EntityType="Self.fotos_contacto_inicial" />
+          <EntitySet Name="fotos_galeria" EntityType="Self.fotos_galeria" />
+          <EntitySet Name="fotos_sesion" EntityType="Self.fotos_sesion" />
+          <EntitySet Name="identidades_bloqueadas" EntityType="Self.identidades_bloqueadas" />
+          <EntitySet Name="manitas_servicios" EntityType="Self.manitas_servicios" />
+          <EntitySet Name="manitas_zonas" EntityType="Self.manitas_zonas" />
+          <EntitySet Name="mensajes" EntityType="Self.mensaje" />
+          <EntitySet Name="notificaciones" EntityType="Self.notificacione" />
+          <EntitySet Name="pagos_comision" EntityType="Self.pagos_comision" />
+          <EntitySet Name="partidas_cotizacion" EntityType="Self.partidas_cotizacion" />
+          <EntitySet Name="perfiles_clientes" EntityType="Self.perfiles_clientes" />
+          <EntitySet Name="perfiles_manitas" EntityType="Self.perfiles_manitas" />
+          <EntitySet Name="reportes_galeria" EntityType="Self.reportes_galeria" />
+          <EntitySet Name="rol_controles" EntityType="Self.rol_controles" />
+          <EntitySet Name="roles" EntityType="Self.role" />
+          <EntitySet Name="servicios" EntityType="Self.servicio" />
+          <EntitySet Name="sesiones" EntityType="Self.sesione" />
+          <EntitySet Name="suspensiones" EntityType="Self.suspensione" />
+          <EntitySet Name="tipos_servicio" EntityType="Self.tipos_servicio" />
+          <EntitySet Name="usuario_roles" EntityType="Self.usuario_roles" />
+          <EntitySet Name="usuarios" EntityType="Self.usuario" />
+          <EntitySet Name="zonas" EntityType="Self.zona" />
+          <AssociationSet Name="FK_calificaciones_cliente" Association="Self.FK_calificaciones_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="calificaciones_manitas" EntitySet="calificaciones_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calificaciones_manitas" Association="Self.FK_calificaciones_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="calificaciones_manitas" EntitySet="calificaciones_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_calificaciones_servicio" Association="Self.FK_calificaciones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="calificaciones_manitas" EntitySet="calificaciones_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cargos_ciclo" Association="Self.FK_cargos_ciclo">
+            <End Role="ciclos_comision" EntitySet="ciclos_comision" />
+            <End Role="cargos_comision" EntitySet="cargos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cargos_servicio" Association="Self.FK_cargos_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="cargos_comision" EntitySet="cargos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ciclos_manitas" Association="Self.FK_ciclos_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="ciclos_comision" EntitySet="ciclos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pagos_ciclo" Association="Self.FK_pagos_ciclo">
+            <End Role="ciclos_comision" EntitySet="ciclos_comision" />
+            <End Role="pagos_comision" EntitySet="pagos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_direcciones_colonia" Association="Self.FK_direcciones_colonia">
+            <End Role="colonias" EntitySet="colonias" />
+            <End Role="direcciones_cliente" EntitySet="direcciones_cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_configuracion_admin" Association="Self.FK_configuracion_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="configuracion_sistema" EntitySet="configuracion_sistema" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_controles_control" Association="Self.FK_rol_controles_control">
+            <End Role="controles" EntitySet="controles" />
+            <End Role="rol_controles" EntitySet="rol_controles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_conversaciones_cliente" Association="Self.FK_conversaciones_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="conversaciones" EntitySet="conversaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_conversaciones_manitas" Association="Self.FK_conversaciones_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="conversaciones" EntitySet="conversaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_conversaciones_servicio" Association="Self.FK_conversaciones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="conversaciones" EntitySet="conversaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fotos_contacto_conversacion" Association="Self.FK_fotos_contacto_conversacion">
+            <End Role="conversaciones" EntitySet="conversaciones" />
+            <End Role="fotos_contacto_inicial" EntitySet="fotos_contacto_inicial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mensajes_conversacion" Association="Self.FK_mensajes_conversacion">
+            <End Role="conversaciones" EntitySet="conversaciones" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_conversacion" Association="Self.FK_servicios_conversacion">
+            <End Role="conversaciones" EntitySet="conversaciones" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cotizaciones_servicio" Association="Self.FK_cotizaciones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="cotizaciones" EntitySet="cotizaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_partidas_cotizacion_cotizacion" Association="Self.FK_partidas_cotizacion_cotizacion">
+            <End Role="cotizaciones" EntitySet="cotizaciones" />
+            <End Role="partidas_cotizacion" EntitySet="partidas_cotizacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_diagnosticos_servicio" Association="Self.FK_diagnosticos_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="diagnosticos" EntitySet="diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_direcciones_cliente_usuario" Association="Self.FK_direcciones_cliente_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="direcciones_cliente" EntitySet="direcciones_cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_direccion" Association="Self.FK_servicios_direccion">
+            <End Role="direcciones_cliente" EntitySet="direcciones_cliente" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_agente" Association="Self.FK_disputas_agente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_cliente" Association="Self.FK_disputas_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_manitas" Association="Self.FK_disputas_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_disputas_servicio" Association="Self.FK_disputas_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="disputas" EntitySet="disputas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fotos_galeria_manitas" Association="Self.FK_fotos_galeria_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="fotos_galeria" EntitySet="fotos_galeria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reportes_foto" Association="Self.FK_reportes_foto">
+            <End Role="fotos_galeria" EntitySet="fotos_galeria" />
+            <End Role="reportes_galeria" EntitySet="reportes_galeria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_fotos_sesion_sesion" Association="Self.FK_fotos_sesion_sesion">
+            <End Role="sesiones" EntitySet="sesiones" />
+            <End Role="fotos_sesion" EntitySet="fotos_sesion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_servicios_perfil" Association="Self.FK_manitas_servicios_perfil">
+            <End Role="perfiles_manitas" EntitySet="perfiles_manitas" />
+            <End Role="manitas_servicios" EntitySet="manitas_servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_servicios_tipo" Association="Self.FK_manitas_servicios_tipo">
+            <End Role="tipos_servicio" EntitySet="tipos_servicio" />
+            <End Role="manitas_servicios" EntitySet="manitas_servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_zonas_perfil" Association="Self.FK_manitas_zonas_perfil">
+            <End Role="perfiles_manitas" EntitySet="perfiles_manitas" />
+            <End Role="manitas_zonas" EntitySet="manitas_zonas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_manitas_zonas_zona" Association="Self.FK_manitas_zonas_zona">
+            <End Role="zonas" EntitySet="zonas" />
+            <End Role="manitas_zonas" EntitySet="manitas_zonas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_mensajes_remitente" Association="Self.FK_mensajes_remitente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="mensajes" EntitySet="mensajes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notificaciones_admin" Association="Self.FK_notificaciones_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="notificaciones" EntitySet="notificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notificaciones_usuario" Association="Self.FK_notificaciones_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="notificaciones" EntitySet="notificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pagos_admin" Association="Self.FK_pagos_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="pagos_comision" EntitySet="pagos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pagos_manitas" Association="Self.FK_pagos_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="pagos_comision" EntitySet="pagos_comision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_perfiles_clientes_usuario" Association="Self.FK_perfiles_clientes_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="perfiles_clientes" EntitySet="perfiles_clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_perfiles_manitas_usuario" Association="Self.FK_perfiles_manitas_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="perfiles_manitas" EntitySet="perfiles_manitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reportes_usuario" Association="Self.FK_reportes_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="reportes_galeria" EntitySet="reportes_galeria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_controles_rol" Association="Self.FK_rol_controles_rol">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="rol_controles" EntitySet="rol_controles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuario_roles_rol" Association="Self.FK_usuario_roles_rol">
+            <End Role="roles" EntitySet="roles" />
+            <End Role="usuario_roles" EntitySet="usuario_roles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_cliente" Association="Self.FK_servicios_cliente">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_manitas" Association="Self.FK_servicios_manitas">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_tipo" Association="Self.FK_servicios_tipo">
+            <End Role="tipos_servicio" EntitySet="tipos_servicio" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_servicios_zona" Association="Self.FK_servicios_zona">
+            <End Role="zonas" EntitySet="zonas" />
+            <End Role="servicios" EntitySet="servicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sesiones_servicio" Association="Self.FK_sesiones_servicio">
+            <End Role="servicios" EntitySet="servicios" />
+            <End Role="sesiones" EntitySet="sesiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_suspensiones_admin" Association="Self.FK_suspensiones_admin">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="suspensiones" EntitySet="suspensiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_suspensiones_usuario" Association="Self.FK_suspensiones_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="suspensiones" EntitySet="suspensiones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuario_roles_usuario" Association="Self.FK_usuario_roles_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="usuario_roles" EntitySet="usuario_roles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Manitas_DBPilotoModelStoreContainer" CdmEntityContainer="Manitas_DBPilotoEntities">
+          <EntitySetMapping Name="calificaciones_manitas">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.calificaciones_manitas">
+              <MappingFragment StoreEntitySet="calificaciones_manitas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="cliente_id" ColumnName="cliente_id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="puntualidad" ColumnName="puntualidad" />
+                <ScalarProperty Name="calidad" ColumnName="calidad" />
+                <ScalarProperty Name="limpieza" ColumnName="limpieza" />
+                <ScalarProperty Name="trato" ColumnName="trato" />
+                <ScalarProperty Name="precio_justo" ColumnName="precio_justo" />
+                <ScalarProperty Name="es_negativa" ColumnName="es_negativa" />
+                <ScalarProperty Name="comentario" ColumnName="comentario" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cargos_comision">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.cargos_comision">
+              <MappingFragment StoreEntitySet="cargos_comision">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ciclo_id" ColumnName="ciclo_id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="mano_obra_base" ColumnName="mano_obra_base" />
+                <ScalarProperty Name="porcentaje_aplicado" ColumnName="porcentaje_aplicado" />
+                <ScalarProperty Name="monto_comision" ColumnName="monto_comision" />
+                <ScalarProperty Name="fecha_cargo" ColumnName="fecha_cargo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ciclos_comision">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.ciclos_comision">
+              <MappingFragment StoreEntitySet="ciclos_comision">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_corte" ColumnName="fecha_corte" />
+                <ScalarProperty Name="fecha_limite_pago" ColumnName="fecha_limite_pago" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="total_acumulado" ColumnName="total_acumulado" />
+                <ScalarProperty Name="notificacion_corte_enviada" ColumnName="notificacion_corte_enviada" />
+                <ScalarProperty Name="notificacion_aviso_enviada" ColumnName="notificacion_aviso_enviada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="colonias">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.colonia">
+              <MappingFragment StoreEntitySet="colonias">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="codigo_postal" ColumnName="codigo_postal" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="municipio" ColumnName="municipio" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="ciudad" ColumnName="ciudad" />
+                <ScalarProperty Name="zona_postal" ColumnName="zona_postal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="configuracion_sistema">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.configuracion_sistema">
+              <MappingFragment StoreEntitySet="configuracion_sistema">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="clave" ColumnName="clave" />
+                <ScalarProperty Name="valor" ColumnName="valor" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="editable" ColumnName="editable" />
+                <ScalarProperty Name="modificado_por_id" ColumnName="modificado_por_id" />
+                <ScalarProperty Name="fecha_modificacion" ColumnName="fecha_modificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="controles">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.controle">
+              <MappingFragment StoreEntitySet="controles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="modulo" ColumnName="modulo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="conversaciones">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.conversacione">
+              <MappingFragment StoreEntitySet="conversaciones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cliente_id" ColumnName="cliente_id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_cierre" ColumnName="fecha_cierre" />
+                <ScalarProperty Name="primer_mensaje_descripcion" ColumnName="primer_mensaje_descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cotizaciones">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.cotizacione">
+              <MappingFragment StoreEntitySet="cotizaciones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="numero_ronda" ColumnName="numero_ronda" />
+                <ScalarProperty Name="total_mano_obra" ColumnName="total_mano_obra" />
+                <ScalarProperty Name="total_materiales" ColumnName="total_materiales" />
+                <ScalarProperty Name="sesiones_estimadas" ColumnName="sesiones_estimadas" />
+                <ScalarProperty Name="tiempo_estimado_texto" ColumnName="tiempo_estimado_texto" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
+                <ScalarProperty Name="fecha_respuesta" ColumnName="fecha_respuesta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="diagnosticos">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.diagnostico">
+              <MappingFragment StoreEntitySet="diagnosticos">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="fecha_propuesta" ColumnName="fecha_propuesta" />
+                <ScalarProperty Name="hora_propuesta" ColumnName="hora_propuesta" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_confirmacion" ColumnName="fecha_confirmacion" />
+                <ScalarProperty Name="recordatorio_24h_enviado" ColumnName="recordatorio_24h_enviado" />
+                <ScalarProperty Name="recordatorio_1h_enviado" ColumnName="recordatorio_1h_enviado" />
+                <ScalarProperty Name="confirmacion_asistencia_manitas" ColumnName="confirmacion_asistencia_manitas" />
+                <ScalarProperty Name="inasistencia_reportada_por" ColumnName="inasistencia_reportada_por" />
+                <ScalarProperty Name="fecha_inasistencia" ColumnName="fecha_inasistencia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="direcciones_cliente">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.direcciones_cliente">
+              <MappingFragment StoreEntitySet="direcciones_cliente">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="colonia_id" ColumnName="colonia_id" />
+                <ScalarProperty Name="calle" ColumnName="calle" />
+                <ScalarProperty Name="numero_ext" ColumnName="numero_ext" />
+                <ScalarProperty Name="numero_int" ColumnName="numero_int" />
+                <ScalarProperty Name="referencias" ColumnName="referencias" />
+                <ScalarProperty Name="etiqueta" ColumnName="etiqueta" />
+                <ScalarProperty Name="activa" ColumnName="activa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="disputas">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.disputa">
+              <MappingFragment StoreEntitySet="disputas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="cliente_id" ColumnName="cliente_id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="agente_id" ColumnName="agente_id" />
+                <ScalarProperty Name="motivo_cliente" ColumnName="motivo_cliente" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="resolucion" ColumnName="resolucion" />
+                <ScalarProperty Name="justificacion_agente" ColumnName="justificacion_agente" />
+                <ScalarProperty Name="nota_advertencia_manitas" ColumnName="nota_advertencia_manitas" />
+                <ScalarProperty Name="fecha_apertura" ColumnName="fecha_apertura" />
+                <ScalarProperty Name="fecha_resolucion" ColumnName="fecha_resolucion" />
+                <ScalarProperty Name="sla_limite" ColumnName="sla_limite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fotos_contacto_inicial">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.fotos_contacto_inicial">
+              <MappingFragment StoreEntitySet="fotos_contacto_inicial">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="conversacion_id" ColumnName="conversacion_id" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="fecha_subida" ColumnName="fecha_subida" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fotos_galeria">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.fotos_galeria">
+              <MappingFragment StoreEntitySet="fotos_galeria">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="total_reportes" ColumnName="total_reportes" />
+                <ScalarProperty Name="fecha_subida" ColumnName="fecha_subida" />
+                <ScalarProperty Name="fecha_retiro" ColumnName="fecha_retiro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fotos_sesion">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.fotos_sesion">
+              <MappingFragment StoreEntitySet="fotos_sesion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="sesion_id" ColumnName="sesion_id" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="fecha_subida" ColumnName="fecha_subida" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="identidades_bloqueadas">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.identidades_bloqueadas">
+              <MappingFragment StoreEntitySet="identidades_bloqueadas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="ine_hash" ColumnName="ine_hash" />
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="fecha_bloqueo" ColumnName="fecha_bloqueo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="manitas_servicios">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.manitas_servicios">
+              <MappingFragment StoreEntitySet="manitas_servicios">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="perfil_manitas_id" ColumnName="perfil_manitas_id" />
+                <ScalarProperty Name="tipo_servicio_id" ColumnName="tipo_servicio_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="manitas_zonas">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.manitas_zonas">
+              <MappingFragment StoreEntitySet="manitas_zonas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="perfil_manitas_id" ColumnName="perfil_manitas_id" />
+                <ScalarProperty Name="zona_id" ColumnName="zona_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mensajes">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.mensaje">
+              <MappingFragment StoreEntitySet="mensajes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="conversacion_id" ColumnName="conversacion_id" />
+                <ScalarProperty Name="remitente_id" ColumnName="remitente_id" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="contenido" ColumnName="contenido" />
+                <ScalarProperty Name="archivo_url" ColumnName="archivo_url" />
+                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
+                <ScalarProperty Name="leido" ColumnName="leido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notificaciones">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.notificacione">
+              <MappingFragment StoreEntitySet="notificaciones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="tipo_evento" ColumnName="tipo_evento" />
+                <ScalarProperty Name="urgencia" ColumnName="urgencia" />
+                <ScalarProperty Name="canal" ColumnName="canal" />
+                <ScalarProperty Name="destinatario_correo" ColumnName="destinatario_correo" />
+                <ScalarProperty Name="asunto" ColumnName="asunto" />
+                <ScalarProperty Name="cuerpo" ColumnName="cuerpo" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="intentos" ColumnName="intentos" />
+                <ScalarProperty Name="fecha_programada" ColumnName="fecha_programada" />
+                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
+                <ScalarProperty Name="reenviada_por_admin_id" ColumnName="reenviada_por_admin_id" />
+                <ScalarProperty Name="fecha_reenvio" ColumnName="fecha_reenvio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pagos_comision">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.pagos_comision">
+              <MappingFragment StoreEntitySet="pagos_comision">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ciclo_id" ColumnName="ciclo_id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="clabe_origen" ColumnName="clabe_origen" />
+                <ScalarProperty Name="metodo" ColumnName="metodo" />
+                <ScalarProperty Name="detectado_automaticamente" ColumnName="detectado_automaticamente" />
+                <ScalarProperty Name="registrado_por_admin_id" ColumnName="registrado_por_admin_id" />
+                <ScalarProperty Name="fecha_pago" ColumnName="fecha_pago" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="partidas_cotizacion">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.partidas_cotizacion">
+              <MappingFragment StoreEntitySet="partidas_cotizacion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cotizacion_id" ColumnName="cotizacion_id" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="perfiles_clientes">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.perfiles_clientes">
+              <MappingFragment StoreEntitySet="perfiles_clientes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="inasistencias_consecutivas" ColumnName="inasistencias_consecutivas" />
+                <ScalarProperty Name="suspensiones_en_6_meses" ColumnName="suspensiones_en_6_meses" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fecha_reactivacion" ColumnName="fecha_reactivacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="perfiles_manitas">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.perfiles_manitas">
+              <MappingFragment StoreEntitySet="perfiles_manitas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="apodo" ColumnName="apodo" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="anios_experiencia" ColumnName="anios_experiencia" />
+                <ScalarProperty Name="disponibilidad_texto" ColumnName="disponibilidad_texto" />
+                <ScalarProperty Name="foto_perfil_url" ColumnName="foto_perfil_url" />
+                <ScalarProperty Name="ine_frente_url" ColumnName="ine_frente_url" />
+                <ScalarProperty Name="ine_reverso_url" ColumnName="ine_reverso_url" />
+                <ScalarProperty Name="comprobante_url" ColumnName="comprobante_url" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="motivo_rechazo" ColumnName="motivo_rechazo" />
+                <ScalarProperty Name="servicios_completados_total" ColumnName="servicios_completados_total" />
+                <ScalarProperty Name="calificaciones_neg_consecutivas" ColumnName="calificaciones_neg_consecutivas" />
+                <ScalarProperty Name="terminos_calidad_aceptados" ColumnName="terminos_calidad_aceptados" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reportes_galeria">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.reportes_galeria">
+              <MappingFragment StoreEntitySet="reportes_galeria">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="foto_id" ColumnName="foto_id" />
+                <ScalarProperty Name="reportado_por_id" ColumnName="reportado_por_id" />
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="fecha_reporte" ColumnName="fecha_reporte" />
+                <ScalarProperty Name="ignorado" ColumnName="ignorado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol_controles">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.rol_controles">
+              <MappingFragment StoreEntitySet="rol_controles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="control_id" ColumnName="control_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.role">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="servicios">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.servicio">
+              <MappingFragment StoreEntitySet="servicios">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cliente_id" ColumnName="cliente_id" />
+                <ScalarProperty Name="manitas_id" ColumnName="manitas_id" />
+                <ScalarProperty Name="tipo_servicio_id" ColumnName="tipo_servicio_id" />
+                <ScalarProperty Name="zona_id" ColumnName="zona_id" />
+                <ScalarProperty Name="direccion_id" ColumnName="direccion_id" />
+                <ScalarProperty Name="conversacion_id" ColumnName="conversacion_id" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="motivo_cierre" ColumnName="motivo_cierre" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_cierre" ColumnName="fecha_cierre" />
+                <ScalarProperty Name="autocierre_programado" ColumnName="autocierre_programado" />
+                <ScalarProperty Name="cancelado_por" ColumnName="cancelado_por" />
+                <ScalarProperty Name="motivo_cancelacion" ColumnName="motivo_cancelacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sesiones">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.sesione">
+              <MappingFragment StoreEntitySet="sesiones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="servicio_id" ColumnName="servicio_id" />
+                <ScalarProperty Name="numero_sesion" ColumnName="numero_sesion" />
+                <ScalarProperty Name="fecha_programada" ColumnName="fecha_programada" />
+                <ScalarProperty Name="hora_programada" ColumnName="hora_programada" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="ocurrio" ColumnName="ocurrio" />
+                <ScalarProperty Name="bitacora_texto" ColumnName="bitacora_texto" />
+                <ScalarProperty Name="fecha_completada" ColumnName="fecha_completada" />
+                <ScalarProperty Name="inasistencia_reportada_por" ColumnName="inasistencia_reportada_por" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="suspensiones">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.suspensione">
+              <MappingFragment StoreEntitySet="suspensiones">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="rol_afectado" ColumnName="rol_afectado" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="motivo" ColumnName="motivo" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+                <ScalarProperty Name="reactivacion_automatica" ColumnName="reactivacion_automatica" />
+                <ScalarProperty Name="reactivado" ColumnName="reactivado" />
+                <ScalarProperty Name="aplicada_por_admin_id" ColumnName="aplicada_por_admin_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipos_servicio">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.tipos_servicio">
+              <MappingFragment StoreEntitySet="tipos_servicio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario_roles">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.usuario_roles">
+              <MappingFragment StoreEntitySet="usuario_roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="usuario_id" ColumnName="usuario_id" />
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="fecha_asignacion" ColumnName="fecha_asignacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.usuario">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="contrasena_hash" ColumnName="contrasena_hash" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="nombre_completo" ColumnName="nombre_completo" />
+                <ScalarProperty Name="correo_verificado" ColumnName="correo_verificado" />
+                <ScalarProperty Name="activo" ColumnName="activo" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="terminos_aceptados" ColumnName="terminos_aceptados" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="zonas">
+            <EntityTypeMapping TypeName="Manitas_DBPilotoModel.zona">
+              <MappingFragment StoreEntitySet="zonas">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="ciudad" ColumnName="ciudad" />
+                <ScalarProperty Name="activa" ColumnName="activa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

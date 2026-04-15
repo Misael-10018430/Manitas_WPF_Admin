@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8f3ea554826a43e68f358213ad9088e9" Name="Diagram1">
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.calificaciones_manitas" Width="1.5" PointX="3" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.cargos_comision" Width="1.5" PointX="5.25" PointY="29" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.ciclos_comision" Width="1.5" PointX="3" PointY="28.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.colonia" Width="1.5" PointX="5.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.configuracion_sistema" Width="1.5" PointX="3" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.controle" Width="1.5" PointX="6.75" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.conversacione" Width="1.5" PointX="6" PointY="37.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.cotizacione" Width="1.5" PointX="16.5" PointY="31.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.diagnostico" Width="1.5" PointX="16.5" PointY="35.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.direcciones_cliente" Width="1.5" PointX="8" PointY="33" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.disputa" Width="1.5" PointX="19.5" PointY="35.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.fotos_contacto_inicial" Width="1.5" PointX="8.25" PointY="40.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.fotos_galeria" Width="1.5" PointX="3" PointY="44.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.fotos_sesion" Width="1.5" PointX="18.75" PointY="45.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.identidades_bloqueadas" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.manitas_servicios" Width="1.5" PointX="5.25" PointY="57.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.manitas_zonas" Width="1.5" PointX="5.25" PointY="54.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.mensaje" Width="1.5" PointX="11.25" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.notificacione" Width="1.5" PointX="3" PointY="48.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.pagos_comision" Width="1.5" PointX="5.25" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.partidas_cotizacion" Width="1.5" PointX="18.75" PointY="32.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.perfiles_clientes" Width="1.5" PointX="3" PointY="52.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.perfiles_manitas" Width="1.5" PointX="3" PointY="56" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.reportes_galeria" Width="1.5" PointX="5.25" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.rol_controles" Width="1.5" PointX="9" PointY="45.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.role" Width="1.5" PointX="6.75" PointY="45.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.servicio" Width="1.5" PointX="14.25" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.sesione" Width="1.5" PointX="16.5" PointY="44.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.suspensione" Width="1.5" PointX="3" PointY="61.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.tipos_servicio" Width="1.5" PointX="12" PointY="33.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.usuario_roles" Width="1.5" PointX="9" PointY="37.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.usuario" Width="1.5" PointX="0.75" PointY="34" IsExpanded="true" />
+        <EntityTypeShape EntityType="Manitas_DBPilotoModel.zona" Width="1.5" PointX="12" PointY="40.875" IsExpanded="true" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_calificaciones_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_calificaciones_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_calificaciones_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_cargos_ciclo" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_cargos_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_ciclos_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_pagos_ciclo" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_direcciones_colonia" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_configuracion_admin" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_rol_controles_control" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_conversaciones_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_conversaciones_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_conversaciones_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_fotos_contacto_conversacion" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_mensajes_conversacion" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_servicios_conversacion" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_cotizaciones_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_partidas_cotizacion_cotizacion" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_diagnosticos_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_direcciones_cliente_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_servicios_direccion" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_disputas_agente" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_disputas_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_disputas_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_disputas_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_fotos_galeria_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_reportes_foto" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_fotos_sesion_sesion" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_manitas_servicios_perfil" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_manitas_servicios_tipo" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_manitas_zonas_perfil" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_manitas_zonas_zona" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_mensajes_remitente" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_notificaciones_admin" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_notificaciones_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_pagos_admin" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_pagos_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_perfiles_clientes_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_perfiles_manitas_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_reportes_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_rol_controles_rol" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_usuario_roles_rol" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_servicios_cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_servicios_manitas" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_servicios_tipo" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_servicios_zona" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_sesiones_servicio" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_suspensiones_admin" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_suspensiones_usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="Manitas_DBPilotoModel.FK_usuario_roles_usuario" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

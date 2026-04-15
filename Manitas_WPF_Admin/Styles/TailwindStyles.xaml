@@ -1,0 +1,236 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="ColorAction">#FF835B</Color>
+    <Color x:Key="ColorActionHover">#F07045</Color>
+    <Color x:Key="ColorAuthority">#1A202C</Color>
+    <Color x:Key="ColorAmbient">#F4F6F9</Color>
+    <Color x:Key="ColorWork">#FFFFFF</Color>
+    <Color x:Key="ColorDivider">#E2E8F0</Color>
+    <Color x:Key="ColorReadText">#64748B</Color>
+    <Color x:Key="ColorSuccess">#22C55E</Color>
+    <Color x:Key="ColorPending">#F59E0B</Color>
+    <Color x:Key="ColorAlert">#EF4444</Color>
+    <Color x:Key="ColorSidebarBg">#1E2532</Color>
+    <Color x:Key="ColorSidebarText">#A8B3C4</Color>
+
+    <SolidColorBrush x:Key="BrushAction" Color="{StaticResource ColorAction}"/>
+    <SolidColorBrush x:Key="BrushActionHover" Color="{StaticResource ColorActionHover}"/>
+    <SolidColorBrush x:Key="BrushAuthority" Color="{StaticResource ColorAuthority}"/>
+    <SolidColorBrush x:Key="BrushAmbient" Color="{StaticResource ColorAmbient}"/>
+    <SolidColorBrush x:Key="BrushWork" Color="{StaticResource ColorWork}"/>
+    <SolidColorBrush x:Key="BrushDivider" Color="{StaticResource ColorDivider}"/>
+    <SolidColorBrush x:Key="BrushReadText" Color="{StaticResource ColorReadText}"/>
+    <SolidColorBrush x:Key="BrushSuccess" Color="{StaticResource ColorSuccess}"/>
+    <SolidColorBrush x:Key="BrushPending" Color="{StaticResource ColorPending}"/>
+    <SolidColorBrush x:Key="BrushAlert" Color="{StaticResource ColorAlert}"/>
+    <SolidColorBrush x:Key="BrushTransparent" Color="Transparent"/>
+    <SolidColorBrush x:Key="BrushSidebarBg" Color="{StaticResource ColorSidebarBg}"/>
+    <SolidColorBrush x:Key="BrushSidebarText" Color="{StaticResource ColorSidebarText}"/>
+    <SolidColorBrush x:Key="BrushSidebarHover" Color="#2A3245"/>
+    <SolidColorBrush x:Key="BrushSidebarActive" Color="#2E3A50"/>
+
+    <Style x:Key="TextBase" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushAuthority}"/>
+    </Style>
+
+    <Style x:Key="TextH1" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="TextH2" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="TextRalewayLogin" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="TextLabel" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushReadText}"/>
+    </Style>
+
+    <Style x:Key="TextMuted" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushReadText}"/>
+    </Style>
+
+    <Style x:Key="TextKpiValue" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="BtnPrimary" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BrushAction}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource BrushActionHover}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnGhost" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushSidebarText}"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource BrushSidebarHover}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnGhostActive" TargetType="Button" BasedOn="{StaticResource BtnGhost}">
+        <Setter Property="Background" Value="{StaticResource BrushSidebarActive}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="5">
+                        <Grid>
+                            <Border Width="3" Background="{StaticResource BrushAction}" CornerRadius="0,3,3,0" HorizontalAlignment="Left"/>
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14,0"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnGhostLight" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushReadText}"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6" BorderBrush="{StaticResource BrushDivider}" BorderThickness="1">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BtnIcon" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" CornerRadius="5" Padding="6" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#F1F5F9"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="InputWeb" TargetType="TextBox">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#D1D9E6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Name="Border" CornerRadius="6" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer Name="PART_ContentHost" VerticalAlignment="Center" Margin="12,0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="InputPassWeb" TargetType="PasswordBox">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#D1D9E6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border Name="Border" CornerRadius="6" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer Name="PART_ContentHost" VerticalAlignment="Center" Margin="12,0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BrushWork}"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushDivider}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="CardStat" TargetType="Border" BasedOn="{StaticResource Card}">
+        <Setter Property="Padding" Value="20"/>
+    </Style>
+
+    <Style x:Key="BadgeBase" TargetType="Border">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Padding" Value="10,3"/>
+    </Style>
+
+    <Style x:Key="BadgeWarning" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+        <Setter Property="Background" Value="#FFFBEB"/>
+        <Setter Property="BorderBrush" Value="#FDE68A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="BadgeSuccess" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
+        <Setter Property="Background" Value="#F0FDF4"/>
+        <Setter Property="BorderBrush" Value="#BBF7D0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="DataGridPro" TargetType="DataGrid">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="RowHeaderWidth" Value="0"/>
+    </Style>
+
+    <Style x:Key="DataGridColumnHeaderPro" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#F8FAFC"/>
+        <Setter Property="Padding" Value="16,11"/>
+    </Style>
+
+    <Style x:Key="DataGridRowPro" TargetType="DataGridRow">
+        <Setter Property="Height" Value="52"/>
+    </Style>
+
+</ResourceDictionary>

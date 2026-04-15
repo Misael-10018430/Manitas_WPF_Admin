@@ -1,0 +1,96 @@
+﻿<Window x:Class="Manitas_WPF_Admin.Views.Account.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Manitas — Acceso Administrativo"
+        Height="600" Width="950"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Storyboard x:Key="CarouselStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="Img2" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:5" Duration="0:0:1"/>
+            <DoubleAnimation Storyboard.TargetName="Img1" Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:5" Duration="0:0:1"/>
+
+            <DoubleAnimation Storyboard.TargetName="Img3" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:11" Duration="0:0:1"/>
+            <DoubleAnimation Storyboard.TargetName="Img2" Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:11" Duration="0:0:1"/>
+
+            <DoubleAnimation Storyboard.TargetName="Img1" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:17" Duration="0:0:1"/>
+            <DoubleAnimation Storyboard.TargetName="Img3" Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:17" Duration="0:0:1"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource CarouselStoryboard}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid>
+        <Border CornerRadius="20" Background="White">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" ShadowDepth="0" Opacity="0.1" Color="Black"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" Margin="50,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,10,0,50">
+                        <Image Source="/Assets/Images/logo-manitas.png" Width="42" Height="42"/>
+                        <TextBlock Text="Manitas" VerticalAlignment="Center" Margin="14,0,0,0"
+                                   FontSize="24" FontWeight="Bold" Foreground="#1A202C"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,35">
+                        <TextBlock Text="Bienvenido" Style="{StaticResource TextRalewayLogin}"/>
+                        <TextBlock Text="Ingresa tu información para acceder" Foreground="#718096" FontSize="16" Margin="2,8,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2">
+                        <TextBlock Text="Email" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,10"/>
+                        <TextBox x:Name="TxtCorreo" Style="{StaticResource InputWeb}"/>
+
+                        <TextBlock Text="Contraseña" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,20,0,10"/>
+                        <PasswordBox x:Name="TxtPassword" Style="{StaticResource InputPassWeb}"/>
+
+                        <Border x:Name="PanelError" Background="#FEF2F2" BorderBrush="#FECACA" BorderThickness="1" 
+                                CornerRadius="8" Padding="12,8" Margin="0,15,0,0" Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚠️ " Foreground="#EF4444" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtError" Text="" Foreground="#EF4444" 
+                                           FontSize="12" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Button x:Name="BtnIngresar" Content="Iniciar Sesión" Margin="0,30,0,0"
+                                Style="{StaticResource BtnPrimary}" Height="52" FontSize="16" FontWeight="Bold"
+                                Click="BtnIngresar_Click"/>
+
+                        <TextBlock Text="Cerrar Aplicación" Margin="0,35,0,0" HorizontalAlignment="Center" 
+                                   FontSize="13" Foreground="#A0AEC0" Cursor="Hand" MouseLeftButtonDown="BtnCerrar_Click"/>
+                    </StackPanel>
+                </Grid>
+
+                <Border Grid.Column="1" Margin="15" CornerRadius="20" ClipToBounds="True">
+                    <Grid Background="#EDF2F7">
+                        <Image x:Name="Img3" Source="/Assets/Images/trabajador3.jpg" Stretch="UniformToFill" Opacity="0"/>
+                        <Image x:Name="Img2" Source="/Assets/Images/trabajador2.jpg" Stretch="UniformToFill" Opacity="0"/>
+                        <Image x:Name="Img1" Source="/Assets/Images/trabajador1.jpg" Stretch="UniformToFill" Opacity="1"/>
+
+                        <Border Background="Black" Opacity="0.03"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
