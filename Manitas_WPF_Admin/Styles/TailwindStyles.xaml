@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
     <Color x:Key="ColorAction">#FF835B</Color>
     <Color x:Key="ColorActionHover">#F07045</Color>
     <Color x:Key="ColorAuthority">#1A202C</Color>
@@ -13,7 +12,6 @@
     <Color x:Key="ColorAlert">#EF4444</Color>
     <Color x:Key="ColorSidebarBg">#1E2532</Color>
     <Color x:Key="ColorSidebarText">#A8B3C4</Color>
-
     <SolidColorBrush x:Key="BrushAction" Color="{StaticResource ColorAction}"/>
     <SolidColorBrush x:Key="BrushActionHover" Color="{StaticResource ColorActionHover}"/>
     <SolidColorBrush x:Key="BrushAuthority" Color="{StaticResource ColorAuthority}"/>
@@ -29,44 +27,36 @@
     <SolidColorBrush x:Key="BrushSidebarText" Color="{StaticResource ColorSidebarText}"/>
     <SolidColorBrush x:Key="BrushSidebarHover" Color="#2A3245"/>
     <SolidColorBrush x:Key="BrushSidebarActive" Color="#2E3A50"/>
-
     <Style x:Key="TextBase" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="Foreground" Value="{StaticResource BrushAuthority}"/>
     </Style>
-
     <Style x:Key="TextH1" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
         <Setter Property="FontSize" Value="22"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
-
     <Style x:Key="TextH2" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
-
     <Style x:Key="TextRalewayLogin" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
         <Setter Property="FontSize" Value="30"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
-
     <Style x:Key="TextLabel" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
         <Setter Property="FontSize" Value="10"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource BrushReadText}"/>
     </Style>
-
     <Style x:Key="TextMuted" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="{StaticResource BrushReadText}"/>
     </Style>
-
     <Style x:Key="TextKpiValue" TargetType="TextBlock" BasedOn="{StaticResource TextBase}">
         <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
     </Style>
-
     <Style x:Key="BtnPrimary" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource BrushAction}"/>
         <Setter Property="Foreground" Value="White"/>
@@ -86,7 +76,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="BtnGhost" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource BrushSidebarText}"/>
@@ -107,7 +96,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="BtnGhostActive" TargetType="Button" BasedOn="{StaticResource BtnGhost}">
         <Setter Property="Background" Value="{StaticResource BrushSidebarActive}"/>
         <Setter Property="Foreground" Value="White"/>
@@ -124,7 +112,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="BtnGhostLight" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource BrushReadText}"/>
@@ -139,7 +126,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="BtnIcon" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
@@ -157,7 +143,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="InputWeb" TargetType="TextBox">
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="#D1D9E6"/>
@@ -173,7 +158,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="InputPassWeb" TargetType="PasswordBox">
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="#D1D9E6"/>
@@ -189,46 +173,38 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="Card" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource BrushWork}"/>
         <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="BorderBrush" Value="{StaticResource BrushDivider}"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
-
     <Style x:Key="CardStat" TargetType="Border" BasedOn="{StaticResource Card}">
         <Setter Property="Padding" Value="20"/>
     </Style>
-
     <Style x:Key="BadgeBase" TargetType="Border">
         <Setter Property="CornerRadius" Value="4"/>
         <Setter Property="Padding" Value="10,3"/>
     </Style>
-
     <Style x:Key="BadgeWarning" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
         <Setter Property="Background" Value="#FFFBEB"/>
         <Setter Property="BorderBrush" Value="#FDE68A"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
-
     <Style x:Key="BadgeSuccess" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
         <Setter Property="Background" Value="#F0FDF4"/>
         <Setter Property="BorderBrush" Value="#BBF7D0"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
-
     <Style x:Key="DataGridPro" TargetType="DataGrid">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
     </Style>
-
     <Style x:Key="DataGridColumnHeaderPro" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="#F8FAFC"/>
         <Setter Property="Padding" Value="16,11"/>
     </Style>
-
     <Style x:Key="DataGridRowPro" TargetType="DataGridRow">
         <Setter Property="Height" Value="52"/>
     </Style>

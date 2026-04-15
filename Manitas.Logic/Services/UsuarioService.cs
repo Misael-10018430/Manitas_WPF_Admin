@@ -35,7 +35,6 @@ namespace Manitas.Logic.Services
         public List<UsuarioDTO> ObtenerManitas()
         {
             List<UsuarioDTO> listaDTO = new List<UsuarioDTO>();
-
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var manitasBD = db.usuarios
@@ -45,26 +44,16 @@ namespace Manitas.Logic.Services
 
                 foreach (var u in manitasBD)
                 {
-                    // 1. Obtenemos el perfil (donde está la ubicación y las fotos)
                     var perfil = u.perfiles_manitas.FirstOrDefault();
-
-                    // 2. Obtenemos el registro de servicio vinculado a ese perfil
                     var registroServicio = perfil?.manitas_servicios.FirstOrDefault();
-
                     listaDTO.Add(new UsuarioDTO
                     {
                         Id = u.id,
                         Correo = u.correo,
                         NombreCompleto = u.nombre_completo,
                         RolNombre = "Manita",
-
-                        // UBICACIÓN: Usamos el campo 'estado' que sí existe en perfiles_manitas
                         Ubicacion = perfil?.estado ?? "Sin ubicación",
-
-                        // OFICIO: Corregido de 'servicio' a 'tipos_servicio' según tu clase manitas_servicios
                         OficioNombre = registroServicio?.tipos_servicio?.nombre ?? "Oficio pendiente",
-
-                        // IDENTIFICACIÓN: Este campo vive en perfiles_manitas
                         RutaIdentificacion = perfil?.ine_frente_url ?? ""
                     });
                 }

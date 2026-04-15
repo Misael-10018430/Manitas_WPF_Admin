@@ -8,47 +8,32 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Manitas.Logic.DTOs;
 using Manitas.Logic.Services;
-
 namespace Manitas_WPF_Admin.Views.Modules
 {
     public partial class ManitasGestionView : UserControl
     {
-        // Colección principal ligada al DataGrid
         public ObservableCollection<UsuarioDTO> ListaManitas { get; set; }
         private readonly UsuarioService _usuarioService;
-
         public ManitasGestionView()
         {
             InitializeComponent();
             _usuarioService = new UsuarioService();
             ListaManitas = new ObservableCollection<UsuarioDTO>();
-
-            // Vinculamos la lista al DataGrid del XAML
             DgManitas.ItemsSource = ListaManitas;
-
-            // Cargamos los datos reales desde la base de datos al iniciar
             CargarDatosDesdeBD();
         }
-
-        #region 🛠️ Carga de Datos y Filtros
-
+        #region
         private void CargarDatosDesdeBD()
         {
             try
             {
-                // 1. Esto intenta traer los datos de tu SQL Server
                 var manitasDesdeDb = _usuarioService.ObtenerManitas();
                 ListaManitas.Clear();
-
                 foreach (var m in manitasDesdeDb)
                 {
                     ListaManitas.Add(m);
                 }
-
-                // ══════════════════════════════════════════════════════════════════
-                // 🚀 AQUÍ PONES EL DATO DE PRUEBA (Hardcodeado)
-                // ══════════════════════════════════════════════════════════════════
-                if (ListaManitas.Count == 0) // Solo si la base de datos está vacía
+                if (ListaManitas.Count == 0) 
                 {
                     ListaManitas.Add(new UsuarioDTO
                     {
@@ -60,18 +45,15 @@ namespace Manitas_WPF_Admin.Views.Modules
                         RolNombre = "Manita"
                     });
                 }
-                // ══════════════════════════════════════════════════════════════════
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar: " + ex.Message);
             }
         }
-
         private void TxtBuscar_TextChanged(object sender, TextChangedEventArgs e)
         {
             string filtro = TxtBuscar.Text.ToLower().Trim();
-
             if (string.IsNullOrEmpty(filtro))
             {
                 DgManitas.ItemsSource = ListaManitas;
@@ -86,11 +68,8 @@ namespace Manitas_WPF_Admin.Views.Modules
                 DgManitas.ItemsSource = filtrados;
             }
         }
-
         #endregion
-
-        #region 🎭 Lógica del Panel de Detalles (ZARVIS Drawer)
-
+        #region
         /// <summary>
         /// Abre el panel lateral con animación y carga los datos del manita seleccionado
         /// </summary>
@@ -98,19 +77,13 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             var btn = sender as Button;
             var manita = btn?.DataContext as UsuarioDTO;
-
             if (manita != null)
             {
-                // 1. Asignar textos (Asegúrate que los nombres coincidan con el XAML)
                 DetalleNombre.Text = manita.NombreCompleto;
                 DetalleCorreo.Text = manita.Correo;
                 DetalleUbicacion.Text = manita.Ubicacion;
-                DetalleOficio.Text = manita.OficioNombre; // O el campo que tengas para el oficio
-
-                // 2. Hacer visible el panel
+                DetalleOficio.Text = manita.OficioNombre;
                 PnlDetalles.Visibility = Visibility.Visible;
-
-                // 3. Ejecutar animación de entrada (Slide de derecha a izquierda)
                 DoubleAnimation slideAnim = new DoubleAnimation
                 {
                     From = 450, // Ancho del panel
@@ -137,7 +110,6 @@ namespace Manitas_WPF_Admin.Views.Modules
 
             TransDetalle.BeginAnimation(TranslateTransform.XProperty, slideAnim);
         }
-
         private void BtnAprobar_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is UsuarioDTO manitaSeleccionado)
@@ -155,7 +127,6 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             var btn = sender as Button;
             var manita = btn?.DataContext as UsuarioDTO;
-
             if (manita != null)
             {
                 var result = MessageBox.Show($"¿Estás seguro de rechazar la solicitud de {manita.NombreCompleto}? Esta acción lo desactivará del sistema.",
