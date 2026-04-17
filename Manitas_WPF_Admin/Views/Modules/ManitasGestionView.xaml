@@ -192,7 +192,7 @@
                                     <TextBlock x:Name="DetalleCorreo" Text="{Binding Correo}" FontWeight="Bold" Foreground="#1E293B" FontSize="11"/>
                                 </StackPanel>
                             </Grid>
-                            <TextBlock Text="DOCUMENTACIÓN DE IDENTIDAD" 
+                            <TextBlock Text="DOCUMENTACIÓN DE IDENTIDAD (INE)" 
                                FontSize="10" 
                                FontWeight="Black" 
                                Foreground="#94A3B8" 
@@ -205,7 +205,7 @@
                                     <Image Source="{Binding IneReversoUrl}" Stretch="Uniform" ToolTip="INE Reverso"/>
                                 </Border>
                             </UniformGrid>
-                            <TextBlock Text="COMPROBANTE ADICIONAL" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                            <TextBlock Text="COMPROBANTE DE DOMICILIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
                             <Border Height="140" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
                                 <Image Source="{Binding DocumentoExtraUrl}" Stretch="Uniform"/>
                             </Border>
