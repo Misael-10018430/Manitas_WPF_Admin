@@ -15,9 +15,18 @@ namespace Manitas_WPF_Admin.Views.Main
         public MainDashboard(UsuarioDTO usuario)
         {
             InitializeComponent();
+
+            // 1. Guardamos la sesión
             this.UsuarioSesion = usuario;
-            TxtNombreAdmin.Text = usuario.NombreCompleto;
+
+            // 2. Llenamos el Sidebar
+            TxtNombreAdminSidebar.Text = usuario.NombreCompleto;
             TxtRolAdmin.Text = usuario.RolNombre;
+
+            // 3. INTEGRACIÓN: Llamamos al método de saludo dinámico
+            EstablecerSaludo();
+
+            // 4. Cargamos la vista inicial
             CargarModuloDashboard();
         }
         private void BtnDashboard_Click(object sender, RoutedEventArgs e)
@@ -47,6 +56,24 @@ namespace Manitas_WPF_Admin.Views.Main
         {
             TxtModuloActual.Text = "Dashboard Principal";
             MainFrame.Navigate(new DashboardView());
+        }
+        private void BtnUsuariosGlobal_Click(object sender, RoutedEventArgs e)
+        {
+            TxtModuloActual.Text = "Directorio Global de Usuarios";
+            MainFrame.Navigate(new UsuariosGlobalView());
+        }
+        // Agrega esto en el constructor o en el evento Loaded
+        private void EstablecerSaludo()
+        {
+            int hora = DateTime.Now.Hour;
+            string saludo;
+
+            if (hora >= 6 && hora < 12) saludo = "Buenos días";
+            else if (hora >= 12 && hora < 19) saludo = "Buenas tardes";
+            else saludo = "Buenas noches";
+
+            // Usamos el nombre que ya tienes en el sidebar para que coincida
+            TxtNombreAdmin.Text = $"{saludo}, {TxtNombreAdminSidebar.Text}";
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Manitas.Logic.Services;
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Manitas.Logic.Services;
 namespace Manitas_WPF_Admin.Views.Modules
 {
     public partial class DashboardView : UserControl
@@ -12,25 +13,35 @@ namespace Manitas_WPF_Admin.Views.Modules
             InitializeComponent();
             _usuarioService = new UsuarioService();
             CargarEstadisticas();
+            CargarActividadReciente();
         }
         private void CargarEstadisticas()
         {
             try
             {
-                TxtManitasActivos.Text = "124";
-                TxtSolicitudes.Text = "8";
-                TxtEnCurso.Text = "32";
+                // 🔄 Sincronizamos con los nuevos nombres del XAML
+                TxtTotalUsuarios.Text = "164"; // El que está en medio del círculo
+                TxtPendientes.Text = "8";
+                TxtActivos.Text = "32";
                 TxtDisputas.Text = "2";
-                TxtComisiones.Text = string.Format("{0:C}", 15420.50);
+                TxtIngresos.Text = string.Format("{0:C}", 15420.50);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al conectar con la base de datos: {ex.Message}", "Error de Carga", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error al cargar estadísticas: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public void Refrescar()
         {
             CargarEstadisticas();
+        }
+        private void CargarActividadReciente()
+        {
+            // Usamos el método optimizado que creamos en el Service
+            var recientes = _usuarioService.ObtenerActividadReciente();
+
+            // Lo mandamos a la tabla
+            DgActividad.ItemsSource = recientes;
         }
     }
 }

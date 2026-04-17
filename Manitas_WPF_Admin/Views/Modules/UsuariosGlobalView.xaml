@@ -1,0 +1,163 @@
+﻿<UserControl x:Class="Manitas_WPF_Admin.Views.Modules.UsuariosGlobalView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Manitas_WPF_Admin.Views.Modules"
+             xmlns:conv="clr-namespace:Manitas_WPF_Admin.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1040">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <conv:RolToColorConverter x:Key="RolToColorConverter"/>
+
+            <Style x:Key="CenterTextColumn" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="15,0"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="0,0,0,25">
+        <TextBlock Text="Directorio Global de Usuarios" Style="{StaticResource TextH1}"/>
+            <TextBlock Text="Visualiza y filtra a todos los miembros registrados en el ecosistema Manitas." 
+                       Style="{StaticResource TextMuted}" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="25,18" Margin="0,0,0,25"
+        BorderBrush="#CBD5E1" BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Direction="270" Opacity="0.03" ShadowDepth="1"/>
+            </Border.Effect>
+
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="0,0,30,0">
+                    <TextBlock Text="CRITERIO DE BÚSQUEDA" FontSize="10" FontWeight="Bold" Foreground="#475569" Margin="2,0,0,8"/>
+                    <Border Background="#F1F5F9" CornerRadius="4" Width="380" Height="38" 
+                    BorderBrush="#E2E8F0" BorderThickness="1">
+                        <Grid Margin="12,0">
+                            <TextBlock Text="Buscar por nombre o correo electrónico..." VerticalAlignment="Center" 
+                               Foreground="#94A3B8" FontSize="12" IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=TxtBusqueda}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBox x:Name="TxtBusqueda" Background="Transparent" BorderThickness="0" 
+                             VerticalContentAlignment="Center" FontSize="13" Foreground="#1E293B"
+                             TextChanged="Filtros_Changed"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="FILTRAR POR CATEGORÍA" FontSize="10" FontWeight="Bold" Foreground="#475569" Margin="2,0,0,8"/>
+                    <ComboBox x:Name="CbRol" Width="220" Height="38"
+          SelectionChanged="Filtros_Changed">
+                        <ComboBoxItem Content="Todos los Miembros" IsSelected="True"/>
+                        <ComboBoxItem Content="Manitas"/>
+                        <ComboBoxItem Content="Clientes"/>
+                    </ComboBox>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="ColDetalle" Width="0"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource Card}" Padding="0" ClipToBounds="True" Margin="0,0,15,0">
+                <DataGrid x:Name="DgUsuarios" 
+                  Style="{StaticResource DataGridPro}"
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True"
+                  RowHeight="60"
+                  SelectionChanged="DgUsuarios_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="NOMBRE COMPLETO" Binding="{Binding NombreCompleto}" Width="2*" ElementStyle="{StaticResource CenterTextColumn}"/>
+                        <DataGridTextColumn Header="CORREO" Binding="{Binding Correo}" Width="1.5*" ElementStyle="{StaticResource CenterTextColumn}"/>
+                        <DataGridTextColumn Header="ESTADO" Binding="{Binding Estado}" Width="1*" ElementStyle="{StaticResource CenterTextColumn}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <Border x:Name="PanelDetalle" Grid.Column="1" Style="{StaticResource Card}" Padding="20" Visibility="Collapsed">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Width="100" Height="100" CornerRadius="50" Margin="0,0,0,15" Background="#F1F5F9" ClipToBounds="True">
+                           <Image x:Name="ImgPerfil" 
+                           Source="{Binding FotoPerfilUrl}" 
+                           Stretch="UniformToFill"/>
+                        </Border>
+
+                        <TextBlock x:Name="TxtNombreDetalle" Text="Nombre del Usuario" FontWeight="Black" FontSize="18" HorizontalAlignment="Center" TextAlignment="Center"/>
+                        <TextBlock x:Name="TxtRolDetalle" Text="Rol" Foreground="#EA580C"  FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,20"/>
+
+                        <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+                        <TextBlock Text="TELÉFONO" 
+                           FontSize="10" 
+                           FontWeight="Black" 
+                           Foreground="#94A3B8" 
+                           Margin="0,0,0,5"/>
+
+                                        <TextBlock x:Name="TxtTelefonoDetalle" 
+                           Text="No registrado" 
+                           Margin="0,0,0,15" 
+                           FontWeight="SemiBold"/>
+
+                        <TextBlock Text="DOCUMENTACIÓN (INE)" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
+
+                        <UniformGrid Columns="2" Margin="0,5,0,0">
+                            <StackPanel Margin="0,0,5,0">
+                                <TextBlock Text="FRENTE" FontSize="9" HorizontalAlignment="Center"/>
+                                <Border Height="80" Background="#F8FAFC" CornerRadius="4" Margin="0,5,0,0" BorderBrush="#E2E8F0" BorderThickness="1">
+                                    <Image x:Name="ImgIneFrente" Stretch="Uniform"/>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Margin="5,0,0,0">
+                                <TextBlock Text="REVERSO" FontSize="9" HorizontalAlignment="Center"/>
+                                <Border Height="80" Background="#F8FAFC" CornerRadius="4" Margin="0,5,0,0" BorderBrush="#E2E8F0" BorderThickness="1">
+                                    <Image x:Name="ImgIneReverso" Stretch="Uniform"/>
+                                </Border>
+                            </StackPanel>
+                        </UniformGrid>
+                        <Button Content="Ver Expediente Completo" 
+                            Click="BtnVerExpediente_Click" 
+                            Margin="0,25,0,10" 
+                            Background="#EA580C" 
+                            Foreground="White" 
+                            FontWeight="Bold" 
+                            Height="40"
+                            BorderThickness="0">
+                                                <Button.Resources>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="CornerRadius" Value="6"/>
+                                                    </Style>
+                            </Button.Resources>
+                        </Button>
+                        <Button x:Name="BtnCerrarDetalle" Content="Cerrar Panel" Click="BtnCerrarDetalle_Click" Background="Transparent" BorderThickness="0" Foreground="#94A3B8"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

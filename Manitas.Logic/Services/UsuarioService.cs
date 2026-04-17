@@ -45,16 +45,20 @@ namespace Manitas.Logic.Services
                 foreach (var u in manitasBD)
                 {
                     var perfil = u.perfiles_manitas.FirstOrDefault();
+                    // 🔍 Nota: Ajustamos a la estructura de servicios que manejas
                     var registroServicio = perfil?.manitas_servicios.FirstOrDefault();
+
                     listaDTO.Add(new UsuarioDTO
                     {
                         Id = u.id,
-                        Correo = u.correo,
                         NombreCompleto = u.nombre_completo,
-                        RolNombre = "Manita",
-                        Ubicacion = perfil?.estado ?? "Sin ubicación",
-                        OficioNombre = registroServicio?.tipos_servicio?.nombre ?? "Oficio pendiente",
-                        RutaIdentificacion = perfil?.ine_frente_url ?? ""
+                        Correo = u.correo,
+                        Telefono = u.telefono, // 📱 Agregamos el teléfono
+
+                        // ✅ CORRECCIÓN: Quitamos Ubicacion porque ya no está en el DTO
+
+                        // ✅ CORRECCIÓN: OficioNombre ahora es OficioDescripcion
+                        OficioDescripcion = registroServicio?.tipos_servicio?.nombre ?? "Oficio no asignado"
                     });
                 }
             }
@@ -124,6 +128,68 @@ namespace Manitas.Logic.Services
             catch (Exception ex)
             {
                 throw new Exception("Error al procesar el rechazo en SQL: " + ex.Message);
+            }
+        }
+        public bool ActualizarEstadoManitas(Guid usuarioId, string nuevoEstado, string motivo)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var perfil = db.perfiles_manitas.FirstOrDefault(p => p.usuario_id == usuarioId);
+                if (perfil != null)
+                {
+                    perfil.estado = nuevoEstado;
+                    perfil.motivo_rechazo = motivo;
+                    return db.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+        // 1. Método para la tabla del Dashboard (Actividad Reciente)
+        public List<UsuarioDTO> ObtenerActividadReciente()
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                return db.usuarios
+                    .Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador" && r.role.nombre != "encargado")) // 👈 FILTRO CLAVE
+                    .OrderByDescending(u => u.fecha_registro)
+                    .Take(6)
+                    .AsEnumerable()
+                    .Select(u => new UsuarioDTO
+                    {
+                        NombreCompleto = u.nombre_completo,
+                        RolNombre = u.usuario_roles.FirstOrDefault()?.role?.nombre ?? "Sin Rol",
+                        Telefono = u.telefono,
+                        FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
+                    }).ToList();
+            }
+        }
+
+        // 2. Método para el Directorio Global
+        public List<UsuarioDTO> ObtenerUsuariosGlobal(string busqueda, string filtroRol)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador"));
+
+                // (Aquí van tus filtros de búsqueda...)
+
+                return query.ToList().Select(u => new UsuarioDTO // <--- Agregamos .ToList() antes del Select
+                {
+                    Id = u.id,
+                    NombreCompleto = u.nombre_completo,
+                    Correo = u.correo,
+                    Telefono = u.telefono,
+                    RolNombre = u.usuario_roles.FirstOrDefault()?.role?.nombre ?? "Sin Rol",
+                    Estado = u.usuario_roles.FirstOrDefault()?.activo == true ? "Activo" : "Inactivo",
+                    FechaRegistro = u.fecha_registro,
+
+                    // Datos del perfil (con validación de nulos)
+                    OficioDescripcion = u.perfiles_manitas.FirstOrDefault()?.descripcion ?? "Sin oficio",
+                    FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
+                    IneFrenteUrl = u.perfiles_manitas.FirstOrDefault()?.ine_frente_url,
+                    IneReversoUrl = u.perfiles_manitas.FirstOrDefault()?.ine_reverso_url,
+                    DocumentoExtraUrl = u.perfiles_manitas.FirstOrDefault()?.comprobante_url
+                }).ToList();
             }
         }
     }

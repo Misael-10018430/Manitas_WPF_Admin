@@ -3,15 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:conv="clr-namespace:Manitas_WPF_Admin.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1100">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <conv:RolToColorConverter x:Key="RolToColorConverter"/>
+
         </ResourceDictionary>
     </UserControl.Resources>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,4,0">
         <StackPanel Margin="0,0,0,20">
 
@@ -22,135 +28,72 @@
                                Style="{StaticResource TextMuted}" Margin="0,4,0,0"/>
                 </StackPanel>
             </Grid>
-            <UniformGrid Columns="3" Margin="0,0,0,4">
-                <Border Style="{StaticResource CardStat}" Margin="0,0,16,16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="Total Manitas" Style="{StaticResource TextMuted}"/>
-                            <Border HorizontalAlignment="Right" Width="36" Height="36" 
-                                    CornerRadius="6" Background="#F0FDF4">
-                                <Path Data="M10,5 A3,3 0 1,1 4,5 A3,3 0 1,1 10,5 M1,15 C1,11 3,9 7,9 C11,9 13,11 13,15 M11,7 L15,7 M13,5 L13,9" 
-                                      Stroke="#22C55E" StrokeThickness="1.2" 
-                                      Fill="Transparent" Stretch="Uniform"
-                                      Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <TextBlock x:Name="TxtManitasActivos" Grid.Row="1" Text="5,423" 
-                                   Style="{StaticResource TextKpiValue}" Margin="0,8,0,4"/>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <TextBlock Text="↑ 16%" Foreground="{StaticResource BrushSuccess}" 
-                                       FontWeight="SemiBold" FontSize="12"/>
-                            <TextBlock Text=" este mes" Style="{StaticResource TextMuted}" 
-                                       FontSize="12" Margin="4,0,0,0"/>
+
+            <Border Background="White" CornerRadius="16" Margin="0,0,0,25" Padding="24">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.05" Color="Black"/>
+                </Border.Effect>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" VerticalAlignment="Center">
+                        <Ellipse Stroke="#F1F5F9" StrokeThickness="18" Width="160" Height="160"/>
+                        <Ellipse x:Name="PieManitas" Stroke="#FFEDD5" StrokeThickness="18" Width="160" Height="160" 
+                                 StrokeDashArray="70,30" StrokeDashCap="Round" RenderTransformOrigin="0.5,0.5">
+                            <Ellipse.RenderTransform>
+                                <RotateTransform Angle="-90"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                        <Ellipse x:Name="PieClientes" Stroke="#E0F2FE" StrokeThickness="18" Width="160" Height="160" 
+                                 StrokeDashArray="30,70" StrokeDashCap="Round" RenderTransformOrigin="0.5,0.5">
+                            <Ellipse.RenderTransform>
+                                <RotateTransform Angle="160"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="TOTAL" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TxtTotalUsuarios" Text="164" FontSize="32" FontWeight="ExtraBold" Foreground="#1E293B" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Miembros" FontSize="11" Foreground="#64748B" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
-                </Border>
-                <Border Style="{StaticResource CardStat}" Margin="0,0,16,16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="Pendientes" Style="{StaticResource TextMuted}"/>
-                            <Border HorizontalAlignment="Right" Width="36" Height="36" 
-                                    CornerRadius="6" Background="#FFFBEB">
-                                <Path Data="M8,1 L8,9 M8,11 L8,13" 
-                                      Stroke="#F59E0B" StrokeThickness="1.5" 
-                                      Stretch="Uniform"
-                                      Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <TextBlock x:Name="TxtSolicitudes" Grid.Row="1" Text="189" 
-                                   Style="{StaticResource TextKpiValue}" Margin="0,8,0,4"/>
-                        <TextBlock Grid.Row="2" Text="Revisión requerida" 
-                                   Foreground="{StaticResource BrushPending}" 
-                                   FontSize="12" FontWeight="SemiBold"/>
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource CardStat}" Margin="0,0,0,16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="Servicios Activos" Style="{StaticResource TextMuted}"/>
-                            <Border HorizontalAlignment="Right" Width="36" Height="36" 
-                                    CornerRadius="6" Background="#EFF6FF">
-                                <Path Data="M3,12 L6,9 L9,11 L14,4" 
-                                      Stroke="#3B82F6" StrokeThickness="1.5" 
-                                      Fill="Transparent" Stretch="Uniform"
-                                      Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <TextBlock x:Name="TxtEnCurso" Grid.Row="1" Text="32" 
-                                   Style="{StaticResource TextKpiValue}" Margin="0,8,0,4"/>
-                        <TextBlock Grid.Row="2" Text="En tiempo real" 
-                                   Style="{StaticResource TextMuted}" FontSize="12"/>
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource CardStat}" Margin="0,0,16,16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="Disputas" Style="{StaticResource TextMuted}"/>
-                            <Border HorizontalAlignment="Right" Width="36" Height="36" 
-                                    CornerRadius="6" Background="#FEF2F2">
-                                <Path Data="M8,2 L14,14 L2,14 Z M8,7 L8,10 M8,11.5 L8,12.5" 
-                                      Stroke="#EF4444" StrokeThickness="1.2" 
-                                      Fill="Transparent" Stretch="Uniform"
-                                      Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <TextBlock x:Name="TxtDisputas" Grid.Row="1" Text="2" 
-                                   Style="{StaticResource TextKpiValue}" 
-                                   Foreground="{StaticResource BrushAlert}" Margin="0,8,0,4"/>
-                        <TextBlock Grid.Row="2" Text="↓ 1% vs ayer" 
-                                   Foreground="{StaticResource BrushAlert}" 
-                                   FontSize="12" FontWeight="SemiBold"/>
-                    </Grid>
-                </Border>
-                <Border Style="{StaticResource CardStat}" Margin="0,0,16,16">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="Ingresos Totales" Style="{StaticResource TextMuted}"/>
-                            <Border HorizontalAlignment="Right" Width="36" Height="36" 
-                                    CornerRadius="6" Background="#FFF5F2">
-                                <Path Data="M8,2 L8,4 M8,12 L8,14 M5,5 L8,4 L11,5 L12,8 L9,9 L6,10 L5,12 L8,13 L11,12" 
-                                      Stroke="{StaticResource BrushAction}" 
-                                      StrokeThickness="1.2" 
-                                      Fill="Transparent" Stretch="Uniform"
-                                      Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <TextBlock x:Name="TxtComisiones" Grid.Row="1" Text="$15,420" 
-                                   Style="{StaticResource TextKpiValue}" Margin="0,8,0,4"/>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <TextBlock Text="↑ 8%" Foreground="{StaticResource BrushSuccess}" 
-                                       FontWeight="SemiBold" FontSize="12"/>
-                            <TextBlock Text=" este mes" Style="{StaticResource TextMuted}" 
-                                       FontSize="12" Margin="4,0,0,0"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </UniformGrid>
+
+                    <UniformGrid Grid.Column="1" Columns="2" Rows="2" Margin="20,0,0,0">
+                        <Border Background="#FFFBEB" CornerRadius="12" Margin="6" Padding="14">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="PENDIENTES" FontSize="9" FontWeight="Bold" Foreground="#B45309" Opacity="0.8"/>
+                                <TextBlock x:Name="TxtPendientes" Text="8" FontSize="22" FontWeight="Bold" Foreground="#92400E" Margin="0,2"/>
+                                <TextBlock Text="Revisión requerida" FontSize="10" Foreground="#D97706"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#F0FDF4" CornerRadius="12" Margin="6" Padding="14">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="SERVICIOS" FontSize="9" FontWeight="Bold" Foreground="#15803D" Opacity="0.8"/>
+                                <TextBlock x:Name="TxtActivos" Text="32" FontSize="22" FontWeight="Bold" Foreground="#166534" Margin="0,2"/>
+                                <TextBlock Text="En tiempo real" FontSize="10" Foreground="#16A34A"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#FEF2F2" CornerRadius="12" Margin="6" Padding="14">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="DISPUTAS" FontSize="9" FontWeight="Bold" Foreground="#B91C1C" Opacity="0.8"/>
+                                <TextBlock x:Name="TxtDisputas" Text="2" FontSize="22" FontWeight="Bold" Foreground="#991B1B" Margin="0,2"/>
+                                <TextBlock Text="Casos abiertos" FontSize="10" Foreground="#DC2626"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="#F5F3FF" CornerRadius="12" Margin="6" Padding="14">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="INGRESOS" FontSize="9" FontWeight="Bold" Foreground="#6D28D9" Opacity="0.8"/>
+                                <TextBlock x:Name="TxtIngresos" Text="$15,420" FontSize="22" FontWeight="Bold" Foreground="#6B21A8" Margin="0,2"/>
+                                <TextBlock Text="Corte del mes" FontSize="10" Foreground="#7C3AED"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                </Grid>
+            </Border>
+
             <Border Style="{StaticResource Card}" Padding="0" ClipToBounds="True" MinHeight="420">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -163,37 +106,55 @@
                             <TextBlock Text="Miembros activos actualmente en el sistema" 
                                        Style="{StaticResource TextMuted}" Margin="0,3,0,0"/>
                         </StackPanel>
-                        <Border HorizontalAlignment="Right" VerticalAlignment="Center"
-                                Background="{StaticResource BrushAmbient}" CornerRadius="6" 
-                                Width="200" Height="34"
-                                BorderBrush="{StaticResource BrushDivider}" BorderThickness="1">
-                            <Grid Margin="12,0">
-                                <TextBlock Text="Buscar..." VerticalAlignment="Center" 
-                                           Foreground="#CBD5E1" FontSize="12"
-                                           IsHitTestVisible="False"/>
-                                <TextBox Background="Transparent" BorderThickness="0" 
-                                         Margin="0,0,0,0" Width="160" FontSize="12"
-                                         VerticalContentAlignment="Center"/>
-                            </Grid>
-                        </Border>
                     </Grid>
-                    <Border Grid.Row="0" Height="1" Background="{StaticResource BrushDivider}" 
-                            VerticalAlignment="Bottom" Margin="0,60,0,0"/>
-                    <StackPanel Grid.Row="1" VerticalAlignment="Center" 
-                                HorizontalAlignment="Center" Margin="0,40">
-                        <Border Width="48" Height="48" CornerRadius="24" 
-                                Background="{StaticResource BrushAmbient}"
-                                HorizontalAlignment="Center">
-                            <Path Data="M6,3 L14,3 L14,13 L6,13 Z M4,5 L2,5 L2,15 L12,15 L12,13 M8,7 L12,7 M8,10 L12,10" 
-                                  Stroke="{StaticResource BrushReadText}" StrokeThickness="1"
-                                  Fill="Transparent" Stretch="Uniform"
-                                  Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <TextBlock Text="Consultando transacciones en SQL Server..." 
-                                   Style="{StaticResource TextMuted}" 
-                                   Margin="0,12,0,0" 
-                                   HorizontalAlignment="Center"/>
-                    </StackPanel>
+                    <Border Grid.Row="0" Height="1" Background="{StaticResource BrushDivider}" VerticalAlignment="Bottom" Margin="0,60,0,0"/>
+                    <Grid Grid.Row="1" Margin="0,15,0,0">
+                        <DataGrid x:Name="DgActividad" 
+                                  Style="{StaticResource DataGridPro}"
+                                  AutoGenerateColumns="False" 
+                                  IsReadOnly="True"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  RowHeight="55">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="MIEMBRO" Width="2*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                                                <Border Width="34" Height="34" CornerRadius="17" Background="#F1F5F9" ClipToBounds="True">
+                                                    <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding NombreCompleto}" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#1E293B"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="ROL" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding RolNombre, Converter={StaticResource RolToColorConverter}}" CornerRadius="4" Padding="8,2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding RolNombre}" FontSize="10" FontWeight="Bold" Foreground="#1E293B"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="TELÉFONO" Binding="{Binding Telefono}" Width="1.2*" Foreground="#64748B"/>
+
+                                <DataGridTemplateColumn Header="ESTADO" Width="110">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Ellipse Width="8" Height="8" Fill="#22C55E" Margin="0,0,8,0"/>
+                                                <TextBlock Text="Activo" FontSize="11" Foreground="#64748B"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
                 </Grid>
             </Border>
         </StackPanel>

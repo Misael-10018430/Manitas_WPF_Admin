@@ -190,6 +190,9 @@
         <Setter Property="Background" Value="#FFFBEB"/>
         <Setter Property="BorderBrush" Value="#FDE68A"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="10,2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
     <Style x:Key="BadgeSuccess" TargetType="Border" BasedOn="{StaticResource BadgeBase}">
         <Setter Property="Background" Value="#F0FDF4"/>
@@ -199,14 +202,129 @@
     <Style x:Key="DataGridPro" TargetType="DataGrid">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="RowHeaderWidth" Value="0"/>
-    </Style>
-    <Style x:Key="DataGridColumnHeaderPro" TargetType="DataGridColumnHeader">
-        <Setter Property="Background" Value="#F8FAFC"/>
-        <Setter Property="Padding" Value="16,11"/>
-    </Style>
-    <Style x:Key="DataGridRowPro" TargetType="DataGridRow">
-        <Setter Property="Height" Value="52"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="#F1F5F9"/>
+        <Setter Property="RowHeight" Value="64"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
     </Style>
 
+    <Style x:Key="DataGridColumnHeaderPro" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#64748B"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushDivider}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    </Style>
+
+    <Style x:Key="DataGridRowPro" TargetType="DataGridRow">
+        <Setter Property="Height" Value="64"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushDivider}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#F8FAFC"/>
+            </Trigger>
+
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="#FFF5F2"/>
+                <Setter Property="Foreground" Value="{StaticResource BrushAction}"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="BadgeStatus" TargetType="Border">
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+    <Style x:Key="MenuNavItem" TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushSidebarText}"/>
+        <Setter Property="Height" Value="45"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8">
+                        <Grid>
+                            <Border x:Name="Indicator" 
+                                Width="4" 
+                                Background="{StaticResource BrushAction}" 
+                                HorizontalAlignment="Left" 
+                                CornerRadius="0,4,4,0" 
+                                Visibility="Collapsed"/>
+
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14,0"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource BrushSidebarHover}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource BrushSidebarActive}"/>
+                            <Setter TargetName="Indicator" Property="Visibility" Value="Visible"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="WebComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#E2E8F0"/>
+        <Setter Property="BorderThickness" Value="1.5"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Border x:Name="border" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            CornerRadius="8"/>
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <ContentPresenter IsHitTestVisible="False" 
+                                          Content="{TemplateBinding SelectionBoxItem}" 
+                                          VerticalAlignment="Center" />
+                        </Grid>
+                        <ToggleButton x:Name="toggle" Background="Transparent" BorderThickness="0" 
+                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ButtonPrimary" TargetType="Button">
+        <Setter Property="Background" Value="#6366F1"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
+using System.Windows;                // ✨ Quita el error de Visibility
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
+using System.Windows.Media;          // ✨ Quita el error de TranslateTransform
+using System.Windows.Media.Animation; // ✨ Quita el error de DoubleAnimation y CubicEase
+using System.Collections.ObjectModel;
 using Manitas.Logic.DTOs;
 using Manitas.Logic.Services;
 namespace Manitas_WPF_Admin.Views.Modules
@@ -40,9 +39,10 @@ namespace Manitas_WPF_Admin.Views.Modules
                         Id = Guid.NewGuid(),
                         NombreCompleto = "Misael (Modo Prueba)",
                         Correo = "misael@test.com",
-                        OficioNombre = "Desarrollador WPF",
-                        Ubicacion = "Villahermosa, Tabasco",
+                        Telefono = "9933123456",             // ✅ USA TELEFONO
+                        OficioDescripcion = "Desarrollador WPF", // ✅ CAMBIÓ DE NOMBRE
                         RolNombre = "Manita"
+                        // 🗑️ BORRA LA LÍNEA DE UBICACION COMPLETAMENTE
                     });
                 }
             }
@@ -77,16 +77,22 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             var btn = sender as Button;
             var manita = btn?.DataContext as UsuarioDTO;
+
             if (manita != null)
             {
+                // ✅ Sincronizamos con los nombres reales del DTO y del XAML
                 DetalleNombre.Text = manita.NombreCompleto;
                 DetalleCorreo.Text = manita.Correo;
-                DetalleUbicacion.Text = manita.Ubicacion;
-                DetalleOficio.Text = manita.OficioNombre;
+                // DetalleUbicacion.Text = manita.Ubicacion; // 🗑️ BORRADO: Ya no existe
+                DetalleOficio.Text = manita.OficioDescripcion; // ✅ Nombre correcto
+
                 PnlDetalles.Visibility = Visibility.Visible;
+                PnlDetalles.DataContext = manita; // ✨ Esto auto-rellena las fotos
+
+                // Animación de entrada
                 DoubleAnimation slideAnim = new DoubleAnimation
                 {
-                    From = 450, // Ancho del panel
+                    From = 450,
                     To = 0,
                     Duration = TimeSpan.FromSeconds(0.4),
                     EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
@@ -112,36 +118,50 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void BtnAprobar_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is UsuarioDTO manitaSeleccionado)
+            var manita = PnlDetalles.DataContext as UsuarioDTO;
+            if (manita == null) return;
+
+            var resultado = MessageBox.Show($"¿Confirmas la aprobación de {manita.NombreCompleto}?",
+                                            "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (resultado == MessageBoxResult.Yes)
             {
-                bool exito = _usuarioService.AprobarUsuarioComoManita(manitaSeleccionado.Id);
+                // Llamamos al servicio para actualizar en la DB
+                bool exito = _usuarioService.ActualizarEstadoManitas(manita.Id, "activo", null);
 
                 if (exito)
                 {
-                    MessageBox.Show("¡Manita aprobado con éxito!");
-                    CargarDatosDesdeBD();
+                    MessageBox.Show("El perfil ha sido activado correctamente.");
+                    CargarDatosDesdeBD(); // Refrescamos la lista
+                    BtnCerrarDetalle_Click(null, null); // Cerramos el panel
                 }
             }
         }
         private void BtnRechazar_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as Button;
-            var manita = btn?.DataContext as UsuarioDTO;
-            if (manita != null)
+            // ✅ Si el panel no es visible, lo mostramos
+            if (PnlRechazo.Visibility == Visibility.Collapsed)
             {
-                var result = MessageBox.Show($"¿Estás seguro de rechazar la solicitud de {manita.NombreCompleto}? Esta acción lo desactivará del sistema.",
-                                           "Advertencia de Rechazo",
-                                           MessageBoxButton.YesNo,
-                                           MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    if (_usuarioService.RechazarUsuario(manita.Id))
-                    {
-                        BtnCerrarDetalle_Click(null, null);
-                        CargarDatosDesdeBD();
-                        MessageBox.Show("Solicitud rechazada y registro desactivado.", "Proceso Completado");
-                    }
-                }
+                PnlRechazo.Visibility = Visibility.Visible;
+                TxtMotivoRechazo.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(TxtMotivoRechazo.Text))
+            {
+                MessageBox.Show("Por favor, indica el motivo del rechazo para informar al usuario.");
+                return;
+            }
+
+            var manita = PnlDetalles.DataContext as UsuarioDTO;
+            // ✅ Asegúrate de que este método exista en tu UsuarioService
+            bool exito = _usuarioService.ActualizarEstadoManitas(manita.Id, "rechazado", TxtMotivoRechazo.Text);
+
+            if (exito)
+            {
+                MessageBox.Show("Solicitud rechazada. Se ha notificado al usuario.");
+                CargarDatosDesdeBD();
+                BtnCerrarDetalle_Click(null, null);
             }
         }
         #endregion
