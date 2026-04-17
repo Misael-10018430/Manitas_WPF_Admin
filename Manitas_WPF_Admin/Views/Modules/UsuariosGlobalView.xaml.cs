@@ -1,7 +1,7 @@
-﻿using Manitas.Logic.DTOs;             // ✨ QUITA EL ERROR DE UsuarioDTO
-using Manitas.Logic.Services;         // ✨ QUITA EL ERROR DE UsuarioService
+﻿using Manitas.Logic.DTOs;             
+using Manitas.Logic.Services;       
 using System;
-using System.Collections.ObjectModel; // ✨ QUITA EL ERROR DE ObservableCollection
+using System.Collections.ObjectModel; 
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -14,12 +14,9 @@ namespace Manitas_WPF_Admin.Views.Modules
         public ObservableCollection<UsuarioDTO> ListaUsuarios { get; set; }
         public UsuariosGlobalView()
         {
-            // ESTO DEBE IR ANTES DE INITIALIZECOMPONENT
             _usuarioService = new UsuarioService();
             ListaUsuarios = new ObservableCollection<UsuarioDTO>();
-
-            InitializeComponent(); // <--- Aquí es donde se "enciende" el XAML
-
+            InitializeComponent();
             DgUsuarios.ItemsSource = ListaUsuarios;
             CargarUsuarios();
         }
@@ -44,30 +41,18 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void Filtros_Changed(object sender, EventArgs e)
         {
-            // 🛡️ ESTA ES LA LÍNEA MÁGICA:
-            // Si la tabla es nula (aún no se crea), salimos de la función sin filtrar
             if (DgUsuarios == null) return;
-
-            // 1. Obtener los valores de los filtros
             string busqueda = TxtBusqueda?.Text.ToLower().Trim() ?? "";
             string rolSeleccionado = (CbRol?.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Todos los Miembros";
-
-            // 2. Filtrar la lista que viene de la BD
             var filtrados = ListaUsuarios.Where(u => {
-                // Filtro por texto (Nombre o Correo)
                 bool coincideTexto = string.IsNullOrEmpty(busqueda) ||
                                      u.NombreCompleto.ToLower().Contains(busqueda) ||
                                      u.Correo.ToLower().Contains(busqueda);
-
-                // Filtro por Rol
                 bool coincideRol = true;
                 if (rolSeleccionado == "Manitas") coincideRol = u.RolNombre.ToLower().Contains("manita");
                 else if (rolSeleccionado == "Clientes") coincideRol = u.RolNombre.ToLower().Contains("cliente");
-
                 return coincideTexto && coincideRol;
             }).ToList();
-
-            // 3. Actualizar la tabla
             DgUsuarios.ItemsSource = filtrados;
         }
         private void DgUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -78,14 +63,10 @@ namespace Manitas_WPF_Admin.Views.Modules
             {
                 ColDetalle.Width = new GridLength(350);
                 PanelDetalle.Visibility = Visibility.Visible;
-
-                // 1. Llenar los datos de texto
                 TxtNombreDetalle.Text = seleccionado.NombreCompleto;
                 TxtRolDetalle.Text = seleccionado.RolNombre?.ToUpper();
                 if (TxtTelefonoDetalle != null)
                     TxtTelefonoDetalle.Text = seleccionado.Telefono ?? "Sin registro";
-
-                // 📸 2. LÓGICA DE IMAGEN ESTRICTA: Solo muestra si hay URL real
                 try
                 {
                     if (!string.IsNullOrEmpty(seleccionado.FotoPerfilUrl))
@@ -94,7 +75,7 @@ namespace Manitas_WPF_Admin.Views.Modules
                     }
                     else
                     {
-                        ImgPerfil.Source = null; // ❌ NO MOSTRAR NADA si no hay foto
+                        ImgPerfil.Source = null;
                     }
 
                     if (!string.IsNullOrEmpty(seleccionado.IneFrenteUrl))
@@ -108,18 +89,13 @@ namespace Manitas_WPF_Admin.Views.Modules
                 }
             }
         }
-
-        // 📂 3. Acción para Ver el Expediente (El documento PDF/Imagen extra)
         private void BtnVerExpediente_Click(object sender, RoutedEventArgs e)
         {
             var seleccionado = DgUsuarios.SelectedItem as UsuarioDTO;
-
-            // Verificamos que haya un documento que mostrar
             if (seleccionado != null && !string.IsNullOrEmpty(seleccionado.DocumentoExtraUrl))
             {
                 try
                 {
-                    // Abre la URL o archivo en el programa predeterminado de Windows
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(seleccionado.DocumentoExtraUrl) { UseShellExecute = true });
                 }
                 catch
@@ -134,10 +110,9 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)
         {
-            // Ocultar el panel y regresar la columna a 0
             ColDetalle.Width = new GridLength(0);
             PanelDetalle.Visibility = Visibility.Collapsed;
-            DgUsuarios.SelectedItem = null; // Quitamos la selección de la tabla
+            DgUsuarios.SelectedItem = null;
         }
     }
 }

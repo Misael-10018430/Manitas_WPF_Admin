@@ -19,8 +19,7 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             try
             {
-                // 🔄 Sincronizamos con los nuevos nombres del XAML
-                TxtTotalUsuarios.Text = "164"; // El que está en medio del círculo
+                TxtTotalUsuarios.Text = "164"; 
                 TxtPendientes.Text = "8";
                 TxtActivos.Text = "32";
                 TxtDisputas.Text = "2";
@@ -37,10 +36,7 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void CargarActividadReciente()
         {
-            // Usamos el método optimizado que creamos en el Service
             var recientes = _usuarioService.ObtenerActividadReciente();
-
-            // Lo mandamos a la tabla
             DgActividad.ItemsSource = recientes;
         }
     }

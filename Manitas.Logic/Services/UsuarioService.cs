@@ -45,19 +45,13 @@ namespace Manitas.Logic.Services
                 foreach (var u in manitasBD)
                 {
                     var perfil = u.perfiles_manitas.FirstOrDefault();
-                    // 🔍 Nota: Ajustamos a la estructura de servicios que manejas
                     var registroServicio = perfil?.manitas_servicios.FirstOrDefault();
-
                     listaDTO.Add(new UsuarioDTO
                     {
                         Id = u.id,
                         NombreCompleto = u.nombre_completo,
                         Correo = u.correo,
-                        Telefono = u.telefono, // 📱 Agregamos el teléfono
-
-                        // ✅ CORRECCIÓN: Quitamos Ubicacion porque ya no está en el DTO
-
-                        // ✅ CORRECCIÓN: OficioNombre ahora es OficioDescripcion
+                        Telefono = u.telefono,
                         OficioDescripcion = registroServicio?.tipos_servicio?.nombre ?? "Oficio no asignado"
                     });
                 }
@@ -144,7 +138,6 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
-        // 1. Método para la tabla del Dashboard (Actividad Reciente)
         public List<UsuarioDTO> ObtenerActividadReciente()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -163,17 +156,12 @@ namespace Manitas.Logic.Services
                     }).ToList();
             }
         }
-
-        // 2. Método para el Directorio Global
         public List<UsuarioDTO> ObtenerUsuariosGlobal(string busqueda, string filtroRol)
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador"));
-
-                // (Aquí van tus filtros de búsqueda...)
-
-                return query.ToList().Select(u => new UsuarioDTO // <--- Agregamos .ToList() antes del Select
+                return query.ToList().Select(u => new UsuarioDTO 
                 {
                     Id = u.id,
                     NombreCompleto = u.nombre_completo,
@@ -182,8 +170,6 @@ namespace Manitas.Logic.Services
                     RolNombre = u.usuario_roles.FirstOrDefault()?.role?.nombre ?? "Sin Rol",
                     Estado = u.usuario_roles.FirstOrDefault()?.activo == true ? "Activo" : "Inactivo",
                     FechaRegistro = u.fecha_registro,
-
-                    // Datos del perfil (con validación de nulos)
                     OficioDescripcion = u.perfiles_manitas.FirstOrDefault()?.descripcion ?? "Sin oficio",
                     FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
                     IneFrenteUrl = u.perfiles_manitas.FirstOrDefault()?.ine_frente_url,

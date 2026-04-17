@@ -35,7 +35,6 @@
                         <TextBlock Text="PRINCIPAL" FontSize="9" FontWeight="SemiBold" 
                Foreground="#4A5568"
                Margin="14,0,0,8"/>
-
                         <RadioButton x:Name="RbDashboard" 
                  Style="{StaticResource MenuNavItem}" 
                  IsChecked="True" 
@@ -49,7 +48,6 @@
                                 <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="13"/>
                             </StackPanel>
                         </RadioButton>
-
                         <RadioButton x:Name="RbManitas" 
                  Style="{StaticResource MenuNavItem}" 
                  GroupName="MenuPrincipal"
@@ -63,8 +61,6 @@
                                 <TextBlock Text="Gestión de Manitas" VerticalAlignment="Center" FontSize="13"/>
                             </StackPanel>
                         </RadioButton>
-                        
-
                         <RadioButton x:Name="RbServicios" 
                  Style="{StaticResource MenuNavItem}" 
                  GroupName="MenuPrincipal">

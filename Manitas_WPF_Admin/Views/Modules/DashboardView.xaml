@@ -6,21 +6,16 @@
              xmlns:conv="clr-namespace:Manitas_WPF_Admin.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1100">
-
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <conv:RolToColorConverter x:Key="RolToColorConverter"/>
-
         </ResourceDictionary>
     </UserControl.Resources>
-
     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,4,0">
         <StackPanel Margin="0,0,0,20">
-
             <Grid Margin="0,0,0,20">
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="Resumen de Operaciones" Style="{StaticResource TextH1}"/>
@@ -28,18 +23,15 @@
                                Style="{StaticResource TextMuted}" Margin="0,4,0,0"/>
                 </StackPanel>
             </Grid>
-
             <Border Background="White" CornerRadius="16" Margin="0,0,0,25" Padding="24">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.05" Color="Black"/>
                 </Border.Effect>
-
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="220"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
                     <Grid Grid.Column="0" VerticalAlignment="Center">
                         <Ellipse Stroke="#F1F5F9" StrokeThickness="18" Width="160" Height="160"/>
                         <Ellipse x:Name="PieManitas" Stroke="#FFEDD5" StrokeThickness="18" Width="160" Height="160" 
@@ -60,7 +52,6 @@
                             <TextBlock Text="Miembros" FontSize="11" Foreground="#64748B" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
-
                     <UniformGrid Grid.Column="1" Columns="2" Rows="2" Margin="20,0,0,0">
                         <Border Background="#FFFBEB" CornerRadius="12" Margin="6" Padding="14">
                             <StackPanel VerticalAlignment="Center">
@@ -93,7 +84,6 @@
                     </UniformGrid>
                 </Grid>
             </Border>
-
             <Border Style="{StaticResource Card}" Padding="0" ClipToBounds="True" MinHeight="420">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -129,7 +119,6 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-
                                 <DataGridTemplateColumn Header="ROL" Width="120">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -139,9 +128,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-
                                 <DataGridTextColumn Header="TELÉFONO" Binding="{Binding Telefono}" Width="1.2*" Foreground="#64748B"/>
-
                                 <DataGridTemplateColumn Header="ESTADO" Width="110">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
