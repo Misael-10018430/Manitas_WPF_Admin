@@ -62,17 +62,6 @@ namespace Manitas.Logic.Services
         /// Cambia el rol de un usuario a 'Manita' en la base de datos SQL
         /// </summary>
         /// 
-
-
-
-
-
-
-
-
-
-
-
         public bool AprobarUsuarioComoManita(Guid usuarioId)
         {
             try
@@ -80,16 +69,11 @@ namespace Manitas.Logic.Services
                 using (var db = new Manitas_DBPilotoEntities())
                 {
                     var relacionActual = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
-
                     if (relacionActual != null)
                     {
-                        // 1. Aseguramos que el rol sea el de 'manitas' (ojo con la 's')
                         var rolManita = db.roles.FirstOrDefault(r => r.nombre == "manitas");
                         if (rolManita != null) relacionActual.rol_id = rolManita.id;
-
-                        // 2. ✨ LA LLAVE MAESTRA: Cambiamos el estatus a Activo
                         relacionActual.activo = true;
-
                         db.SaveChanges();
                         return true;
                     }
@@ -108,11 +92,10 @@ namespace Manitas.Logic.Services
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
-                // Buscamos la relación en usuario_roles, no en usuarios
                 var relacion = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
                 if (relacion != null)
                 {
-                    relacion.activo = false; // Lo mantenemos inactivo (Rechazado)
+                    relacion.activo = false;
                     return db.SaveChanges() > 0;
                 }
                 return false;
@@ -132,17 +115,6 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
         public List<UsuarioDTO> ObtenerActividadReciente()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -193,11 +165,10 @@ namespace Manitas.Logic.Services
                     .AsEnumerable()
                     .Select(u => new UsuarioDTO
                     {
-                        Id = u.id, // 👈 INDISPENSABLE para poder Aprobar/Rechazar
+                        Id = u.id, 
                         NombreCompleto = u.nombre_completo,
                         RolNombre = "Manita Pendiente",
                         Telefono = u.telefono,
-                        // 🖼️ Traemos los documentos para que el Admin los revise
                         FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
                         IneFrenteUrl = u.perfiles_manitas.FirstOrDefault()?.ine_frente_url,
                         IneReversoUrl = u.perfiles_manitas.FirstOrDefault()?.ine_reverso_url,

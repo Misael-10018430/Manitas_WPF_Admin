@@ -61,12 +61,8 @@ namespace Manitas_WPF_Admin.Views.Modules
 
             if (usuario != null)
             {
-                // 1. Abrir el panel con el DataContext ya enlazado en el XAML
                 PanelDetalle.Visibility = Visibility.Visible;
-                ColDetalle.Width = new GridLength(450); // Ajustar el ancho de la columna
-
-                // 2. 🧠 Lógica para mostrar u ocultar la sección de Oficio
-                // Si el rol NO es manita, ocultamos el cuadro del oficio
+                ColDetalle.Width = new GridLength(450);
                 if (usuario.RolNombre?.ToLower() != "manitas")
                 {
                     SecOficio.Visibility = Visibility.Collapsed;

@@ -8,7 +8,6 @@ namespace Manitas_WPF_Admin.Views.Main
     public partial class MainDashboard : Window
     {
         public UsuarioDTO UsuarioSesion { get; set; }
-
         /// <summary>
         /// Constructor principal que recibe al usuario autenticado
         /// </summary>
