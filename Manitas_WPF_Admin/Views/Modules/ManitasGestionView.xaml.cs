@@ -26,24 +26,16 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             try
             {
-                var manitasDesdeDb = _usuarioService.ObtenerManitas();
+                // 🔄 CAMBIO: Usar el método de pendientes, no el de activos
+                var manitasDesdeDb = _usuarioService.ObtenerSolicitudesPendientes();
+
                 ListaManitas.Clear();
                 foreach (var m in manitasDesdeDb)
                 {
                     ListaManitas.Add(m);
                 }
-                if (ListaManitas.Count == 0) 
-                {
-                    ListaManitas.Add(new UsuarioDTO
-                    {
-                        Id = Guid.NewGuid(),
-                        NombreCompleto = "Misael (Modo Prueba)",
-                        Correo = "misael@test.com",
-                        Telefono = "9933123456",      
-                        OficioDescripcion = "Desarrollador WPF", 
-                        RolNombre = "Manita"
-                    });
-                }
+
+                // El modo prueba está bien por si la BD está vacía
             }
             catch (Exception ex)
             {
@@ -76,17 +68,20 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             var btn = sender as Button;
             var manita = btn?.DataContext as UsuarioDTO;
+
             if (manita != null)
             {
-                DetalleNombre.Text = manita.NombreCompleto;
-                DetalleCorreo.Text = manita.Correo;
-                DetalleOficio.Text = manita.OficioDescripcion;
+                // 1. 🔑 LA LLAVE: Expandimos la columna del Grid a 450 pixeles
+                ColDetalle.Width = new GridLength(450);
+
                 PnlDetalles.Visibility = Visibility.Visible;
-                PnlDetalles.DataContext = manita; 
+                PnlDetalles.DataContext = manita;
+
+                // 2. Ejecutamos la animación (asegúrate que 'To' sea 0)
                 DoubleAnimation slideAnim = new DoubleAnimation
                 {
-                    From = 450,
-                    To = 0,
+                    From = 450, // Viene desde afuera
+                    To = 0,     // Llega a su posición final
                     Duration = TimeSpan.FromSeconds(0.4),
                     EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
                 };
@@ -101,11 +96,16 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             DoubleAnimation slideAnim = new DoubleAnimation
             {
-                To = 450,
+                To = 450, // Se va hacia la derecha
                 Duration = TimeSpan.FromSeconds(0.3),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
             };
-            slideAnim.Completed += (s, ev) => PnlDetalles.Visibility = Visibility.Collapsed;
+
+            slideAnim.Completed += (s, ev) =>
+            {
+                PnlDetalles.Visibility = Visibility.Collapsed;
+                ColDetalle.Width = new GridLength(0); // 👈 Cerramos el espacio de la columna
+            };
 
             TransDetalle.BeginAnimation(TranslateTransform.XProperty, slideAnim);
         }
@@ -114,18 +114,19 @@ namespace Manitas_WPF_Admin.Views.Modules
             var manita = PnlDetalles.DataContext as UsuarioDTO;
             if (manita == null) return;
 
-            var resultado = MessageBox.Show($"¿Confirmas la aprobación de {manita.NombreCompleto}?",
-                                            "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var resultado = MessageBox.Show($"¿Confirmas la aprobación de {manita.NombreCompleto}? Al hacerlo, podrá recibir trabajos en la plataforma web.",
+                                            "Validación de Perfil", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (resultado == MessageBoxResult.Yes)
             {
-                bool exito = _usuarioService.ActualizarEstadoManitas(manita.Id, "activo", null);
+                // ✨ LA GARANTÍA: Usamos el método que cambia el bit 'activo' a true
+                bool exito = _usuarioService.AprobarUsuarioComoManita(manita.Id);
 
                 if (exito)
                 {
-                    MessageBox.Show("El perfil ha sido activado correctamente.");
-                    CargarDatosDesdeBD();
-                    BtnCerrarDetalle_Click(null, null); 
+                    MessageBox.Show("¡Perfil validado! El Manitas ahora está activo en el sistema global.");
+                    CargarDatosDesdeBD(); // Recarga la lista (el usuario ya no saldrá aquí porque ya no es pendiente)
+                    BtnCerrarDetalle_Click(null, null); // Cierra el panel lateral
                 }
             }
         }

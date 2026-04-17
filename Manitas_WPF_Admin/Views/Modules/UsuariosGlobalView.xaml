@@ -83,6 +83,10 @@
                   IsReadOnly="True"
                   RowHeight="60"
                   SelectionChanged="DgUsuarios_SelectionChanged">
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#F1F5F9"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1E293B"/>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="NOMBRE COMPLETO" Binding="{Binding NombreCompleto}" Width="2*" ElementStyle="{StaticResource CenterTextColumn}"/>
                         <DataGridTextColumn Header="CORREO" Binding="{Binding Correo}" Width="1.5*" ElementStyle="{StaticResource CenterTextColumn}"/>
@@ -91,54 +95,67 @@
                 </DataGrid>
             </Border>
             <Border x:Name="PanelDetalle" Grid.Column="1" Style="{StaticResource Card}" Padding="20" Visibility="Collapsed">
+                <Border.DataContext>
+                    <Binding ElementName="DgUsuarios" Path="SelectedItem"/>
+                </Border.DataContext>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <Border Width="100" Height="100" CornerRadius="50" Margin="0,0,0,15" Background="#F1F5F9" ClipToBounds="True">
-                            <Image x:Name="ImgPerfil" 
-                           Source="{Binding FotoPerfilUrl}" 
-                           Stretch="UniformToFill"/>
+                        <Grid Margin="0,0,0,15">
+                            <TextBlock Text="Expediente del Usuario" FontWeight="Bold" FontSize="16" Foreground="#1E293B"/>
+                            <Button HorizontalAlignment="Right" Click="BtnCerrarDetalle_Click" Background="Transparent" BorderThickness="0" Cursor="Hand">
+                                <TextBlock Text="✕" Foreground="#94A3B8" FontSize="16"/>
+                            </Button>
+                        </Grid>
+
+                        <Border Width="100" Height="100" CornerRadius="50" Margin="0,0,0,15" Background="#F1F5F9" ClipToBounds="True"
+                    BorderBrush="#EA580C" BorderThickness="2">
+                            <Image x:Name="ImgPerfil" Source="{Binding FotoPerfilUrl, TargetNullValue='/Assets/Images/avatar.png'}" Stretch="UniformToFill"/>
                         </Border>
-                        <TextBlock x:Name="TxtNombreDetalle" Text="Nombre del Usuario" FontWeight="Black" FontSize="18" HorizontalAlignment="Center" TextAlignment="Center"/>
-                        <TextBlock x:Name="TxtRolDetalle" Text="Rol" Foreground="#EA580C"  FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,20"/>
+
+                        <TextBlock x:Name="TxtNombreDetalle" Text="{Binding NombreCompleto}" FontWeight="Black" FontSize="18" HorizontalAlignment="Center" TextAlignment="Center"/>
+                        <TextBlock x:Name="TxtRolDetalle" Text="{Binding RolNombre}" Foreground="#EA580C" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,20"/>
+
                         <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
-                        <TextBlock Text="TELÉFONO" 
-                           FontSize="10" 
-                           FontWeight="Black" 
-                           Foreground="#94A3B8" 
-                           Margin="0,0,0,5"/>
-                        <TextBlock x:Name="TxtTelefonoDetalle" 
-                           Text="No registrado" 
-                           Margin="0,0,0,15" 
-                           FontWeight="SemiBold"/>
-                        <TextBlock Text="DOCUMENTACIÓN (INE)" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
-                        <UniformGrid Columns="2" Margin="0,5,0,0">
-                            <StackPanel Margin="0,0,5,0">
-                                <TextBlock Text="FRENTE" FontSize="9" HorizontalAlignment="Center"/>
-                                <Border Height="80" Background="#F8FAFC" CornerRadius="4" Margin="0,5,0,0" BorderBrush="#E2E8F0" BorderThickness="1">
-                                    <Image x:Name="ImgIneFrente" Stretch="Uniform"/>
-                                </Border>
+
+                        <StackPanel x:Name="SecOficio">
+                            <TextBlock Text="SOLICITUD DE OFICIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,8"/>
+                            <Border Background="#F8FAFC" CornerRadius="8" Padding="15" Margin="0,0,0,24" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <TextBlock x:Name="DetalleOficio" Text="{Binding OficioDescripcion, FallbackValue='Cliente / Sin descripción'}" 
+                               FontSize="14" Foreground="#1E293B" TextWrapping="Wrap" FontWeight="Medium"/>
+                            </Border>
+                        </StackPanel>
+
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="TELÉFONO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="TxtTelefonoDetalle" Text="{Binding Telefono, TargetNullValue='No registrado'}" FontWeight="SemiBold" Foreground="#1E293B"/>
                             </StackPanel>
-                            <StackPanel Margin="5,0,0,0">
-                                <TextBlock Text="REVERSO" FontSize="9" HorizontalAlignment="Center"/>
-                                <Border Height="80" Background="#F8FAFC" CornerRadius="4" Margin="0,5,0,0" BorderBrush="#E2E8F0" BorderThickness="1">
-                                    <Image x:Name="ImgIneReverso" Stretch="Uniform"/>
-                                </Border>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="CORREO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="TxtCorreoDetalle" Text="{Binding Correo}" FontWeight="SemiBold" Foreground="#1E293B" FontSize="11"/>
                             </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="DOCUMENTACIÓN DE IDENTIDAD (INE)" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
+                        <UniformGrid Columns="2" Margin="0,5,0,15">
+                            <Border Margin="0,0,5,0" Height="80" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <Image x:Name="ImgIneFrente" Source="{Binding IneFrenteUrl}" Stretch="Uniform" ToolTip="INE Frente"/>
+                            </Border>
+                            <Border Margin="5,0,0,0" Height="80" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <Image x:Name="ImgIneReverso" Source="{Binding IneReversoUrl}" Stretch="Uniform" ToolTip="INE Reverso"/>
+                            </Border>
                         </UniformGrid>
-                        <Button Content="Ver Expediente Completo" 
-                            Click="BtnVerExpediente_Click" 
-                            Margin="0,25,0,10" 
-                            Background="#EA580C" 
-                            Foreground="White" 
-                            FontWeight="Bold" 
-                            Height="40"
-                            BorderThickness="0">
-                                                <Button.Resources>
-                                                    <Style TargetType="Border">
-                                                        <Setter Property="CornerRadius" Value="6"/>
-                                                    </Style>
-                            </Button.Resources>
-                        </Button>
+
+                        <TextBlock Text="COMPROBANTE ADICIONAL" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                        <Border Height="140" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                            <Image x:Name="ImgDocumentoExtra" Source="{Binding DocumentoExtraUrl}" Stretch="Uniform"/>
+                        </Border>
+
+                        <Button Content="Ver Expediente Completo" Click="BtnVerExpediente_Click" Margin="0,25,0,10" Background="#EA580C" Foreground="White" FontWeight="Bold" Height="40" BorderThickness="0"/>
                         <Button x:Name="BtnCerrarDetalle" Content="Cerrar Panel" Click="BtnCerrarDetalle_Click" Background="Transparent" BorderThickness="0" Foreground="#94A3B8"/>
                     </StackPanel>
                 </ScrollViewer>

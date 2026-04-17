@@ -73,6 +73,10 @@
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
                           RowHeight="65">
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#F1F5F9"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1E293B"/>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="USUARIO" Width="2.5*">
                             <DataGridTemplateColumn.CellTemplate>
@@ -111,11 +115,25 @@
                         <DataGridTemplateColumn Header="ACCIONES" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <Button Style="{StaticResource BtnIcon}" Click="BtnVerDetalles_Click" ToolTip="Ver Expediente">
-                                            <TextBlock Text="👁️" FontSize="14" Foreground="#EA580C"/>
+                                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0">
+                                        <Button Click="BtnVerDetalles_Click" ToolTip="Ver Expediente"
+                        Background="Transparent" BorderThickness="0" Cursor="Hand">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Grid>
+                                                        <Ellipse x:Name="circle" Width="36" Height="36" Fill="Transparent"/>
+                                                        <TextBlock Text="👁️" FontSize="16" Foreground="#EA580C"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="circle" Property="Fill" Value="#FFF7ED"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
                                         </Button>
-                                    </StackPanel>
+                                    </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -123,6 +141,7 @@
                 </DataGrid>
             </Border>
             <Border x:Name="PnlDetalles" 
+                    DataContext="{Binding ElementName=DgManitas, Path=SelectedItem}"
                     Grid.Column="1"
                     Margin="15,0,0,0"
                     Style="{StaticResource Card}"
@@ -206,6 +225,7 @@
                             <Button Grid.Column="0" Content="Rechazar" Click="BtnRechazar_Click"
                                     Background="#FEE2E2" Foreground="#EF4444" Height="40" FontWeight="Bold" BorderThickness="0"/>
                             <Button Grid.Column="2" Content="Aprobar" 
+                                    Click="BtnAprobar_Click" 
                                     Background="#EA580C" Foreground="White" Height="40" FontWeight="Bold" BorderThickness="0"/>
                         </Grid>
                     </Border>

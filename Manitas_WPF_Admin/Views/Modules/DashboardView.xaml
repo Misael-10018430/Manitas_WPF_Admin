@@ -53,7 +53,9 @@
                         </StackPanel>
                     </Grid>
                     <UniformGrid Grid.Column="1" Columns="2" Rows="2" Margin="20,0,0,0">
-                        <Border Background="#FFFBEB" CornerRadius="12" Margin="6" Padding="14">
+                        <Border Background="#FFFBEB" CornerRadius="12" Margin="6" Padding="14"
+                        Cursor="Hand" 
+                        MouseDown="BtnVerPendientes_Click"> 
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="PENDIENTES" FontSize="9" FontWeight="Bold" Foreground="#B45309" Opacity="0.8"/>
                                 <TextBlock x:Name="TxtPendientes" Text="8" FontSize="22" FontWeight="Bold" Foreground="#92400E" Margin="0,2"/>
@@ -128,15 +130,27 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="TELÉFONO" Binding="{Binding Telefono}" Width="1.2*" Foreground="#64748B"/>
+                                <DataGridTextColumn Header="TELÉFONO" Binding="{Binding Telefono}" Width="1.2*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="10,0,0,0"/>
+                                            <Setter Property="Foreground" Value="#64748B"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
                                 <DataGridTemplateColumn Header="ESTADO" Width="110">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <Ellipse Width="8" Height="8" Fill="#22C55E" Margin="0,0,8,0"/>
-                                                <TextBlock Text="Activo" FontSize="11" Foreground="#64748B"/>
-                                            </StackPanel>
-                                        </DataTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                                <Ellipse Width="8" Height="8" 
+                                         Fill="{Binding EstadoColor}" 
+                                         Margin="0,0,8,0"/>
+                                                                <TextBlock Text="{Binding EstadoTexto}" 
+                                           FontSize="11" 
+                                           Foreground="#64748B"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>

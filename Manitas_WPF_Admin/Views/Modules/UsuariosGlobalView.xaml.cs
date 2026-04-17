@@ -57,35 +57,23 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void DgUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var seleccionado = DgUsuarios.SelectedItem as UsuarioDTO;
+            var usuario = DgUsuarios.SelectedItem as UsuarioDTO;
 
-            if (seleccionado != null)
+            if (usuario != null)
             {
-                ColDetalle.Width = new GridLength(350);
+                // 1. Abrir el panel con el DataContext ya enlazado en el XAML
                 PanelDetalle.Visibility = Visibility.Visible;
-                TxtNombreDetalle.Text = seleccionado.NombreCompleto;
-                TxtRolDetalle.Text = seleccionado.RolNombre?.ToUpper();
-                if (TxtTelefonoDetalle != null)
-                    TxtTelefonoDetalle.Text = seleccionado.Telefono ?? "Sin registro";
-                try
-                {
-                    if (!string.IsNullOrEmpty(seleccionado.FotoPerfilUrl))
-                    {
-                        ImgPerfil.Source = new BitmapImage(new Uri(seleccionado.FotoPerfilUrl, UriKind.RelativeOrAbsolute));
-                    }
-                    else
-                    {
-                        ImgPerfil.Source = null;
-                    }
+                ColDetalle.Width = new GridLength(450); // Ajustar el ancho de la columna
 
-                    if (!string.IsNullOrEmpty(seleccionado.IneFrenteUrl))
-                        ImgIneFrente.Source = new BitmapImage(new Uri(seleccionado.IneFrenteUrl, UriKind.RelativeOrAbsolute));
-                    else
-                        ImgIneFrente.Source = null;
-                }
-                catch
+                // 2. 🧠 Lógica para mostrar u ocultar la sección de Oficio
+                // Si el rol NO es manita, ocultamos el cuadro del oficio
+                if (usuario.RolNombre?.ToLower() != "manitas")
                 {
-                    ImgPerfil.Source = null;
+                    SecOficio.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    SecOficio.Visibility = Visibility.Visible;
                 }
             }
         }

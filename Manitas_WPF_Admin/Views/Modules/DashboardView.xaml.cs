@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 namespace Manitas_WPF_Admin.Views.Modules
 {
     public partial class DashboardView : UserControl
@@ -38,6 +39,14 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             var recientes = _usuarioService.ObtenerActividadReciente();
             DgActividad.ItemsSource = recientes;
+        }
+        private void BtnVerPendientes_Click(object sender, MouseButtonEventArgs e)
+        {
+            var pendientes = _usuarioService.ObtenerSolicitudesPendientes();
+            if (pendientes != null)
+            {
+                DgActividad.ItemsSource = pendientes;
+            }
         }
     }
 }

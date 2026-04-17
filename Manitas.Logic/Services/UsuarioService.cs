@@ -61,57 +61,34 @@ namespace Manitas.Logic.Services
         /// <summary>
         /// Cambia el rol de un usuario a 'Manita' en la base de datos SQL
         /// </summary>
+        /// 
+
+
+
+
+
+
+
+
+
+
+
         public bool AprobarUsuarioComoManita(Guid usuarioId)
         {
             try
             {
                 using (var db = new Manitas_DBPilotoEntities())
                 {
-                    var usuario = db.usuarios.FirstOrDefault(u => u.id == usuarioId);
-                    if (usuario != null)
-                    {
-                        var rolManita = db.roles.FirstOrDefault(r => r.nombre == "Manita");
-                        if (rolManita != null)
-                        {
-                            var relacionActual = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
-                            if (relacionActual != null)
-                            {
-                                relacionActual.rol_id = rolManita.id;
-                            }
-                            else
-                            {
-                                db.usuario_roles.Add(new usuario_roles
-                                {
-                                    usuario_id = usuarioId,
-                                    rol_id = rolManita.id
-                                });
-                            }
-                            db.SaveChanges();
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error en la persistencia de datos: " + ex.Message);
-            }
-        }
-        /// <summary>
-        /// Desactiva a un usuario en la base de datos (Borrado Lógico)
-        /// </summary>
-        public bool RechazarUsuario(Guid usuarioId)
-        {
-            try
-            {
-                using (var db = new Manitas_DBPilotoEntities())
-                {
-                    var usuario = db.usuarios.FirstOrDefault(u => u.id == usuarioId);
+                    var relacionActual = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
 
-                    if (usuario != null)
+                    if (relacionActual != null)
                     {
-                        usuario.activo = false;
+                        // 1. Aseguramos que el rol sea el de 'manitas' (ojo con la 's')
+                        var rolManita = db.roles.FirstOrDefault(r => r.nombre == "manitas");
+                        if (rolManita != null) relacionActual.rol_id = rolManita.id;
+
+                        // 2. ✨ LA LLAVE MAESTRA: Cambiamos el estatus a Activo
+                        relacionActual.activo = true;
 
                         db.SaveChanges();
                         return true;
@@ -121,7 +98,24 @@ namespace Manitas.Logic.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al procesar el rechazo en SQL: " + ex.Message);
+                throw new Exception("Error al aprobar: " + ex.Message);
+            }
+        }
+        /// <summary>
+        /// Desactiva a un usuario en la base de datos (Borrado Lógico)
+        /// </summary>
+        public bool RechazarUsuario(Guid usuarioId)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                // Buscamos la relación en usuario_roles, no en usuarios
+                var relacion = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
+                if (relacion != null)
+                {
+                    relacion.activo = false; // Lo mantenemos inactivo (Rechazado)
+                    return db.SaveChanges() > 0;
+                }
+                return false;
             }
         }
         public bool ActualizarEstadoManitas(Guid usuarioId, string nuevoEstado, string motivo)
@@ -138,6 +132,17 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
         public List<UsuarioDTO> ObtenerActividadReciente()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -153,6 +158,7 @@ namespace Manitas.Logic.Services
                         RolNombre = u.usuario_roles.FirstOrDefault()?.role?.nombre ?? "Sin Rol",
                         Telefono = u.telefono,
                         FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
+                        IsActivo = u.usuario_roles.FirstOrDefault().activo == true
                     }).ToList();
             }
         }
@@ -176,6 +182,28 @@ namespace Manitas.Logic.Services
                     IneReversoUrl = u.perfiles_manitas.FirstOrDefault()?.ine_reverso_url,
                     DocumentoExtraUrl = u.perfiles_manitas.FirstOrDefault()?.comprobante_url
                 }).ToList();
+            }
+        }
+        public List<UsuarioDTO> ObtenerSolicitudesPendientes()
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                return db.usuarios
+                    .Where(u => u.usuario_roles.Any(r => r.role.nombre == "manitas" && r.activo == false))
+                    .AsEnumerable()
+                    .Select(u => new UsuarioDTO
+                    {
+                        Id = u.id, // 👈 INDISPENSABLE para poder Aprobar/Rechazar
+                        NombreCompleto = u.nombre_completo,
+                        RolNombre = "Manita Pendiente",
+                        Telefono = u.telefono,
+                        // 🖼️ Traemos los documentos para que el Admin los revise
+                        FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
+                        IneFrenteUrl = u.perfiles_manitas.FirstOrDefault()?.ine_frente_url,
+                        IneReversoUrl = u.perfiles_manitas.FirstOrDefault()?.ine_reverso_url,
+                        DocumentoExtraUrl = u.perfiles_manitas.FirstOrDefault()?.comprobante_url,
+                        OficioDescripcion = u.perfiles_manitas.FirstOrDefault()?.descripcion ?? "Pendiente de asignar"
+                    }).ToList();
             }
         }
     }
