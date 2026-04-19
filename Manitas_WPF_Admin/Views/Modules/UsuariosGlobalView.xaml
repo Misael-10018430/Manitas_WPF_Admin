@@ -109,7 +109,10 @@
 
                         <Border Width="100" Height="100" CornerRadius="50" Margin="0,0,0,15" Background="#F1F5F9" ClipToBounds="True"
                     BorderBrush="#EA580C" BorderThickness="2">
-                            <Image x:Name="ImgPerfil" Source="{Binding FotoPerfilUrl, TargetNullValue='/Assets/Images/avatar.png'}" Stretch="UniformToFill"/>
+                            <Image Source="{Binding FotoPerfilUrl, 
+                                   TargetNullValue='/Assets/Images/no-image.jpg', 
+                                   FallbackValue='/Assets/Images/no-image.jpg'}" 
+                           Stretch="UniformToFill"/>
                         </Border>
 
                         <TextBlock x:Name="TxtNombreDetalle" Text="{Binding NombreCompleto}" FontWeight="Black" FontSize="18" HorizontalAlignment="Center" TextAlignment="Center"/>
@@ -143,16 +146,25 @@
                         <TextBlock Text="DOCUMENTACIÓN DE IDENTIDAD (INE)" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
                         <UniformGrid Columns="2" Margin="0,5,0,15">
                             <Border Margin="0,0,5,0" Height="80" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image x:Name="ImgIneFrente" Source="{Binding IneFrenteUrl}" Stretch="Uniform" ToolTip="INE Frente"/>
+                                <Image Source="{Binding IneFrenteUrl, 
+                                    TargetNullValue='/Assets/Images/no-image.jpg', 
+                                    FallbackValue='/Assets/Images/no-image.jpg'}" 
+                            Stretch="Uniform" ToolTip="INE Frente"/>
                             </Border>
                             <Border Margin="5,0,0,0" Height="80" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image x:Name="ImgIneReverso" Source="{Binding IneReversoUrl}" Stretch="Uniform" ToolTip="INE Reverso"/>
+                                <Image Source="{Binding IneReversoUrl, 
+                                    TargetNullValue='/Assets/Images/no-image.jpg', 
+                                    FallbackValue='/Assets/Images/no-image.jpg'}" 
+                            Stretch="Uniform" ToolTip="INE Reverso"/>
                             </Border>
                         </UniformGrid>
 
                         <TextBlock Text="COMPROBANTE DOMICILIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
                         <Border Height="140" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                            <Image x:Name="ImgDocumentoExtra" Source="{Binding DocumentoExtraUrl}" Stretch="Uniform"/>
+                            <Image Source="{Binding DocumentoExtraUrl, 
+                                    TargetNullValue='/Assets/Images/no-document.png', 
+                                    FallbackValue='/Assets/Images/no-document.png'}" 
+                            Stretch="Uniform"/>
                         </Border>
 
                         <Button Content="Ver Expediente Completo" Click="BtnVerExpediente_Click" Margin="0,25,0,10" Background="#EA580C" Foreground="White" FontWeight="Bold" Height="40" BorderThickness="0"/>

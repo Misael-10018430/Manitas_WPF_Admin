@@ -36,7 +36,7 @@
                 <Border Background="White" CornerRadius="6" Width="300" Height="40" 
                         BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,10">
                     <Grid Margin="12,0">
-                        <TextBlock Text="🔍 Buscar por nombre..." 
+                        <TextBlock Text=" Buscar por nombre..." 
                                    VerticalAlignment="Center" 
                                    Foreground="#94A3B8" 
                                    FontSize="13"
@@ -83,8 +83,10 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="16,0">
                                         <Border Width="40" Height="40" CornerRadius="20" Background="#F1F5F9" ClipToBounds="True">
-                                            <Image Source="{Binding FotoPerfilUrl, TargetNullValue='/Assets/Images/avatar.png', FallbackValue='/Assets/Images/avatar.png'}" 
-                                                   Stretch="UniformToFill"/>
+                                            <Image Source="{Binding FotoPerfilUrl, 
+                                                       TargetNullValue='/Assets/Images/no-image.jpg', 
+                                                       FallbackValue='/Assets/Images/no-image.jpg'}" 
+                                               Stretch="UniformToFill"/>
                                         </Border>
                                         <StackPanel VerticalAlignment="Center" Margin="12,0,0,0">
                                             <TextBlock Text="{Binding NombreCompleto}" FontWeight="SemiBold" FontSize="14" Foreground="#1E293B"/>
@@ -168,7 +170,10 @@
                         <StackPanel Margin="24">
                             <Border Width="100" Height="100" CornerRadius="50" ClipToBounds="True" HorizontalAlignment="Center"
                                     Background="#F1F5F9" BorderBrush="#EA580C" BorderThickness="2" Margin="0,0,0,15">
-                                <Image Source="{Binding FotoPerfilUrl, TargetNullValue='/Assets/Images/avatar.png'}" Stretch="UniformToFill"/>
+                                <Image Source="{Binding FotoPerfilUrl, 
+                                           TargetNullValue='/Assets/Images/no-image.jpg', 
+                                           FallbackValue='/Assets/Images/no-image.jpg'}" 
+                                   Stretch="UniformToFill"/>
                             </Border>
                             <TextBlock x:Name="DetalleNombre" Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Black" HorizontalAlignment="Center" TextAlignment="Center"/>
                             <TextBlock Text="POSTULANTE A MANITAS" FontSize="10" FontWeight="Bold" Foreground="#EA580C" HorizontalAlignment="Center" Margin="0,5,0,20"/>
@@ -199,15 +204,24 @@
                                Margin="0,0,0,10"/>
                             <UniformGrid Columns="2" Height="110" Margin="0,5,0,15">
                                 <Border Margin="0,0,5,0" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                    <Image Source="{Binding IneFrenteUrl}" Stretch="Uniform" ToolTip="INE Frente"/>
+                                    <Image Source="{Binding IneFrenteUrl, 
+                                       TargetNullValue='/Assets/Images/no-image.jpg', 
+                                       FallbackValue='/Assets/Images/no-image.jpg'}" 
+                               Stretch="Uniform" ToolTip="INE Frente"/>
                                 </Border>
                                 <Border Margin="5,0,0,0" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                    <Image Source="{Binding IneReversoUrl}" Stretch="Uniform" ToolTip="INE Reverso"/>
+                                    <Image Source="{Binding IneReversoUrl, 
+                                       TargetNullValue='/Assets/Images/no-image.jpg', 
+                                       FallbackValue='/Assets/Images/no-image.jpg'}" 
+                               Stretch="Uniform" ToolTip="INE Reverso"/>
                                 </Border>
                             </UniformGrid>
                             <TextBlock Text="COMPROBANTE DE DOMICILIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
                             <Border Height="140" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image Source="{Binding DocumentoExtraUrl}" Stretch="Uniform"/>
+                                <Image Source="{Binding DocumentoExtraUrl, 
+                                       TargetNullValue='/Assets/Images/no-document.png', 
+                                       FallbackValue='/Assets/Images/no-document.png'}" 
+                               Stretch="Uniform"/>
                             </Border>
                             <StackPanel x:Name="PnlRechazo" Visibility="Collapsed" Margin="0,20,0,0">
                                 <TextBlock Text="MOTIVO DEL RECHAZO" FontSize="10" FontWeight="Bold" Foreground="#EF4444" Margin="0,0,0,8"/>

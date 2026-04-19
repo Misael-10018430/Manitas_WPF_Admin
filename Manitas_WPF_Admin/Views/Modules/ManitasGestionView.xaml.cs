@@ -121,17 +121,25 @@ namespace Manitas_WPF_Admin.Views.Modules
             }
             if (string.IsNullOrWhiteSpace(TxtMotivoRechazo.Text))
             {
-                MessageBox.Show("Por favor, indica el motivo del rechazo para informar al usuario.");
+                MessageBox.Show("Por favor, indica el motivo del rechazo para informar al usuario.",
+                                "Motivo Obligatorio", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
             var manita = PnlDetalles.DataContext as UsuarioDTO;
+            if (manita == null)
+            {
+                MessageBox.Show("No se pudo identificar al usuario seleccionado.");
+                return;
+            }
             bool exito = _usuarioService.ActualizarEstadoManitas(manita.Id, "rechazado", TxtMotivoRechazo.Text);
+
             if (exito)
             {
-                MessageBox.Show("Solicitud rechazada. Se ha notificado al usuario.");
+                MessageBox.Show($"La solicitud de {manita.NombreCompleto} ha sido rechazada.");
                 CargarDatosDesdeBD();
                 BtnCerrarDetalle_Click(null, null);
+                TxtMotivoRechazo.Clear();
+                PnlRechazo.Visibility = Visibility.Collapsed;
             }
         }
         #endregion
