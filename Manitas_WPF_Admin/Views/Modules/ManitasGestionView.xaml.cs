@@ -143,23 +143,16 @@ namespace Manitas_WPF_Admin.Views.Modules
             }
         }
         #endregion
-        // ✨ ESTO SOLUCIONA EL ERROR "DgManitas_SelectionChanged"
         private void DgManitas_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var manita = DgManitas.SelectedItem as UsuarioDTO;
             if (manita != null)
             {
                 PnlDetalles.Visibility = Visibility.Visible;
-
-                // Ajustamos las columnas del efecto acordeón
                 ColTabla.Width = new GridLength(2, GridUnitType.Star);
                 ColSpacer.Width = new GridLength(30);
                 ColDetalle.Width = new GridLength(1.2, GridUnitType.Star);
-
-                // Resetear el panel de rechazo al cambiar de usuario
                 if (PnlRechazo != null) PnlRechazo.Visibility = Visibility.Collapsed;
-
-                // Animación de entrada
                 var anim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
                 TransDetalle.BeginAnimation(TranslateTransform.XProperty, anim);
             }

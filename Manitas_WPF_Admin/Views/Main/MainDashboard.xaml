@@ -86,11 +86,9 @@
                                 <TextBlock Text="Directorio Global" VerticalAlignment="Center" FontSize="13"/>
                             </StackPanel>
                         </RadioButton>
-
                         <TextBlock Text="SISTEMA" FontSize="9" FontWeight="SemiBold" 
-               Foreground="#4A5568"
-               Margin="14,20,0,8"/>
-
+                           Foreground="#4A5568"
+                           Margin="14,20,0,8"/>
                         <RadioButton x:Name="RbUsuarios" 
                  Style="{StaticResource MenuNavItem}" 
                  GroupName="MenuPrincipal">

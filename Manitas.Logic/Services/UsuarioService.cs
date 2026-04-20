@@ -120,7 +120,7 @@ namespace Manitas.Logic.Services
             using (var db = new Manitas_DBPilotoEntities())
             {
                 return db.usuarios
-                    .Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador" && r.role.nombre != "encargado")) // 👈 FILTRO CLAVE
+                    .Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador" && r.role.nombre != "encargado"))
                     .OrderByDescending(u => u.fecha_registro)
                     .Take(6)
                     .AsEnumerable()
@@ -137,17 +137,14 @@ namespace Manitas.Logic.Services
         // Rutas de respaldo para cuando el usuario no ha subido fotos
         private readonly string _noImage = "pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png";
         private readonly string _noDoc = "pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-document.png";
-
         public List<UsuarioDTO> ObtenerUsuariosGlobal(string busqueda, string filtroRol)
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador"));
-
                 return query.ToList().Select(u => {
                     var perfil = u.perfiles_manitas.FirstOrDefault();
                     var rol = u.usuario_roles.FirstOrDefault();
-
                     return new UsuarioDTO
                     {
                         Id = u.id,
@@ -159,14 +156,10 @@ namespace Manitas.Logic.Services
                         IsActivo = rol?.activo == true,
                         FechaRegistro = u.fecha_registro,
                         OficioDescripcion = perfil?.descripcion ?? "Sin oficio",
-
-                        // Lógica de nombre de oficio (Manita vs Cliente)
                         OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
                                        ?? (u.usuario_roles.Any(r => r.role.nombre.ToLower().Contains("manita"))
                                            ? "Oficio no seleccionado"
                                            : "Cliente"),
-
-                        // ✨ Filtro Inteligente de Imágenes
                         FotoPerfilUrl = string.IsNullOrWhiteSpace(perfil?.foto_perfil_url) ? _noImage : perfil.foto_perfil_url,
                         IneFrenteUrl = string.IsNullOrWhiteSpace(perfil?.ine_frente_url) ? _noImage : perfil.ine_frente_url,
                         IneReversoUrl = string.IsNullOrWhiteSpace(perfil?.ine_reverso_url) ? _noImage : perfil.ine_reverso_url,
@@ -175,7 +168,6 @@ namespace Manitas.Logic.Services
                 }).ToList();
             }
         }
-
         public List<UsuarioDTO> ObtenerSolicitudesPendientes()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -195,8 +187,6 @@ namespace Manitas.Logic.Services
                             RolNombre = "Manita Pendiente",
                             OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre ?? "Oficio no seleccionado",
                             OficioDescripcion = perfil?.descripcion ?? "Sin descripción",
-
-                            // ✨ Filtro Inteligente de Imágenes (Igual que en Global)
                             FotoPerfilUrl = string.IsNullOrWhiteSpace(perfil?.foto_perfil_url) ? _noImage : perfil.foto_perfil_url,
                             IneFrenteUrl = string.IsNullOrWhiteSpace(perfil?.ine_frente_url) ? _noImage : perfil.ine_frente_url,
                             IneReversoUrl = string.IsNullOrWhiteSpace(perfil?.ine_reverso_url) ? _noImage : perfil.ine_reverso_url,

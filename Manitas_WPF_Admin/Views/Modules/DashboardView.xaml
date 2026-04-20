@@ -118,7 +118,8 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
                                                 <Border Width="34" Height="34" CornerRadius="17" Background="#F1F5F9" ClipToBounds="True">
-                                                    <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
+                                                    <Image Source="{Binding FotoPerfilUrl, TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" Stretch="UniformToFill" VerticalAlignment="Center" 
+                                                    HorizontalAlignment="Center" />
                                                 </Border>
                                                 <TextBlock Text="{Binding NombreCompleto}" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#1E293B"/>
                                             </StackPanel>
@@ -148,11 +149,11 @@
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                                                 <Ellipse Width="8" Height="8" 
-                                         Fill="{Binding EstadoColor}" 
-                                         Margin="0,0,8,0"/>
+                                                                 Fill="{Binding EstadoColor}" 
+                                                                 Margin="0,0,8,0"/>
                                                                 <TextBlock Text="{Binding EstadoTexto}" 
-                                           FontSize="11" 
-                                           Foreground="#64748B"/>
+                                                                 FontSize="11" 
+                                                                 Foreground="#64748B"/>
                                                             </StackPanel>
                                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

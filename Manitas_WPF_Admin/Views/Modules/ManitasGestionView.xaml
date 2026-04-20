@@ -5,15 +5,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1100">
-
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
             <Style x:Key="CenterTextColumn" TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="15,0"/>
@@ -88,7 +85,6 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#F8FAFC"/>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1E293B"/>
                     </DataGrid.Resources>
-
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Header="POSTULANTE" Width="2.5*">
                             <DataGridTemplateColumn.CellTemplate>
@@ -105,7 +101,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
                         <DataGridTextColumn Header="OFICIO SOLICITADO" Binding="{Binding OficioNombre}" Width="1.5*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextColumn}">
@@ -114,7 +109,6 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
                         <DataGridTemplateColumn Header="ESTADO" Width="1.2*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -127,7 +121,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
                         <DataGridTemplateColumn Header="REVISAR" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -152,28 +145,23 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
-
             <Border x:Name="PnlDetalles" 
         Grid.Column="2"
         Margin="15,0,0,0"
         Style="{StaticResource Card}"
         Visibility="Collapsed">
-
                 <Border.DataContext>
                     <Binding ElementName="DgManitas" Path="SelectedItem"/>
                 </Border.DataContext>
-
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="TransDetalle" X="450"/>
                 </Border.RenderTransform>
-
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-
                     <Border Grid.Row="0" Padding="20,15" BorderBrush="#F1F5F9" BorderThickness="0,0,0,1">
                         <Grid>
                             <TextBlock Text="Expediente del Manita" FontWeight="Bold" FontSize="16" Foreground="#1E293B"/>
@@ -182,36 +170,30 @@
                             </Button>
                         </Grid>
                     </Border>
-
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                         <StackPanel Margin="24">
                             <Border Width="100" Height="100" CornerRadius="50" ClipToBounds="True" HorizontalAlignment="Center"
                         Background="#F1F5F9" BorderBrush="#EA580C" BorderThickness="2" Margin="0,0,0,15">
                                 <Image Source="{Binding FotoPerfilUrl, TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" Stretch="UniformToFill" VerticalAlignment="Center" 
-       HorizontalAlignment="Center" />
+                            HorizontalAlignment="Center" />
                             </Border>
-
                             <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Black" HorizontalAlignment="Center" TextAlignment="Center"/>
-
                             <Border CornerRadius="12" Padding="12,3" HorizontalAlignment="Center" Margin="0,8,0,0" 
-        BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
+                                       BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding OficioNombre}" 
-                   Foreground="#C2410C" 
-                   FontSize="11" 
-                   FontWeight="Black" 
-                   VerticalAlignment="Center"/>
+                                       Foreground="#C2410C" 
+                                       FontSize="11" 
+                                       FontWeight="Black" 
+                                       VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
-
                             <TextBlock Text="POSTULANTE A MANITAS" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,5,0,20"/>
                             <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
-
                             <TextBlock Text="SOLICITUD DE OFICIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,8"/>
                             <Border Background="#F8FAFC" CornerRadius="8" Padding="15" Margin="0,0,0,24" BorderBrush="#E2E8F0" BorderThickness="1">
                                 <TextBlock Text="{Binding OficioDescripcion, FallbackValue='Sin descripción de oficio'}" FontSize="14" Foreground="#1E293B" TextWrapping="Wrap" FontWeight="Medium"/>
                             </Border>
-
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -226,7 +208,6 @@
                                     <TextBlock Text="{Binding Correo}" FontWeight="Bold" Foreground="#1E293B" FontSize="11"/>
                                 </StackPanel>
                             </Grid>
-
                             <TextBlock Text="DOCUMENTACIÓN DE IDENTIDAD (INE)" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
                             <UniformGrid Columns="2" Height="110" Margin="0,5,0,15">
                                 <Border Margin="0,0,5,0" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
@@ -236,19 +217,16 @@
                                     <Image Source="{Binding IneReversoUrl, TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" Stretch="Uniform"/>
                                 </Border>
                             </UniformGrid>
-
                             <TextBlock Text="COMPROBANTE DE DOMICILIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
                             <Border Height="140" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
                                 <Image Source="{Binding DocumentoExtraUrl, TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-document.png'}" Stretch="Uniform"/>
                             </Border>
-
                             <StackPanel x:Name="PnlRechazo" Visibility="Collapsed" Margin="0,20,0,0">
                                 <TextBlock Text="MOTIVO DEL RECHAZO" FontSize="10" FontWeight="Bold" Foreground="#EF4444" Margin="0,0,0,8"/>
                                 <TextBox x:Name="TxtMotivoRechazo" Height="80" TextWrapping="Wrap" AcceptsReturn="True" BorderBrush="#EF4444"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
-
                     <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -256,7 +234,6 @@
                                 <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-
                             <Button Grid.Column="0" Content="Rechazar" Click="BtnRechazar_Click" 
                 Background="#FEE2E2" Foreground="#EF4444" 
                 Height="40" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
@@ -266,7 +243,6 @@
                                     </Style>
                                 </Button.Resources>
                             </Button>
-
                             <Button Grid.Column="2" Content="Aprobar" Click="BtnAprobar_Click" 
                 Background="#EA580C" Foreground="White" 
                 Height="40" FontWeight="Bold" BorderThickness="0" Cursor="Hand">

@@ -8,9 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <conv:RolToColorConverter x:Key="RolToColorConverter"/>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>
