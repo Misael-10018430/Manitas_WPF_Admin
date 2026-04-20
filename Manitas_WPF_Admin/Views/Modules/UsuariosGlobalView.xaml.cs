@@ -61,17 +61,22 @@ namespace Manitas_WPF_Admin.Views.Modules
 
             if (usuario != null)
             {
+                PanelDetalle.DataContext = usuario;
                 PanelDetalle.Visibility = Visibility.Visible;
-                ColDetalle.Width = new GridLength(450);
-                if (usuario.RolNombre?.ToLower() != "manitas")
-                {
-                    SecOficio.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    SecOficio.Visibility = Visibility.Visible;
-                }
+                ColTabla.Width = new GridLength(2, GridUnitType.Star); 
+                ColSpacer.Width = new GridLength(30);           
+                ColDetalle.Width = new GridLength(1, GridUnitType.Star); 
+                SecOficio.Visibility = (usuario.RolNombre?.ToLower() == "manitas")
+                                        ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+        private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)
+        {
+            ColTabla.Width = new GridLength(1, GridUnitType.Star);
+            ColSpacer.Width = new GridLength(0);
+            ColDetalle.Width = new GridLength(0);
+            PanelDetalle.Visibility = Visibility.Collapsed;
+            DgUsuarios.SelectedItem = null;
         }
         private void BtnVerExpediente_Click(object sender, RoutedEventArgs e)
         {
@@ -92,11 +97,40 @@ namespace Manitas_WPF_Admin.Views.Modules
                 MessageBox.Show("Este usuario no tiene un comprobante o INE cargado aún.");
             }
         }
-        private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)
+        private void BtnCambiarEstado_Click(object sender, RoutedEventArgs e)
         {
-            ColDetalle.Width = new GridLength(0);
-            PanelDetalle.Visibility = Visibility.Collapsed;
-            DgUsuarios.SelectedItem = null;
+            var usuario = DgUsuarios.SelectedItem as UsuarioDTO;
+
+            if (usuario == null)
+            {
+                MessageBox.Show("Por favor, selecciona un usuario primero.");
+                return;
+            }
+            string accion = usuario.IsActivo ? "SUSPENDER" : "ACTIVAR";
+            var resultado = MessageBox.Show($"¿Estás seguro de que deseas {accion} la cuenta de {usuario.NombreCompleto}?",
+                                            "Confirmar cambio de estado",
+                                            MessageBoxButton.YesNo,
+                                            MessageBoxImage.Question);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    bool nuevoEstado = !usuario.IsActivo;
+
+                    bool exito = _usuarioService.CambiarEstatusUsuario(usuario.Id, nuevoEstado);
+
+                    if (exito)
+                    {
+                        MessageBox.Show($"La cuenta ha sido {(nuevoEstado ? "activada" : "suspendida")} correctamente.");
+                        CargarUsuarios();
+                        BtnCerrarDetalle_Click(null, null);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cambiar el estado: " + ex.Message);
+                }
+            }
         }
     }
 }

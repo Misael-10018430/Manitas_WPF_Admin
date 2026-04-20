@@ -11,10 +11,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <conv:RolToColorConverter x:Key="RolToColorConverter"/>
+
+            <Style x:Key="CenterTextColumn" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="15,0"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,4,0">
+    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="0,0,0,20">
             <Grid Margin="0,0,0,20">
                 <StackPanel VerticalAlignment="Center">
