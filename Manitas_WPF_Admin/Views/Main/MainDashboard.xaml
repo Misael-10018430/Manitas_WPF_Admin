@@ -61,9 +61,21 @@
                                 <TextBlock Text="Gestión de Manitas" VerticalAlignment="Center" FontSize="13"/>
                             </StackPanel>
                         </RadioButton>
+                        <RadioButton x:Name="RbClientes" 
+             Style="{StaticResource MenuNavItem}" 
+             GroupName="MenuPrincipal"
+             Click="BtnClientes_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Path Data="M8,8 C10.21,8 12,6.21 12,4 C12,1.79 10.21,0 8,0 C5.79,0 4,1.79 4,4 C4,6.21 5.79,8 8,8 Z M8,9 C5.33,9 0,10.34 0,13 L0,16 L16,16 L16,13 C16,10.34 10.67,9 8,9 Z" 
+                  Fill="{StaticResource BrushSidebarText}" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="Gestión de Clientes" VerticalAlignment="Center" FontSize="13"/>
+                            </StackPanel>
+                        </RadioButton>
                         <RadioButton x:Name="RbServicios" 
-                 Style="{StaticResource MenuNavItem}" 
-                 GroupName="MenuPrincipal">
+                         Style="{StaticResource MenuNavItem}" 
+                         GroupName="MenuPrincipal">
                             <StackPanel Orientation="Horizontal">
                                 <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
                                     <Path Data="M8,1 L10,6 L15,6 L11,9 L13,14 L8,11 L3,14 L5,9 L1,6 L6,6 Z" 
@@ -87,41 +99,60 @@
                             </StackPanel>
                         </RadioButton>
                         <TextBlock Text="SISTEMA" FontSize="9" FontWeight="SemiBold" 
-                           Foreground="#4A5568"
-                           Margin="14,20,0,8"/>
+           Foreground="#4A5568"
+           Margin="14,20,0,8"/>
+
                         <RadioButton x:Name="RbUsuarios" 
-                 Style="{StaticResource MenuNavItem}" 
-                 GroupName="MenuPrincipal">
+             Style="{StaticResource MenuNavItem}" 
+             GroupName="MenuPrincipal"
+             Click="BtnUsuariosSistema_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Border Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
                                     <Path Data="M1,14 C1,10 4,8 8,8 C12,8 15,10 15,14 M8,7 A3.5,3.5 0 1,0 8,0 A3.5,3.5 0 0,0 8,7" 
-                      Stroke="{StaticResource BrushSidebarText}" StrokeThickness="1.2" 
-                      Fill="Transparent" Stretch="Uniform"/>
+                  Stroke="{StaticResource BrushSidebarText}" 
+                  StrokeThickness="1.2" 
+                  Fill="Transparent" 
+                  Stretch="Uniform"/>
                                 </Border>
                                 <TextBlock Text="Usuarios Sistema" VerticalAlignment="Center" FontSize="13"/>
                             </StackPanel>
                         </RadioButton>
                     </StackPanel>
-                    <Border Grid.Row="3" Padding="14,14" 
-                            BorderBrush="#2A3245" BorderThickness="0,1,0,0">
+                    <Border Grid.Row="3" Padding="14,14" BorderBrush="#2A3245" BorderThickness="0,1,0,0">
                         <Grid Cursor="Hand" MouseLeftButtonUp="BtnLogout_Click">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Border Width="36" Height="36" CornerRadius="18" 
-                                    Background="{StaticResource BrushAction}" ClipToBounds="True">
-                                <Image Source="https://i.pravatar.cc/150?u=misael" Stretch="UniformToFill"/>
-                            </Border>
+                            <Grid Width="36" Height="36">
+                                <Border Background="#F1F5F9" CornerRadius="18">
+                                    <TextBlock Text="{Binding Iniciales}" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center" 
+                           FontSize="12" FontWeight="Bold" Foreground="#64748B"/>
+                                </Border>
+                                <Border CornerRadius="18" ClipToBounds="True">
+                                    <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </Border>
+                            </Grid>
                             <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
-                                <TextBlock x:Name="TxtNombreAdminSidebar" Text="Misael" 
-                                           FontWeight="SemiBold" FontSize="13" Foreground="White"/>
-                                <TextBlock x:Name="TxtRolAdmin" Text="Super Admin" 
-                                           FontSize="11" Foreground="{StaticResource BrushSidebarText}"/>
+                                <TextBlock Text="{Binding NombreCompleto}" 
+                       FontWeight="SemiBold" FontSize="13" Foreground="White"/>
+                                <TextBlock Text="{Binding RolNombre}" 
+                       FontSize="11" Foreground="{StaticResource BrushSidebarText}"/>
                             </StackPanel>
-                            <TextBlock Grid.Column="2" Text="→" FontSize="14" 
-                                       Foreground="#4A5568" VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="2" Text="→" FontSize="14" Foreground="#4A5568" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </Grid>

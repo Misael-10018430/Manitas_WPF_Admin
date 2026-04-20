@@ -1,0 +1,218 @@
+﻿<UserControl x:Class="Manitas_WPF_Admin.Views.Modules.UsuariosSistemaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" d:DesignHeight="720" d:DesignWidth="1080">
+    <UserControl.Resources>
+        <Style x:Key="ButtonOutlineStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Style.Resources>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E2E8F0"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#CBD5E1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+    <Grid Background="#F8FAFC">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition x:Name="ColDetalle" Width="0"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Margin="25" Background="White" CornerRadius="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="25,25,25,15">
+                    <StackPanel>
+                        <TextBlock Text="Usuarios del Sistema" FontSize="22" FontWeight="Black" Foreground="#1E293B"/>
+                        <TextBlock Text="Gestiona el personal administrativo y sus niveles de acceso." Foreground="#64748B" FontSize="12"/>
+                    </StackPanel>
+                    <Button x:Name="BtnNuevoUsuario" Content="+ Nuevo Miembro" HorizontalAlignment="Right" 
+                            Padding="15,8" Background="{StaticResource BrushAction}" Foreground="White" 
+                            FontWeight="Bold" BorderThickness="0" Click="BtnNuevoUsuario_Click">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+                <Border Grid.Row="1" Margin="25,0,25,15" Background="#F1F5F9" CornerRadius="8" Height="36">
+                    <Grid>
+                        <TextBlock Text="Buscar por nombre o usuario..." 
+                   VerticalAlignment="Center" Margin="15,0" 
+                   Foreground="#94A3B8" IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=TxtBusqueda}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBox x:Name="TxtBusqueda" Background="Transparent" BorderThickness="0" 
+                 VerticalContentAlignment="Center" Margin="10,0"
+                 TextChanged="TxtBusqueda_TextChanged"/>
+                    </Grid>
+                </Border>
+                <DataGrid x:Name="DgStaff" Grid.Row="2" Margin="15" AutoGenerateColumns="False" 
+          IsReadOnly="True" Background="Transparent" BorderThickness="0" 
+          RowHeight="60" GridLinesVisibility="None" SelectionChanged="DgStaff_SelectionChanged"
+          HeadersVisibility="Column">
+
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="10,0"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#F1F5F9"/>
+                                    <Setter Property="Foreground" Value="#1E293B"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid VerticalAlignment="Center">
+                                        <Border Width="38" Height="38" CornerRadius="19" Background="#F1F5F9" Margin="15,0,5,0">
+                                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               FontSize="12" FontWeight="Bold" Foreground="#64748B"/>
+                                        </Border>
+                                        <Border Width="38" Height="38" CornerRadius="19" ClipToBounds="True" Margin="15,0,5,0">
+                                            <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="USUARIO" Binding="{Binding Username}" Width="1.5*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Margin" Value="10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTextColumn Header="NOMBRE COMPLETO" Binding="{Binding NombreCompleto}" Width="2*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <DataGridTemplateColumn Header="ROL" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RolNombre}" 
+                                       Foreground="{Binding ColorRol}" 
+                                       FontWeight="Bold" 
+                                       VerticalAlignment="Center" 
+                                       FontSize="11" 
+                                       Margin="10,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+        <Border Grid.Column="1" x:Name="PanelDetalle" Margin="0,25,25,25" Background="White" CornerRadius="16" Visibility="Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Button Content="✕" HorizontalAlignment="Right" Margin="15" Background="Transparent" BorderThickness="0" Click="BtnCerrarDetalle_Click"/>
+                <StackPanel Grid.Row="1" Margin="25">
+                    <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
+                        <Border Background="#F1F5F9" CornerRadius="45">
+                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
+                        </Border>
+                        <Border CornerRadius="45" ClipToBounds="True">
+                            <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </Border>
+                    </Grid>
+                    <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding RolNombre}" Foreground="#EA580C" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,30"/>
+                    <TextBlock Text="CONFIGURACIÓN DE CUENTA" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,15"/>
+                    <Button x:Name="BtnResetPassword" 
+                        Content="Resetear Contraseña" 
+                        Margin="0,0,0,10" 
+                        Style="{StaticResource ButtonOutlineStyle}"
+                        Click="BtnResetPassword_Click"/>
+                    <Button x:Name="BtnCambiarRol" 
+                        Content="Cambiar Rol de Acceso" 
+                        Margin="0,0,0,10" 
+                        Style="{StaticResource ButtonOutlineStyle}"
+                        Click="BtnCambiarRol_Click"/>
+                </StackPanel>
+                <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
+                    <Button Content="Suspender Acceso" 
+                    Background="#FEE2E2" 
+                    Foreground="#EF4444" 
+                    FontWeight="Bold" 
+                    Height="45" 
+                    BorderThickness="0" 
+                    Cursor="Hand"
+                    FocusVisualStyle="{x:Null}">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

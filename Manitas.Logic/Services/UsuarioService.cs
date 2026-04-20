@@ -115,6 +115,18 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+        public void ActualizarEstadoUsuario(Guid usuarioId, bool activo)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var relacion = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
+                if (relacion != null)
+                {
+                    relacion.activo = activo;
+                    db.SaveChanges();
+                }
+            }
+        }
         public List<UsuarioDTO> ObtenerActividadReciente()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -206,6 +218,118 @@ namespace Manitas.Logic.Services
                     return db.SaveChanges() > 0;
                 }
                 return false;
+            }
+        }
+        public List<UsuarioDTO> ObtenerClientes(string busqueda = "")
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre == "cliente"));
+                if (!string.IsNullOrEmpty(busqueda))
+                {
+                    query = query.Where(u => u.nombre_completo.Contains(busqueda) || u.correo.Contains(busqueda));
+                }
+                string noImage = "pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png";
+                return query.ToList().Select(u => new UsuarioDTO
+                {
+                    Id = u.id,
+                    NombreCompleto = u.nombre_completo,
+                    Correo = u.correo,
+                    Telefono = u.telefono,
+                    FechaRegistro = u.fecha_registro,
+                    IsActivo = u.usuario_roles.FirstOrDefault()?.activo ?? false,
+                    Estado = (u.usuario_roles.FirstOrDefault()?.activo ?? false) ? "Activo" : "Inactivo",
+                    FotoPerfilUrl = string.IsNullOrWhiteSpace(u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url)
+                                    ? noImage
+                                    : u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url
+                }).ToList();
+            }
+          
+        }
+        public List<UsuarioDTO> ObtenerUsuariosSistema(string busqueda)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var query = db.usuarios.Where(u => u.usuario_roles.Any(r =>
+                    r.activo && (
+                        r.role.nombre.ToLower() == "administrador" ||
+                        r.role.nombre.ToLower() == "moderador" ||
+                        r.role.nombre.ToLower() == "soporte"
+                    )
+                ));
+                if (!string.IsNullOrEmpty(busqueda))
+                {
+                    string b = busqueda.ToLower();
+                    query = query.Where(u => u.nombre_completo.ToLower().Contains(b) ||
+                                             u.correo.ToLower().Contains(b));
+                }
+                return query.ToList().Select(u => new UsuarioDTO
+                {
+                    Id = u.id,
+                    Username = u.correo, 
+                    NombreCompleto = u.nombre_completo,
+                    Correo = u.correo,
+                    RolNombre = u.usuario_roles.FirstOrDefault(r => r.activo)?.role?.nombre ?? "Staff",
+                    IsActivo = u.usuario_roles.FirstOrDefault(r => r.activo)?.activo ?? false,
+                    UltimaConexion = u.fecha_registro
+                }).ToList();
+            }
+        }
+        public bool ActualizarPassword(Guid usuarioId, string nuevaPassword)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var user = db.usuarios.Find(usuarioId);
+                if (user == null) return false;
+                user.contrasena_hash = nuevaPassword;
+                return db.SaveChanges() > 0;
+            }
+        }
+        public bool ActualizarRolSistema(Guid usuarioId, string nuevoRolNombre)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var rol = db.roles.FirstOrDefault(r => r.nombre.ToLower() == nuevoRolNombre.ToLower());
+                var relacionActual = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId && ur.activo);
+                if (rol == null || relacionActual == null) return false;
+                relacionActual.rol_id = rol.id;
+                return db.SaveChanges() > 0;
+            }
+        }
+        public bool CrearUsuarioStaff(usuario nuevoU, string nombreRol)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                using (var transaction = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        db.usuarios.Add(nuevoU);
+                        db.SaveChanges();
+                        var rol = db.roles.FirstOrDefault(r => r.nombre.ToLower() == nombreRol.ToLower());
+
+                        if (rol != null)
+                        {
+                            db.usuario_roles.Add(new usuario_roles
+                            {
+                                id = Guid.NewGuid(),
+                                usuario_id = nuevoU.id,
+                                rol_id = rol.id,
+                                activo = true,
+                                fecha_asignacion = DateTime.Now
+                            });
+                            db.SaveChanges();
+                            transaction.Commit();
+                            return true;
+                        }
+                        return false;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
             }
         }
     }

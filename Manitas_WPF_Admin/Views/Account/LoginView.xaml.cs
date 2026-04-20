@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Manitas.Logic.Security;
+using Manitas.Logic.Services;
+using System;
 using System.Windows;
 using System.Windows.Input;
-using Manitas.Logic.Services;
 namespace Manitas_WPF_Admin.Views.Account
 {
     public partial class LoginView : Window
@@ -46,8 +47,11 @@ namespace Manitas_WPF_Admin.Views.Account
             try
             {
                 var usuario = _usuarioService.Autenticar(correo, password);
+
                 if (usuario != null)
                 {
+                    SesionUsuario.Logout();
+                    SesionUsuario.UsuarioActual = usuario;
                     var dashboard = new Manitas_WPF_Admin.Views.Main.MainDashboard(usuario);
                     dashboard.Show();
                     this.Close();

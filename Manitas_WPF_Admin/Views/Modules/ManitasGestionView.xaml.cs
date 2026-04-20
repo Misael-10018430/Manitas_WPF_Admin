@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Manitas.Logic.DTOs;
+using Manitas.Logic.Security;
+using Manitas.Logic.Services;
+using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;                
 using System.Windows.Controls;
 using System.Windows.Media;         
 using System.Windows.Media.Animation; 
-using System.Collections.ObjectModel;
-using Manitas.Logic.DTOs;
-using Manitas.Logic.Services;
 namespace Manitas_WPF_Admin.Views.Modules
 {
     public partial class ManitasGestionView : UserControl
@@ -96,6 +97,11 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void BtnAprobar_Click(object sender, RoutedEventArgs e)
         {
+            if (!SesionUsuario.EsAdmin())
+            {
+                MessageBox.Show("No tienes permisos para validar perfiles de Manitas.", "Acceso Restringido", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
             var manita = PnlDetalles.DataContext as UsuarioDTO;
             if (manita == null) return;
             var resultado = MessageBox.Show($"¿Confirmas la aprobación de {manita.NombreCompleto}? Al hacerlo, podrá recibir trabajos en la plataforma web.",
@@ -107,12 +113,18 @@ namespace Manitas_WPF_Admin.Views.Modules
                 {
                     MessageBox.Show("¡Perfil validado! El Manitas ahora está activo en el sistema global.");
                     CargarDatosDesdeBD();
-                    BtnCerrarDetalle_Click(null, null); 
+                    BtnCerrarDetalle_Click(null, null);
                 }
             }
         }
         private void BtnRechazar_Click(object sender, RoutedEventArgs e)
         {
+            if (!Manitas.Logic.Security.SesionUsuario.EsAdmin())
+            {
+                MessageBox.Show("No tienes permisos suficientes para rechazar solicitudes de registro.",
+                                "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
             if (PnlRechazo.Visibility == Visibility.Collapsed)
             {
                 PnlRechazo.Visibility = Visibility.Visible;
@@ -128,18 +140,26 @@ namespace Manitas_WPF_Admin.Views.Modules
             var manita = PnlDetalles.DataContext as UsuarioDTO;
             if (manita == null)
             {
-                MessageBox.Show("No se pudo identificar al usuario seleccionado.");
+                MessageBox.Show("Error: No se pudo identificar al usuario seleccionado.");
                 return;
             }
-            bool exito = _usuarioService.ActualizarEstadoManitas(manita.Id, "rechazado", TxtMotivoRechazo.Text);
-
-            if (exito)
+            try
             {
-                MessageBox.Show($"La solicitud de {manita.NombreCompleto} ha sido rechazada.");
-                CargarDatosDesdeBD();
-                BtnCerrarDetalle_Click(null, null);
-                TxtMotivoRechazo.Clear();
-                PnlRechazo.Visibility = Visibility.Collapsed;
+                bool exito = _usuarioService.ActualizarEstadoManitas(manita.Id, "rechazado", TxtMotivoRechazo.Text);
+                if (exito)
+                {
+                    MessageBox.Show($"La solicitud de {manita.NombreCompleto} ha sido rechazada con éxito.",
+                                    "Proceso Completado", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    CargarDatosDesdeBD();
+                    BtnCerrarDetalle_Click(null, null);
+                    TxtMotivoRechazo.Clear();
+                    PnlRechazo.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error técnico al rechazar: {ex.Message}", "Error");
             }
         }
         #endregion

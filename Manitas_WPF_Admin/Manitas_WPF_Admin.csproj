@@ -75,8 +75,14 @@
     <Compile Include="Views\Modules\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Modules\GestionClientesView.xaml.cs">
+      <DependentUpon>GestionClientesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Modules\ManitasGestionView.xaml.cs">
       <DependentUpon>ManitasGestionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\NuevoUsuarioWindow.xaml.cs">
+      <DependentUpon>NuevoUsuarioWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modules\UsuariosGlobalView.xaml.cs">
       <DependentUpon>UsuariosGlobalView.xaml</DependentUpon>
@@ -84,6 +90,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Modules\UsuariosSistemaView.xaml.cs">
+      <DependentUpon>UsuariosSistemaView.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\TailwindStyles.xaml">
       <SubType>Designer</SubType>
@@ -101,11 +110,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Modules\GestionClientesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Modules\ManitasGestionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Modules\NuevoUsuarioWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Modules\UsuariosGlobalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modules\UsuariosSistemaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,6 +159,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Manitas.Data\Manitas.Data.csproj">
+      <Project>{2e3b1d82-886e-41c4-8985-748430b7edc1}</Project>
+      <Name>Manitas.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Manitas.Logic\Manitas.Logic.csproj">
       <Project>{8f0a2487-8e35-44ed-8b26-25afb0feb685}</Project>
       <Name>Manitas.Logic</Name>

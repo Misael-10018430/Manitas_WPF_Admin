@@ -1,0 +1,44 @@
+﻿<Window x:Class="Manitas_WPF_Admin.Views.Modules.NuevoUsuarioWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Nuevo Miembro" Height="500" Width="400" 
+        WindowStartupLocation="CenterScreen" WindowStyle="None" 
+        AllowsTransparency="True" Background="Transparent">
+    <Border Background="White" CornerRadius="20" BorderBrush="#F1F5F9" BorderThickness="1">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Margin="0,0,0,25">
+                <TextBlock Text="Nuevo Miembro" FontSize="20" FontWeight="Black" Foreground="#1E293B"/>
+                <TextBlock Text="Asigna credenciales para el equipo de oficina." Foreground="#64748B" FontSize="12"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="NOMBRE COMPLETO" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,8"/>
+                <TextBox x:Name="TxtNombre" Height="40" Padding="10,0" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+                <TextBlock Text="CORREO ELECTRÓNICO" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,8"/>
+                <TextBox x:Name="TxtCorreo" Height="40" Padding="10,0" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+                <TextBlock Text="CONTRASEÑA INICIAL" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,8"/>
+                <PasswordBox x:Name="TxtPass" Height="40" Padding="10,0" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+                <TextBlock Text="ROL DE ACCESO" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,8"/>
+                <ComboBox x:Name="CboRol" Height="40" VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="Administrador" IsSelected="True"/>
+                    <ComboBoxItem Content="Moderador"/>
+                    <ComboBoxItem Content="Soporte"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Cancelar" Click="BtnCancelar_Click" Background="Transparent" BorderThickness="0" Foreground="#64748B" Margin="0,0,20,0" Cursor="Hand"/>
+                <Button Content="Guardar Miembro" Click="BtnGuardar_Click" Background="#EA580C" Foreground="White" FontWeight="Bold" Padding="20,10" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

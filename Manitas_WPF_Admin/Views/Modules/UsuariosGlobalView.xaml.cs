@@ -5,7 +5,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.Linq; 
+using System.Linq;
+using Manitas.Logic.Security;
 namespace Manitas_WPF_Admin.Views.Modules
 {
     public partial class UsuariosGlobalView : UserControl
@@ -63,11 +64,12 @@ namespace Manitas_WPF_Admin.Views.Modules
             {
                 PanelDetalle.DataContext = usuario;
                 PanelDetalle.Visibility = Visibility.Visible;
-                ColTabla.Width = new GridLength(2, GridUnitType.Star); 
-                ColSpacer.Width = new GridLength(30);           
-                ColDetalle.Width = new GridLength(1, GridUnitType.Star); 
-                SecOficio.Visibility = (usuario.RolNombre?.ToLower() == "manitas")
+                ColTabla.Width = new GridLength(2, GridUnitType.Star);
+                ColSpacer.Width = new GridLength(30);
+                ColDetalle.Width = new GridLength(1, GridUnitType.Star);
+                SecOficio.Visibility = (usuario.RolNombre?.ToLower().Contains("manita") == true)
                                         ? Visibility.Visible : Visibility.Collapsed;
+                BtnCambiarEstado.IsEnabled = Manitas.Logic.Security.SesionUsuario.EsAdmin();
             }
         }
         private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)
@@ -99,8 +101,13 @@ namespace Manitas_WPF_Admin.Views.Modules
         }
         private void BtnCambiarEstado_Click(object sender, RoutedEventArgs e)
         {
+            if (!Manitas.Logic.Security.SesionUsuario.EsAdmin())
+            {
+                MessageBox.Show("No tienes permisos para modificar estados de cuenta en el Directorio Global.",
+                                "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
             var usuario = DgUsuarios.SelectedItem as UsuarioDTO;
-
             if (usuario == null)
             {
                 MessageBox.Show("Por favor, selecciona un usuario primero.");
@@ -116,19 +123,20 @@ namespace Manitas_WPF_Admin.Views.Modules
                 try
                 {
                     bool nuevoEstado = !usuario.IsActivo;
-
                     bool exito = _usuarioService.CambiarEstatusUsuario(usuario.Id, nuevoEstado);
 
                     if (exito)
                     {
-                        MessageBox.Show($"La cuenta ha sido {(nuevoEstado ? "activada" : "suspendida")} correctamente.");
-                        CargarUsuarios();
-                        BtnCerrarDetalle_Click(null, null);
+                        MessageBox.Show($"La cuenta ha sido {(nuevoEstado ? "activada" : "suspendida")} correctamente.",
+                                        "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        CargarUsuarios(); 
+                        BtnCerrarDetalle_Click(null, null); 
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al cambiar el estado: " + ex.Message);
+                    MessageBox.Show("Error al cambiar el estado: " + ex.Message, "Error Crítico");
                 }
             }
         }

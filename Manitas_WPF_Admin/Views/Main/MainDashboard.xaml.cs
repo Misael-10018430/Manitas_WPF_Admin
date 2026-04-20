@@ -1,22 +1,25 @@
-﻿using System;
-using System.Windows;
-using Manitas.Logic.DTOs;
-using Manitas_WPF_Admin.Views.Modules;
+﻿using Manitas.Logic.DTOs;
+using Manitas.Logic.Security;
 using Manitas_WPF_Admin.Views.Account;
+using Manitas_WPF_Admin.Views.Modules;
+using System;
+using System.Windows;
 namespace Manitas_WPF_Admin.Views.Main
 {
     public partial class MainDashboard : Window
     {
         public UsuarioDTO UsuarioSesion { get; set; }
-        /// <summary>
-        /// Constructor principal que recibe al usuario autenticado
-        /// </summary>
-        public MainDashboard(UsuarioDTO usuario)
+        public MainDashboard()
         {
             InitializeComponent();
+
+        }
+        public MainDashboard(UsuarioDTO usuario) : this()
+        {
             this.UsuarioSesion = usuario;
-            TxtNombreAdminSidebar.Text = usuario.NombreCompleto;
-            TxtRolAdmin.Text = usuario.RolNombre;
+            SesionUsuario.UsuarioActual = usuario;
+            this.DataContext = usuario;
+            ConfigurarMenuPorRol();
             EstablecerSaludo();
             CargarModuloDashboard();
         }
@@ -29,15 +32,31 @@ namespace Manitas_WPF_Admin.Views.Main
             TxtModuloActual.Text = "Gestión de Manitas";
             MainFrame.Navigate(new ManitasGestionView());
         }
+        /// <summary>
+        /// Oculta o muestra botones del menú según el rango del usuario
+        /// </summary>
+        private void ConfigurarMenuPorRol()
+        {
+            if (!SesionUsuario.EsAdmin())
+            {
+                if (RbUsuarios != null) RbUsuarios.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void BtnUsuariosSistema_Click(object sender, RoutedEventArgs e)
+        {
+            if (SesionUsuario.EsAdmin())
+            {
+                TxtModuloActual.Text = "Gestión de Usuarios del Sistema";
+                MainFrame.Navigate(new UsuariosSistemaView());
+            }
+        }
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
-            var resultado = MessageBox.Show("¿Estás seguro de que deseas cerrar sesión?",
-                                          "Cerrar Sesión",
-                                          MessageBoxButton.YesNo,
-                                          MessageBoxImage.Question);
-
-            if (resultado == MessageBoxResult.Yes)
+            var result = MessageBox.Show("¿Seguro que quieres cerrar sesión?", "Cerrar Sesión",
+                                        MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
             {
+                SesionUsuario.Logout();
                 LoginView login = new LoginView();
                 login.Show();
                 this.Close();
@@ -57,10 +76,17 @@ namespace Manitas_WPF_Admin.Views.Main
         {
             int hora = DateTime.Now.Hour;
             string saludo;
+
             if (hora >= 6 && hora < 12) saludo = "Buenos días";
             else if (hora >= 12 && hora < 19) saludo = "Buenas tardes";
             else saludo = "Buenas noches";
-            TxtNombreAdmin.Text = $"{saludo}, {TxtNombreAdminSidebar.Text}";
+            TxtNombreAdmin.Text = $"{saludo}, {UsuarioSesion.NombreCompleto}";
+        }
+        private void BtnClientes_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new GestionClientesView());
+
+            TxtModuloActual.Text = "Administración de Cuentas de Clientes";
         }
     }
 }
