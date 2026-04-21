@@ -90,7 +90,7 @@
                     </UniformGrid>
                 </Grid>
             </Border>
-            <Border Style="{StaticResource Card}" Padding="0" ClipToBounds="True" MinHeight="420">
+            <Border Style="{StaticResource Card}" Padding="0" ClipToBounds="True" MaxHeight="380" Margin="0,0,0,20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -106,13 +106,17 @@
                     <Border Grid.Row="0" Height="1" Background="{StaticResource BrushDivider}" VerticalAlignment="Bottom" Margin="0,60,0,0"/>
                     <Grid Grid.Row="1" Margin="0,15,0,0">
                         <DataGrid x:Name="DgActividad" 
-          Style="{StaticResource DataGridPro}"
-          AutoGenerateColumns="False" 
-          IsReadOnly="True"
-          BorderThickness="0"
-          Background="Transparent"
-          RowHeight="55">
-
+                          Style="{StaticResource DataGridPro}"
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True"
+                          BorderThickness="0"
+                          Background="Transparent"
+                          RowHeight="55"
+                          ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.CanContentScroll="False"
+                          EnableRowVirtualization="True"
+                          VirtualizingStackPanel.IsVirtualizing="True">
                             <DataGrid.Resources>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="BorderThickness" Value="0"/>

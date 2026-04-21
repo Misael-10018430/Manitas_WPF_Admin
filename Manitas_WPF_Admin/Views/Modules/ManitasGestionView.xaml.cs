@@ -21,6 +21,12 @@ namespace Manitas_WPF_Admin.Views.Modules
             ListaManitas = new ObservableCollection<UsuarioDTO>();
             DgManitas.ItemsSource = ListaManitas;
             CargarDatosDesdeBD();
+            ScvDetalles.PreviewMouseWheel += (s, e) =>
+            {
+                var scv = (ScrollViewer)s;
+                scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+                e.Handled = true;
+            };
         }
         #region
         private void CargarDatosDesdeBD()
@@ -168,6 +174,7 @@ namespace Manitas_WPF_Admin.Views.Modules
             var manita = DgManitas.SelectedItem as UsuarioDTO;
             if (manita != null)
             {
+                ScvDetalles.ScrollToHome();
                 PnlDetalles.Visibility = Visibility.Visible;
                 ColTabla.Width = new GridLength(2, GridUnitType.Star);
                 ColSpacer.Width = new GridLength(30);

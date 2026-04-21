@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
 namespace Manitas_WPF_Admin.Views.Modules
 {
     public partial class DashboardView : UserControl
@@ -13,14 +14,28 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             InitializeComponent();
             _usuarioService = new UsuarioService();
+            DgActividad.PreviewMouseWheel += DgActividad_PreviewMouseWheel;
+
             CargarEstadisticas();
             CargarActividadReciente();
+        }
+        private void DgActividad_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                e.Handled = true;
+                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                eventArg.RoutedEvent = UIElement.MouseWheelEvent;
+                eventArg.Source = sender;
+                var parent = ((Control)sender).Parent as UIElement;
+                parent?.RaiseEvent(eventArg);
+            }
         }
         private void CargarEstadisticas()
         {
             try
             {
-                TxtTotalUsuarios.Text = "164"; 
+                TxtTotalUsuarios.Text = "164";
                 TxtPendientes.Text = "8";
                 TxtActivos.Text = "32";
                 TxtDisputas.Text = "2";
