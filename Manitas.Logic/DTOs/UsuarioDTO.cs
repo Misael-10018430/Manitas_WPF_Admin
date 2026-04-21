@@ -11,7 +11,7 @@ namespace Manitas.Logic.DTOs
         public string Telefono { get; set; }
         public string RolNombre { get; set; }
         public string Estado { get; set; }
-        public DateTime FechaRegistro { get; set; }
+        public DateTime? FechaRegistro { get; set; }
         public string OficioDescripcion { get; set; }
         public string OficioNombre { get; set; }
         public bool IsActivo { get; set; }
@@ -65,10 +65,19 @@ namespace Manitas.Logic.DTOs
             }
         }
         public bool TieneFotoValida =>
-    !string.IsNullOrWhiteSpace(_fotoPerfilUrl) &&
-    !_fotoPerfilUrl.Contains("no-image") &&
-    !_fotoPerfilUrl.StartsWith("pack://");
+        !string.IsNullOrWhiteSpace(_fotoPerfilUrl) &&
+        !_fotoPerfilUrl.Contains("no-image") &&
+        !_fotoPerfilUrl.StartsWith("pack://");
+        public string Apodo { get; set; }
+        public int? AniosExperiencia { get; set; }
+        public string DisponibilidadHorario { get; set; }
+        public int ServiciosCompletados { get; set; }
+        public int CalificacionesNegativas { get; set; }
+        public string AniosExperienciaTexto => AniosExperiencia.HasValue
+            ? $"{AniosExperiencia} año(s) de experiencia"
+            : "Experiencia no especificada";
+        public int InasistenciasConsecutivas { get; set; }
+        public int SuspensionesEnSeisMeses { get; set; }
 
-       
     }
 }

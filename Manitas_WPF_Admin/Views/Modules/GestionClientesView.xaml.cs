@@ -92,5 +92,11 @@ namespace Manitas_WPF_Admin.Views.Modules
                 MessageBox.Show($"Hubo un problema al actualizar: {ex.Message}", "Error");
             }
         }
+        private void ScvCliente_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            var scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
     }
 }

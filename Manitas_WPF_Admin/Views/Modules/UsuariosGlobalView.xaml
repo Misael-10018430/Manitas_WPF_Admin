@@ -148,49 +148,58 @@
                 <Border.DataContext>
                     <Binding ElementName="DgUsuarios" Path="SelectedItem"/>
                 </Border.DataContext>
-                <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+              PreviewMouseWheel="ScvGlobal_PreviewMouseWheel">
                     <StackPanel Margin="0,0,0,30">
+
+                        <!-- HEADER con botón cerrar -->
                         <Grid Margin="0,0,0,15">
                             <TextBlock Text="Expediente del Usuario" FontWeight="Bold" FontSize="16" Foreground="#1E293B"/>
                             <Button HorizontalAlignment="Right" Click="BtnCerrarDetalle_Click" 
-                            Background="Transparent" BorderThickness="0" Cursor="Hand">
+                    Background="Transparent" BorderThickness="0" Cursor="Hand">
                                 <TextBlock Text="✕" Foreground="#94A3B8" FontSize="16"/>
                             </Button>
                         </Grid>
-                        <!-- REEMPLAZA el Border Width="100" Height="100" con TargetNullValue -->
-                    <Grid Width="100" Height="100" HorizontalAlignment="Center" Margin="0,0,0,15">
-                            <Border Background="#F1F5F9" CornerRadius="45">
-                                <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
- FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
+
+                        <!-- AVATAR -->
+                        <Grid Width="100" Height="100" HorizontalAlignment="Center" Margin="0,0,0,15">
+                            <Border Background="#F1F5F9" CornerRadius="50">
+                                <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" 
+                           HorizontalAlignment="Center" FontSize="28" 
+                           FontWeight="Bold" Foreground="#94A3B8"/>
                             </Border>
-                            <Border CornerRadius="45" ClipToBounds="True">
+                            <Border CornerRadius="50" ClipToBounds="True">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TieneFotoValida}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
-                        </Border>
-                    </Grid>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TieneFotoValida}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
+                            </Border>
+                        </Grid>
+
                         <TextBlock Text="{Binding NombreCompleto}" FontWeight="Black" FontSize="18" 
-                           HorizontalAlignment="Center" TextAlignment="Center"/>
+                   HorizontalAlignment="Center" TextAlignment="Center"/>
                         <TextBlock Text="{Binding RolNombre}" Foreground="#EA580C" FontWeight="Bold" 
-                           HorizontalAlignment="Center" Margin="0,2,0,5"/>
+                   HorizontalAlignment="Center" Margin="0,2,0,5"/>
+
+                        <!-- Badge oficio — solo visible si es Manitas -->
+                        <!-- Badge oficio — solo visible si es Manitas -->
                         <Border CornerRadius="12" Padding="10,2" HorizontalAlignment="Center" 
-                        Margin="0,5,0,15" BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
+        Margin="0,5,0,15" BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Setter Property="Visibility" Value="Visible"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding OficioNombre}" Value="Cliente">
+                                        <DataTrigger Binding="{Binding RolNombre}" Value="Cliente">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding RolNombre}" Value="Cliente">
+                                        <DataTrigger Binding="{Binding OficioNombre}" Value="Cliente">
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -198,54 +207,191 @@
                             </Border.Style>
                             <TextBlock Text="{Binding OficioNombre}" Foreground="#C2410C" FontSize="11" FontWeight="Black"/>
                         </Border>
+
                         <Separator Background="#F1F5F9" Margin="0,5,0,20"/>
+
+                        <!-- BLOQUE: DATOS PERSONALES — Teléfono y Correo OCULTOS por privacidad -->
+                        <TextBlock Text="DATOS PERSONALES" FontSize="10" FontWeight="Black" 
+                   Foreground="#94A3B8" Margin="0,0,0,12"/>
+                        <StackPanel Margin="0,0,0,20">
+                            <TextBlock Text="FECHA DE REGISTRO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding FechaRegistro, StringFormat=\{0:dd/MM/yyyy\}, TargetNullValue='Sin fecha'}"  
+                       FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,20">
+                            <TextBlock Text="ESTADO DE CUENTA" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Estado}" FontSize="13" FontWeight="Bold" 
+                       Foreground="{Binding EstadoColor}" Margin="0,3,0,0"/>
+                        </StackPanel>
+
+                        <!-- BLOQUE: PERFIL PROFESIONAL — solo si es Manitas -->
                         <StackPanel x:Name="SecOficio">
-                            <TextBlock Text="SOLICITUD DE OFICIO" FontSize="10" FontWeight="Black" 
-                               Foreground="#94A3B8" Margin="0,0,0,8"/>
-                            <Border Background="#F8FAFC" CornerRadius="8" Padding="15" Margin="0,0,0,24" 
-                            BorderBrush="#E2E8F0" BorderThickness="1">
-                                <TextBlock Text="{Binding OficioDescripcion, FallbackValue='Cliente / Sin descripción'}" 
-                                   FontSize="14" Foreground="#1E293B" TextWrapping="Wrap" FontWeight="Medium"/>
+                            <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+                            <TextBlock Text="PERFIL PROFESIONAL" FontSize="10" FontWeight="Black" 
+                       Foreground="#94A3B8" Margin="0,0,0,12"/>
+                            <StackPanel Margin="0,0,0,12">
+                                <TextBlock Text="APODO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding Apodo, TargetNullValue='Sin apodo'}" 
+                           FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,12">
+                                <TextBlock Text="EXPERIENCIA" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding AniosExperienciaTexto}" 
+                           FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,12">
+                                <TextBlock Text="DISPONIBILIDAD" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding DisponibilidadHorario, TargetNullValue='No especificada'}" 
+                           FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,0,20">
+                                <TextBlock Text="DESCRIPCIÓN DE OFICIO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold" Margin="0,0,0,6"/>
+                                <Border Background="#F8FAFC" CornerRadius="8" Padding="12" BorderBrush="#E2E8F0" BorderThickness="1">
+                                    <TextBlock Text="{Binding OficioDescripcion, FallbackValue='Sin descripción'}" 
+                               FontSize="13" Foreground="#1E293B" TextWrapping="Wrap"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- BLOQUE: MÉTRICAS -->
+                            <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+                            <TextBlock Text="MÉTRICAS DE CALIDAD" FontSize="10" FontWeight="Black" 
+                       Foreground="#94A3B8" Margin="0,0,0,12"/>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Background="#F0FDF4" CornerRadius="8" Padding="12" Margin="0,0,6,0">
+                                    <StackPanel>
+                                        <TextBlock Text="SERVICIOS" FontSize="9" FontWeight="Black" 
+                                   Foreground="#16A34A" Margin="0,0,0,4"/>
+                                        <TextBlock Text="{Binding ServiciosCompletados}" 
+                                   FontSize="22" FontWeight="Black" Foreground="#15803D"
+                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="completados" FontSize="9" Foreground="#94A3B8" 
+                                   HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="1" Background="#FEF2F2" CornerRadius="8" Padding="12" Margin="6,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="CAL. NEGATIVAS" FontSize="9" FontWeight="Black" 
+                                   Foreground="#EF4444" Margin="0,0,0,4"/>
+                                        <TextBlock Text="{Binding CalificacionesNegativas}" 
+                                   FontSize="22" FontWeight="Black" Foreground="#DC2626"
+                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="consecutivas" FontSize="9" Foreground="#94A3B8" 
+                                   HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- DOCUMENTACIÓN — solo Manitas -->
+                            <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+                            <TextBlock Text="DOCUMENTACIÓN INE" FontSize="10" FontWeight="Black" 
+                       Foreground="#94A3B8" Margin="0,0,0,10"/>
+                            <UniformGrid Columns="2" Height="80" Margin="0,0,0,15">
+                                <Border Margin="0,0,5,0" CornerRadius="6" Background="#F8FAFC" 
+                        BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                    <Grid>
+                                        <Image Source="{Binding IneFrenteUrl}" Stretch="UniformToFill">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IneFrenteUrl}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IneFrenteUrl}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                            <TextBlock Text="📄" FontSize="20" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="Sin documento" FontSize="9" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <Border Margin="5,0,0,0" CornerRadius="6" Background="#F8FAFC" 
+                        BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                    <Grid>
+                                        <Image Source="{Binding IneReversoUrl}" Stretch="UniformToFill">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IneReversoUrl}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IneReversoUrl}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                            <TextBlock Text="📄" FontSize="20" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="Sin documento" FontSize="9" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </UniformGrid>
+
+                            <TextBlock Text="COMPROBANTE DOMICILIO" FontSize="10" FontWeight="Black" 
+                       Foreground="#94A3B8" Margin="0,0,0,10"/>
+                            <Border Height="120" CornerRadius="6" Background="#F8FAFC" 
+                    BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,15" ClipToBounds="True">
+                                <Grid>
+                                    <Image Source="{Binding DocumentoExtraUrl}" Stretch="UniformToFill">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DocumentoExtraUrl}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DocumentoExtraUrl}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="📄" FontSize="30" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Sin comprobante" FontSize="10" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
                             </Border>
                         </StackPanel>
-                        <Grid Margin="0,0,0,20">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Margin="0,0,10,0">
-                                <TextBlock Text="TELÉFONO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding Telefono, TargetNullValue='No registrado'}" FontWeight="SemiBold" Foreground="#1E293B"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Text="CORREO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding Correo}" FontWeight="SemiBold" Foreground="#1E293B" FontSize="11"/>
-                            </StackPanel>
-                        </Grid>
-                        <TextBlock Text="DOCUMENTACIÓN DE IDENTIDAD (INE)" FontSize="10" FontWeight="Black" 
-                           Foreground="#94A3B8" Margin="0,0,0,10"/>
-                        <UniformGrid Columns="2" Margin="0,5,0,15">
-                            <Border Margin="0,0,5,0" Height="80" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image Source="{Binding IneFrenteUrl, 
-                               TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" 
-                               Stretch="Uniform" ToolTip="INE Frente"/>
-                            </Border>
-                            <Border Margin="5,0,0,0" Height="80" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image Source="{Binding IneReversoUrl, 
-                               TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" 
-                               Stretch="Uniform" ToolTip="INE Reverso"/>
-                            </Border>
-                        </UniformGrid>
-                        <TextBlock Text="COMPROBANTE DOMICILIO" FontSize="10" FontWeight="Black" 
-                           Foreground="#94A3B8" Margin="0,0,0,5"/>
-                        <Border Height="140" CornerRadius="6" Background="#F8FAFC" BorderBrush="#E2E8F0" 
-                        BorderThickness="1" Margin="0,0,0,20">
-                            <Image Source="{Binding DocumentoExtraUrl, 
-                           TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-document.png'}" 
-                           Stretch="Uniform"/>
-                        </Border>
+
+                        <!-- BOTONES -->
                         <Button x:Name="BtnCambiarEstado" Click="BtnCambiarEstado_Click" Margin="0,10,0,0" 
-                        Height="40" FontWeight="Bold" Cursor="Hand">
+                Height="40" FontWeight="Bold" Cursor="Hand">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                     <Setter Property="Background" Value="White"/>
@@ -265,8 +411,8 @@
                             </Button.Style>
                         </Button>
                         <Button Content="Ver Expediente Completo" Click="BtnVerExpediente_Click" Margin="0,15,0,10" 
-                        Background="#EA580C" Foreground="White" FontWeight="Bold" Height="40" 
-                        BorderThickness="0" Cursor="Hand">
+                Background="#EA580C" Foreground="White" FontWeight="Bold" Height="40" 
+                BorderThickness="0" Cursor="Hand">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="6"/>
@@ -274,8 +420,9 @@
                             </Button.Resources>
                         </Button>
                         <Button x:Name="BtnCerrarDetalle" Content="Cerrar Panel" Click="BtnCerrarDetalle_Click" 
-                        Background="Transparent" BorderThickness="0" Foreground="#94A3B8" 
-                        Margin="0,5,0,0" Cursor="Hand"/>
+                Background="Transparent" BorderThickness="0" Foreground="#94A3B8" 
+                Margin="0,5,0,0" Cursor="Hand"/>
+
                     </StackPanel>
                 </ScrollViewer>
             </Border>

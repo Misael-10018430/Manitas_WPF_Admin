@@ -68,8 +68,11 @@ namespace Manitas_WPF_Admin.Views.Modules
                 ColSpacer.Width = new GridLength(20);
                 ColDetalle.Width = new GridLength(1.7, GridUnitType.Star);
 
-                SecOficio.Visibility = (usuario.RolNombre?.ToLower().Contains("manita") == true)
-                                        ? Visibility.Visible : Visibility.Collapsed;
+                // SecOficio visible solo si tiene perfil Manitas
+                bool esManitas = !string.IsNullOrEmpty(usuario.OficioNombre) &&
+                                  usuario.OficioNombre != "Cliente";
+                SecOficio.Visibility = esManitas ? Visibility.Visible : Visibility.Collapsed;
+
                 BtnCambiarEstado.IsEnabled = SesionUsuario.EsAdmin();
             }
         }
@@ -140,6 +143,12 @@ namespace Manitas_WPF_Admin.Views.Modules
                     MessageBox.Show("Error al cambiar el estado: " + ex.Message, "Error Crítico");
                 }
             }
+        }
+        private void ScvGlobal_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            var scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

@@ -155,23 +155,23 @@
                         </Button>
                     </Grid>
                 </Border>
-
                 <ScrollViewer x:Name="ScvDetalles" Grid.Row="1" 
-                          VerticalScrollBarVisibility="Hidden" CanContentScroll="False">
+              VerticalScrollBarVisibility="Hidden" CanContentScroll="False">
                     <StackPanel Margin="24">
-                        <!-- REEMPLAZA el Border Width="90" Height="90" con la foto de perfil -->
+
+                        <!-- FOTO DE PERFIL -->
                         <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
                             <Border Background="#F1F5F9" CornerRadius="45">
                                 <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
- FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
+                           FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
                             </Border>
                             <Border CornerRadius="45" ClipToBounds="True">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding TieneFotoValida}" Value="False">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            <DataTrigger Binding="{Binding TieneFotoValida}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -179,17 +179,19 @@
                                 <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
                             </Border>
                         </Grid>
+
                         <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Black" 
-                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                   HorizontalAlignment="Center" TextAlignment="Center"/>
                         <Border CornerRadius="12" Padding="12,3" HorizontalAlignment="Center" 
-                            Margin="0,8,0,0" BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
+                Margin="0,8,0,0" BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
                             <TextBlock Text="{Binding OficioNombre}" Foreground="#C2410C" FontSize="11" FontWeight="Black"/>
                         </Border>
                         <TextBlock Text="POSTULANTE A MANITAS" FontSize="10" FontWeight="Bold" 
-                               Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,5,0,20"/>
+                   Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,5,0,20"/>
 
                         <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
 
+                        <!-- TELÉFONO Y CORREO -->
                         <Grid Margin="0,0,0,25">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -205,40 +207,135 @@
                             </StackPanel>
                         </Grid>
 
+                        <!-- SOLICITUD DE OFICIO -->
                         <TextBlock Text="SOLICITUD DE OFICIO" FontSize="10" FontWeight="Black" 
-                               Foreground="#94A3B8" Margin="0,0,0,8"/>
+                   Foreground="#94A3B8" Margin="0,0,0,8"/>
                         <Border Background="#F8FAFC" CornerRadius="8" Padding="15" Margin="0,0,0,24" 
-                            BorderBrush="#E2E8F0" BorderThickness="1">
+                BorderBrush="#E2E8F0" BorderThickness="1">
                             <TextBlock Text="{Binding OficioDescripcion, FallbackValue='Sin descripción de oficio'}" 
-                                   FontSize="13" Foreground="#1E293B" TextWrapping="Wrap"/>
+                       FontSize="13" Foreground="#1E293B" TextWrapping="Wrap"/>
                         </Border>
 
+                        <!-- DOCUMENTACIÓN INE -->
                         <TextBlock Text="DOCUMENTACIÓN INE" FontSize="10" FontWeight="Black" 
-                               Foreground="#94A3B8" Margin="0,0,0,10"/>
+                   Foreground="#94A3B8" Margin="0,0,0,10"/>
                         <UniformGrid Columns="2" Height="110" Margin="0,0,0,20">
-                            <Border Margin="0,0,5,0" CornerRadius="8" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image Source="{Binding IneFrenteUrl}"/>
+
+                            <!-- INE FRENTE -->
+                            <Border Margin="0,0,5,0" CornerRadius="8" Background="#F8FAFC" 
+                    BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                <Grid>
+                                    <!-- Imagen -->
+                                    <Image Source="{Binding IneFrenteUrl}" Stretch="UniformToFill">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IneFrenteUrl}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <!-- Placeholder vacío -->
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IneFrenteUrl}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="📄" FontSize="24" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Sin documento" FontSize="10" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
                             </Border>
-                            <Border Margin="5,0,0,0" CornerRadius="8" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
-                                <Image Source="{Binding IneReversoUrl}"/>
+
+                            <!-- INE REVERSO -->
+                            <Border Margin="5,0,0,0" CornerRadius="8" Background="#F8FAFC" 
+                    BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                <Grid>
+                                    <Image Source="{Binding IneReversoUrl}" Stretch="UniformToFill">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IneReversoUrl}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IneReversoUrl}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="📄" FontSize="24" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Sin documento" FontSize="10" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
                             </Border>
                         </UniformGrid>
 
+                        <!-- COMPROBANTE DE DOMICILIO -->
                         <TextBlock Text="COMPROBANTE DE DOMICILIO" FontSize="10" FontWeight="Black" 
-                               Foreground="#94A3B8" Margin="0,0,0,10"/>
-                        <Border Background="White" Height="150" CornerRadius="8" BorderBrush="#E2E8F0" BorderThickness="1">
-                            <Image Source="{Binding DocumentoExtraUrl}"/>
+                   Foreground="#94A3B8" Margin="0,0,0,10"/>
+                        <Border Background="#F8FAFC" Height="150" CornerRadius="8" 
+                BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                            <Grid>
+                                <!-- Imagen -->
+                                <Image Source="{Binding DocumentoExtraUrl}" Stretch="UniformToFill">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DocumentoExtraUrl}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                                <!-- Placeholder vacío -->
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DocumentoExtraUrl}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock Text="📄" FontSize="36" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Sin comprobante" FontSize="11" Foreground="#94A3B8" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
                         </Border>
 
+                        <!-- MOTIVO DE RECHAZO -->
                         <StackPanel x:Name="PnlRechazo" Visibility="Collapsed" Margin="0,20,0,0">
                             <TextBlock Text="MOTIVO DEL RECHAZO" FontSize="10" FontWeight="Bold" 
-                                   Foreground="#EF4444" Margin="0,0,0,8"/>
+                       Foreground="#EF4444" Margin="0,0,0,8"/>
                             <TextBox x:Name="TxtMotivoRechazo" Height="80" TextWrapping="Wrap" 
-                                 AcceptsReturn="True" BorderBrush="#EF4444" Padding="10"/>
+                     AcceptsReturn="True" BorderBrush="#EF4444" Padding="10"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
-
                 <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0" 
                     Background="White" CornerRadius="0,0,16,16">
                     <Grid>

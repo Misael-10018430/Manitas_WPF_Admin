@@ -8,9 +8,18 @@ namespace Manitas.Logic.Services
 {
     public class UsuarioService
     {
-        /// <summary>
-        /// Valida las credenciales del administrador en el Login
-        /// </summary>
+        private const string BaseUrl = "http://localhost:44355";
+
+        // helper privado para construir URLs
+        private string BuildUrl(string rutaRelativa)
+        {
+            if (string.IsNullOrWhiteSpace(rutaRelativa)) return null;
+
+            if (rutaRelativa.StartsWith("/App_Data/"))
+                return BaseUrl + "/Archivo/Servir?ruta=" + Uri.EscapeDataString(rutaRelativa);
+
+            return BaseUrl + rutaRelativa;
+        }
         public UsuarioDTO Autenticar(string correo, string password)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -49,13 +58,23 @@ namespace Manitas.Logic.Services
                 {
                     var perfil = u.perfiles_manitas.FirstOrDefault();
                     var registroServicio = perfil?.manitas_servicios.FirstOrDefault();
+
                     listaDTO.Add(new UsuarioDTO
                     {
                         Id = u.id,
                         NombreCompleto = u.nombre_completo,
                         Correo = u.correo,
                         Telefono = u.telefono,
-                        OficioDescripcion = registroServicio?.tipos_servicio?.nombre ?? "Oficio no asignado"
+                        OficioDescripcion = registroServicio?.tipos_servicio?.nombre ?? "Oficio no asignado",
+                        Apodo = perfil?.apodo,
+                        AniosExperiencia = perfil?.anios_experiencia,
+                        DisponibilidadHorario = perfil?.disponibilidad_texto,
+                        ServiciosCompletados = perfil?.servicios_completados_total ?? 0,
+                        CalificacionesNegativas = perfil?.calificaciones_neg_consecutivas ?? 0,
+                        FotoPerfilUrl = BuildUrl(perfil?.foto_perfil_url),
+                        IneFrenteUrl = BuildUrl(perfil?.ine_frente_url),
+                        IneReversoUrl = BuildUrl(perfil?.ine_reverso_url),
+                        DocumentoExtraUrl = BuildUrl(perfil?.comprobante_url)
                     });
                 }
             }
@@ -158,12 +177,18 @@ namespace Manitas.Logic.Services
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
-                var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador"));
+                var query = db.usuarios.Where(u =>
+                    u.usuario_roles.Any(r => r.role.nombre != "administrador" &&
+                                             r.role.nombre != "encargado"));
 
                 return query.ToList().Select(u =>
                 {
-                    var perfil = u.perfiles_manitas.FirstOrDefault();
                     var rol = u.usuario_roles.FirstOrDefault();
+                    var perfilManitas = u.perfiles_manitas.FirstOrDefault();
+                    var perfilCliente = u.perfiles_clientes.FirstOrDefault();
+
+                    // JERARQUÍA: si tiene perfil manitas, se trata como Manitas
+                    bool esManitas = perfilManitas != null;
 
                     return new UsuarioDTO
                     {
@@ -171,20 +196,38 @@ namespace Manitas.Logic.Services
                         NombreCompleto = u.nombre_completo,
                         Correo = u.correo,
                         Telefono = u.telefono,
-                        RolNombre = rol?.role?.nombre ?? "Sin Rol",
-                        Estado = rol?.activo == true ? "Activo" : "Inactivo",
-                        IsActivo = rol?.activo == true,
                         FechaRegistro = u.fecha_registro,
-                        OficioDescripcion = perfil?.descripcion ?? "Sin oficio",
-                        OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
-                                       ?? (u.usuario_roles.Any(r => r.role.nombre.ToLower().Contains("manita"))
-                                           ? "Oficio no seleccionado"
-                                           : "Cliente"),
-                        // Sin placeholders — el DTO maneja el null
-                        FotoPerfilUrl = perfil?.foto_perfil_url,
-                        IneFrenteUrl = perfil?.ine_frente_url,
-                        IneReversoUrl = perfil?.ine_reverso_url,
-                        DocumentoExtraUrl = perfil?.comprobante_url
+                        IsActivo = rol?.activo == true,
+                        Estado = rol?.activo == true ? "Activo" : "Inactivo",
+
+                        // Rol visual: si tiene perfil manitas, mostrar como Manita
+                        RolNombre = esManitas
+                            ? (rol?.role?.nombre ?? "Manita")
+                            : "Cliente",
+
+                        // Oficio: solo si es Manitas
+                        OficioNombre = esManitas
+                            ? (perfilManitas.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
+                               ?? "Oficio no seleccionado")
+                            : "Cliente",
+
+                        OficioDescripcion = esManitas
+                            ? (perfilManitas.descripcion ?? "Sin descripción")
+                            : null,
+
+                        Apodo = esManitas ? perfilManitas.apodo : null,
+                        AniosExperiencia = esManitas ? perfilManitas.anios_experiencia : null,
+                        DisponibilidadHorario = esManitas ? perfilManitas.disponibilidad_texto : null,
+                        ServiciosCompletados = esManitas
+                        ? (perfilManitas.servicios_completados_total) : 0,
+                                            CalificacionesNegativas = esManitas
+                        ? (perfilManitas.calificaciones_neg_consecutivas) : 0,
+
+                        // Fotos: solo Manitas tiene documentos
+                        FotoPerfilUrl = esManitas ? BuildUrl(perfilManitas.foto_perfil_url) : null,
+                        IneFrenteUrl = esManitas ? BuildUrl(perfilManitas.ine_frente_url) : null,
+                        IneReversoUrl = esManitas ? BuildUrl(perfilManitas.ine_reverso_url) : null,
+                        DocumentoExtraUrl = esManitas ? BuildUrl(perfilManitas.comprobante_url) : null
                     };
                 }).ToList();
             }
@@ -195,29 +238,33 @@ namespace Manitas.Logic.Services
             using (var db = new Manitas_DBPilotoEntities())
             {
                 return db.usuarios
-                    .Where(u => u.perfiles_manitas.Any(p => p.estado == "en_solicitud"))
-                    .ToList()
-                    .Select(u =>
-                    {
-                        var perfil = u.perfiles_manitas.FirstOrDefault();
+                .Where(u => u.perfiles_manitas.Any(p => p.estado == "en_solicitud"))
+                .ToList()
+                .Select(u =>
+                {
+        var perfil = u.perfiles_manitas.FirstOrDefault();
 
-                        return new UsuarioDTO
-                        {
-                            Id = u.id,
-                            NombreCompleto = u.nombre_completo,
-                            Telefono = u.telefono,
-                            Correo = u.correo,
-                            RolNombre = "Manita Pendiente",
-                            OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
-                                           ?? "Oficio no seleccionado",
-                            OficioDescripcion = perfil?.descripcion ?? "Sin descripción",
-                            // Sin placeholders — el DTO maneja el null
-                            FotoPerfilUrl = perfil?.foto_perfil_url,
-                            IneFrenteUrl = perfil?.ine_frente_url,
-                            IneReversoUrl = perfil?.ine_reverso_url,
-                            DocumentoExtraUrl = perfil?.comprobante_url
-                        };
-                    }).ToList();
+        return new UsuarioDTO
+        {
+            Id = u.id,
+            NombreCompleto = u.nombre_completo,
+            Telefono = u.telefono,
+            Correo = u.correo,
+            RolNombre = "Manita Pendiente",
+            OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
+                           ?? "Oficio no seleccionado",
+            OficioDescripcion = perfil?.descripcion ?? "Sin descripción",
+            Apodo = perfil?.apodo,
+            AniosExperiencia = perfil?.anios_experiencia,
+            DisponibilidadHorario = perfil?.disponibilidad_texto,
+            ServiciosCompletados = perfil?.servicios_completados_total ?? 0,
+            CalificacionesNegativas = perfil?.calificaciones_neg_consecutivas ?? 0,
+            FotoPerfilUrl = BuildUrl(perfil?.foto_perfil_url),
+            IneFrenteUrl = BuildUrl(perfil?.ine_frente_url),
+            IneReversoUrl = BuildUrl(perfil?.ine_reverso_url),
+            DocumentoExtraUrl = BuildUrl(perfil?.comprobante_url)
+        };
+    }).ToList();
             }
         }
 
@@ -239,22 +286,33 @@ namespace Manitas.Logic.Services
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
-                var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre == "cliente"));
+                var query = db.usuarios.Where(u =>
+                    u.usuario_roles.Any(r => r.role.nombre == "cliente") &&
+                    !u.perfiles_manitas.Any()); // Solo clientes puros, sin perfil manitas
 
                 if (!string.IsNullOrEmpty(busqueda))
-                    query = query.Where(u => u.nombre_completo.Contains(busqueda) || u.correo.Contains(busqueda));
+                    query = query.Where(u => u.nombre_completo.Contains(busqueda) ||
+                                             u.correo.Contains(busqueda));
 
-                return query.ToList().Select(u => new UsuarioDTO
+                return query.ToList().Select(u =>
                 {
-                    Id = u.id,
-                    NombreCompleto = u.nombre_completo,
-                    Correo = u.correo,
-                    Telefono = u.telefono,
-                    FechaRegistro = u.fecha_registro,
-                    IsActivo = u.usuario_roles.FirstOrDefault()?.activo ?? false,
-                    Estado = (u.usuario_roles.FirstOrDefault()?.activo ?? false) ? "Activo" : "Inactivo",
-                    // Sin placeholder — el DTO maneja el null
-                    FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url
+                    var rol = u.usuario_roles.FirstOrDefault();
+                    var perfilCliente = u.perfiles_clientes.FirstOrDefault();
+
+                    return new UsuarioDTO
+                    {
+                        Id = u.id,
+                        NombreCompleto = u.nombre_completo,
+                        Correo = u.correo,
+                        Telefono = u.telefono,
+                        FechaRegistro = u.fecha_registro,
+                        IsActivo = rol?.activo ?? false,
+                        FotoPerfilUrl = null, // clientes no tienen foto en esta tabla
+                                              // Campos de perfiles_clientes
+                        ServiciosCompletados = perfilCliente?.inasistencias_consecutivas ?? 0,
+                        CalificacionesNegativas = perfilCliente?.suspensiones_en_6_meses ?? 0,
+                        Estado = perfilCliente?.estado ?? (rol?.activo == true ? "Activo" : "Inactivo")
+                    };
                 }).ToList();
             }
         }

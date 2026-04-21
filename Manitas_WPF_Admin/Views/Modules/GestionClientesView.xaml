@@ -175,21 +175,24 @@
                             </Border>
 
                             <!-- CONTENIDO -->
-                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+              PreviewMouseWheel="ScvCliente_PreviewMouseWheel">
                                 <StackPanel Margin="25,20,25,25">
-                                    <!-- REEMPLAZA el Grid Width="90" Height="90" en el ScrollViewer del PanelExpediente -->
+
+                                    <!-- AVATAR -->
                                     <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
                                         <Border Background="#F1F5F9" CornerRadius="45">
-                                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                                         FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
+                                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" 
+                           HorizontalAlignment="Center" FontSize="28" 
+                           FontWeight="Bold" Foreground="#94A3B8"/>
                                         </Border>
                                         <Border CornerRadius="45" ClipToBounds="True">
                                             <Border.Style>
                                                 <Style TargetType="Border">
-                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding TieneFotoValida}" Value="False">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <DataTrigger Binding="{Binding TieneFotoValida}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -199,28 +202,73 @@
                                     </Grid>
 
                                     <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Bold" 
-                                               HorizontalAlignment="Center" TextAlignment="Center" Foreground="#1E293B"/>
+                   HorizontalAlignment="Center" TextAlignment="Center" Foreground="#1E293B"/>
                                     <TextBlock Text="PERFIL CLIENTE" Foreground="#94A3B8" FontSize="10" 
-                                               FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,25"/>
+                   FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,25"/>
 
                                     <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
 
-                                    <StackPanel Margin="0,0,0,15">
+                                    <!-- BLOQUE: DATOS PERSONALES -->
+                                    <TextBlock Text="DATOS PERSONALES" FontSize="10" FontWeight="Black" 
+                   Foreground="#94A3B8" Margin="0,0,0,12"/>
+                                    <StackPanel Margin="0,0,0,12">
                                         <TextBlock Text="CORREO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Correo}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
+                                        <TextBlock Text="{Binding Correo}" FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
                                     </StackPanel>
-                                    <StackPanel Margin="0,0,0,15">
+                                    <StackPanel Margin="0,0,0,12">
                                         <TextBlock Text="TELÉFONO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Telefono}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
+                                        <TextBlock Text="{Binding Telefono, TargetNullValue='No registrado'}" 
+                       FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
                                     </StackPanel>
-                                    <StackPanel>
+                                    <StackPanel Margin="0,0,0,25">
                                         <TextBlock Text="REGISTRADO EL" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding FechaRegistro, StringFormat=\{0:dd/MM/yyyy\}}" 
-                                                   FontSize="13" Foreground="#1E293B" Margin="0,2"/>
+                                        <TextBlock Text="{Binding FechaRegistro, StringFormat=\{0:dd/MM/yyyy\}, TargetNullValue='Sin fecha'}" 
+                       FontSize="13" Foreground="#1E293B" Margin="0,3,0,0"/>
                                     </StackPanel>
+
+                                    <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+
+                                    <!-- BLOQUE: MÉTRICAS DE CALIDAD -->
+                                    <TextBlock Text="MÉTRICAS DE COMPORTAMIENTO" FontSize="10" FontWeight="Black" 
+                   Foreground="#94A3B8" Margin="0,0,0,12"/>
+                                    <Grid Margin="0,0,0,25">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Background="#FFF7ED" CornerRadius="8" Padding="12" Margin="0,0,6,0">
+                                            <StackPanel>
+                                                <TextBlock Text="INASISTENCIAS" FontSize="9" FontWeight="Black" 
+                               Foreground="#EA580C" Margin="0,0,0,4"/>
+                                                <TextBlock Text="{Binding InasistenciasConsecutivas}" 
+                               FontSize="22" FontWeight="Black" Foreground="#C2410C"
+                               HorizontalAlignment="Center"/>
+                                                <TextBlock Text="consecutivas" FontSize="9" Foreground="#94A3B8" 
+                               HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Background="#FEF2F2" CornerRadius="8" Padding="12" Margin="6,0,0,0">
+                                            <StackPanel>
+                                                <TextBlock Text="SUSPENSIONES" FontSize="9" FontWeight="Black" 
+                               Foreground="#EF4444" Margin="0,0,0,4"/>
+                                                <TextBlock Text="{Binding SuspensionesEnSeisMeses}" 
+                               FontSize="22" FontWeight="Black" Foreground="#DC2626"
+                               HorizontalAlignment="Center"/>
+                                                <TextBlock Text="en 6 meses" FontSize="9" Foreground="#94A3B8" 
+                               HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- ESTADO -->
+                                    <StackPanel Margin="0,0,0,20">
+                                        <TextBlock Text="ESTADO DE CUENTA" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Estado}" FontSize="13" FontWeight="Bold" 
+                       Foreground="{Binding EstadoColor}" Margin="0,3,0,0"/>
+                                    </StackPanel>
+
                                 </StackPanel>
                             </ScrollViewer>
-
                             <!-- BOTÓN -->
                             <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
                                 <Button x:Name="btnToggleEstado" Height="40" FontWeight="Bold" 
