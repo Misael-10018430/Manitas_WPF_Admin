@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Manitas.Data.Models;
 using Manitas.Logic.DTOs;
+
 namespace Manitas.Logic.Services
 {
     public class UsuarioService
@@ -16,6 +17,7 @@ namespace Manitas.Logic.Services
             {
                 var usuarioEncontrado = db.usuarios
                     .FirstOrDefault(u => u.correo == correo && u.contrasena_hash == password && u.activo == true);
+
                 if (usuarioEncontrado != null)
                 {
                     return new UsuarioDTO
@@ -29,6 +31,7 @@ namespace Manitas.Logic.Services
                 return null;
             }
         }
+
         /// <summary>
         /// Obtiene los usuarios que ya tienen el rol de 'Manita' con su info completa
         /// </summary>
@@ -58,10 +61,10 @@ namespace Manitas.Logic.Services
             }
             return listaDTO;
         }
+
         /// <summary>
         /// Cambia el rol de un usuario a 'Manita' en la base de datos SQL
         /// </summary>
-        /// 
         public bool AprobarUsuarioComoManita(Guid usuarioId)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -73,11 +76,10 @@ namespace Manitas.Logic.Services
                 {
                     relacionActual.rol_id = rolManita.id;
                     relacionActual.activo = true;
+
                     var perfil = db.perfiles_manitas.FirstOrDefault(p => p.usuario_id == usuarioId);
                     if (perfil != null)
-                    {
-                        perfil.estado = "Activo"; 
-                    }
+                        perfil.estado = "Activo";
 
                     db.SaveChanges();
                     return true;
@@ -85,6 +87,7 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+
         /// <summary>
         /// Desactiva a un usuario en la base de datos (Borrado Lógico)
         /// </summary>
@@ -101,6 +104,7 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+
         public bool ActualizarEstadoManitas(Guid usuarioId, string nuevoEstado, string motivo)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -115,6 +119,7 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+
         public void ActualizarEstadoUsuario(Guid usuarioId, bool activo)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -127,6 +132,7 @@ namespace Manitas.Logic.Services
                 }
             }
         }
+
         public List<UsuarioDTO> ObtenerActividadReciente()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -141,22 +147,24 @@ namespace Manitas.Logic.Services
                         NombreCompleto = u.nombre_completo,
                         RolNombre = u.usuario_roles.FirstOrDefault()?.role?.nombre ?? "Sin Rol",
                         Telefono = u.telefono,
+                        // Sin placeholder — el DTO maneja el null con TieneFotoValida
                         FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
                         IsActivo = u.usuario_roles.FirstOrDefault().activo == true
                     }).ToList();
             }
         }
-        // Rutas de respaldo para cuando el usuario no ha subido fotos
-        private readonly string _noImage = "pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png";
-        private readonly string _noDoc = "pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-document.png";
+
         public List<UsuarioDTO> ObtenerUsuariosGlobal(string busqueda, string filtroRol)
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador"));
-                return query.ToList().Select(u => {
+
+                return query.ToList().Select(u =>
+                {
                     var perfil = u.perfiles_manitas.FirstOrDefault();
                     var rol = u.usuario_roles.FirstOrDefault();
+
                     return new UsuarioDTO
                     {
                         Id = u.id,
@@ -172,14 +180,16 @@ namespace Manitas.Logic.Services
                                        ?? (u.usuario_roles.Any(r => r.role.nombre.ToLower().Contains("manita"))
                                            ? "Oficio no seleccionado"
                                            : "Cliente"),
-                        FotoPerfilUrl = string.IsNullOrWhiteSpace(perfil?.foto_perfil_url) ? _noImage : perfil.foto_perfil_url,
-                        IneFrenteUrl = string.IsNullOrWhiteSpace(perfil?.ine_frente_url) ? _noImage : perfil.ine_frente_url,
-                        IneReversoUrl = string.IsNullOrWhiteSpace(perfil?.ine_reverso_url) ? _noImage : perfil.ine_reverso_url,
-                        DocumentoExtraUrl = string.IsNullOrWhiteSpace(perfil?.comprobante_url) ? _noDoc : perfil.comprobante_url
+                        // Sin placeholders — el DTO maneja el null
+                        FotoPerfilUrl = perfil?.foto_perfil_url,
+                        IneFrenteUrl = perfil?.ine_frente_url,
+                        IneReversoUrl = perfil?.ine_reverso_url,
+                        DocumentoExtraUrl = perfil?.comprobante_url
                     };
                 }).ToList();
             }
         }
+
         public List<UsuarioDTO> ObtenerSolicitudesPendientes()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -187,7 +197,8 @@ namespace Manitas.Logic.Services
                 return db.usuarios
                     .Where(u => u.perfiles_manitas.Any(p => p.estado == "en_solicitud"))
                     .ToList()
-                    .Select(u => {
+                    .Select(u =>
+                    {
                         var perfil = u.perfiles_manitas.FirstOrDefault();
 
                         return new UsuarioDTO
@@ -197,16 +208,19 @@ namespace Manitas.Logic.Services
                             Telefono = u.telefono,
                             Correo = u.correo,
                             RolNombre = "Manita Pendiente",
-                            OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre ?? "Oficio no seleccionado",
+                            OficioNombre = perfil?.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
+                                           ?? "Oficio no seleccionado",
                             OficioDescripcion = perfil?.descripcion ?? "Sin descripción",
-                            FotoPerfilUrl = string.IsNullOrWhiteSpace(perfil?.foto_perfil_url) ? _noImage : perfil.foto_perfil_url,
-                            IneFrenteUrl = string.IsNullOrWhiteSpace(perfil?.ine_frente_url) ? _noImage : perfil.ine_frente_url,
-                            IneReversoUrl = string.IsNullOrWhiteSpace(perfil?.ine_reverso_url) ? _noImage : perfil.ine_reverso_url,
-                            DocumentoExtraUrl = string.IsNullOrWhiteSpace(perfil?.comprobante_url) ? _noDoc : perfil.comprobante_url
+                            // Sin placeholders — el DTO maneja el null
+                            FotoPerfilUrl = perfil?.foto_perfil_url,
+                            IneFrenteUrl = perfil?.ine_frente_url,
+                            IneReversoUrl = perfil?.ine_reverso_url,
+                            DocumentoExtraUrl = perfil?.comprobante_url
                         };
                     }).ToList();
             }
         }
+
         public bool CambiarEstatusUsuario(Guid usuarioId, bool nuevoEstado)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -220,16 +234,16 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+
         public List<UsuarioDTO> ObtenerClientes(string busqueda = "")
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var query = db.usuarios.Where(u => u.usuario_roles.Any(r => r.role.nombre == "cliente"));
+
                 if (!string.IsNullOrEmpty(busqueda))
-                {
                     query = query.Where(u => u.nombre_completo.Contains(busqueda) || u.correo.Contains(busqueda));
-                }
-                string noImage = "pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png";
+
                 return query.ToList().Select(u => new UsuarioDTO
                 {
                     Id = u.id,
@@ -239,13 +253,12 @@ namespace Manitas.Logic.Services
                     FechaRegistro = u.fecha_registro,
                     IsActivo = u.usuario_roles.FirstOrDefault()?.activo ?? false,
                     Estado = (u.usuario_roles.FirstOrDefault()?.activo ?? false) ? "Activo" : "Inactivo",
-                    FotoPerfilUrl = string.IsNullOrWhiteSpace(u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url)
-                                    ? noImage
-                                    : u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url
+                    // Sin placeholder — el DTO maneja el null
+                    FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url
                 }).ToList();
             }
-          
         }
+
         public List<UsuarioDTO> ObtenerUsuariosSistema(string busqueda)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -257,16 +270,18 @@ namespace Manitas.Logic.Services
                         r.role.nombre.ToLower() == "soporte"
                     )
                 ));
+
                 if (!string.IsNullOrEmpty(busqueda))
                 {
                     string b = busqueda.ToLower();
                     query = query.Where(u => u.nombre_completo.ToLower().Contains(b) ||
                                              u.correo.ToLower().Contains(b));
                 }
+
                 return query.ToList().Select(u => new UsuarioDTO
                 {
                     Id = u.id,
-                    Username = u.correo, 
+                    Username = u.correo,
                     NombreCompleto = u.nombre_completo,
                     Correo = u.correo,
                     RolNombre = u.usuario_roles.FirstOrDefault(r => r.activo)?.role?.nombre ?? "Staff",
@@ -275,6 +290,7 @@ namespace Manitas.Logic.Services
                 }).ToList();
             }
         }
+
         public bool ActualizarPassword(Guid usuarioId, string nuevaPassword)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -285,6 +301,7 @@ namespace Manitas.Logic.Services
                 return db.SaveChanges() > 0;
             }
         }
+
         public bool ActualizarRolSistema(Guid usuarioId, string nuevoRolNombre)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -296,6 +313,7 @@ namespace Manitas.Logic.Services
                 return db.SaveChanges() > 0;
             }
         }
+
         public bool CrearUsuarioStaff(usuario nuevoU, string nombreRol)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -306,8 +324,8 @@ namespace Manitas.Logic.Services
                     {
                         db.usuarios.Add(nuevoU);
                         db.SaveChanges();
-                        var rol = db.roles.FirstOrDefault(r => r.nombre.ToLower() == nombreRol.ToLower());
 
+                        var rol = db.roles.FirstOrDefault(r => r.nombre.ToLower() == nombreRol.ToLower());
                         if (rol != null)
                         {
                             db.usuario_roles.Add(new usuario_roles

@@ -12,29 +12,6 @@
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-            <Style TargetType="DataGridColumnHeader">
-                <Setter Property="Background" Value="#F8FAFC"/>
-                <Setter Property="Foreground" Value="#1E293B"/>
-                <Setter Property="FontSize" Value="11"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Padding" Value="15,12"/>
-                <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                <Setter Property="BorderBrush" Value="#E2E8F0"/>
-                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            </Style>
-
-            <Style TargetType="DataGridCell">
-                <Setter Property="Padding" Value="15,0"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="#E0F2FE"/>
-                        <Setter Property="Foreground" Value="#0369A1"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-
             <Style x:Key="CenterTextColumn" TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="15,0"/>
@@ -42,206 +19,254 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="#F8FAFC">
-        <Border Margin="25" Background="White" CornerRadius="16">
+    <!-- Este Grid ocupa las filas 1 y 2 para que el panel llegue hasta arriba -->
+    <Grid Grid.Row="1" Grid.RowSpan="2" Margin="15,0,15,15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="ColTabla" Width="*"/>
+            <ColumnDefinition x:Name="ColSpacer" Width="0"/>
+            <ColumnDefinition x:Name="ColDetalle" Width="0"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- DATAGRID — ahora necesita su propio Grid interno para dejar espacio al buscador -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- BUSCADOR reubicado aquí dentro -->
+            <Border Grid.Row="0" Background="White" CornerRadius="8" Padding="25,20" 
+                Margin="15,10,0,15" BorderBrush="#CBD5E1" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="12" Direction="270" Opacity="0.04" ShadowDepth="2"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="CRITERIO DE BÚSQUEDA" FontSize="10" FontWeight="Black" 
+                           Foreground="#64748B" Margin="2,0,0,8"/>
+                    <Border Background="#F8FAFC" CornerRadius="6" Height="40" 
+                        BorderBrush="#E2E8F0" BorderThickness="1">
+                        <Grid Margin="12,0">
+                            <TextBlock Text="Buscar por nombre o correo electrónico..." 
+                                   VerticalAlignment="Center" Foreground="#94A3B8" 
+                                   FontSize="12" IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=TxtBuscar}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBox x:Name="TxtBuscar" Background="Transparent" BorderThickness="0" 
+                                 VerticalContentAlignment="Center" FontSize="13" Foreground="#1E293B"
+                                 TextChanged="TxtBuscar_TextChanged"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- TABLA -->
+            <Border Grid.Row="1" Margin="15,0,0,0" Style="{StaticResource Card}" 
+                Padding="0" ClipToBounds="True">
+                <DataGrid x:Name="DgManitas" 
+                      Style="{StaticResource DataGridPro}"
+                      AutoGenerateColumns="False" 
+                      IsReadOnly="True" 
+                      RowHeight="60"
+                      SelectionChanged="DgManitas_SelectionChanged"
+                      BorderThickness="0">
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#F8FAFC"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1E293B"/>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="POSTULANTE" Width="2*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                                        <StackPanel VerticalAlignment="Center" Margin="12,0,0,0">
+                                            <TextBlock Text="{Binding NombreCompleto}" FontWeight="Bold" Foreground="#1E293B"/>
+                                            <TextBlock Text="{Binding Correo}" FontSize="11" Foreground="#64748B"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="OFICIO" 
+                                        Binding="{Binding OficioNombre}" 
+                                        Width="1.2*" 
+                                        ElementStyle="{StaticResource CenterTextColumn}">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="#64748B"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Header="ESTADO" Width="1*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                                        <Ellipse Width="8" Height="8" Fill="#EA580C" Margin="0,0,8,0"/>
+                                        <TextBlock Text="PENDIENTE" VerticalAlignment="Center"
+                                               FontWeight="Medium" Foreground="#EA580C"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="ACCIONES" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Click="BtnVerDetalles_Click" Background="Transparent" 
+                                        BorderThickness="0" Cursor="Hand" HorizontalAlignment="Center">
+                                        <TextBlock Text="👁️" FontSize="18" Foreground="#94A3B8"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+        <!-- PANEL DE DETALLES — ahora abarca toda la altura -->
+        <Border x:Name="PnlDetalles" Grid.Column="2" Margin="15,10,0,0" 
+            Style="{StaticResource Card}" Visibility="Collapsed">
+            <Border.RenderTransform>
+                <TranslateTransform x:Name="TransDetalle" X="450"/>
+            </Border.RenderTransform>
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Margin="30,25,30,10">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Gestión de Manitas" FontSize="24" FontWeight="Black" Foreground="#1E293B"/>
-                        <Border Background="#FFF7ED" CornerRadius="6" Padding="10,3" Margin="15,0,0,0" VerticalAlignment="Center" BorderBrush="#FED7AA" BorderThickness="1">
-                            <TextBlock Text="Pendientes de Validación" Foreground="#EA580C" FontSize="11" FontWeight="Bold"/>
-                        </Border>
-                    </StackPanel>
-                    <TextBlock Text="Filtra y valida los perfiles registrados desde la plataforma web." Style="{StaticResource TextMuted}" Margin="0,5,0,0"/>
-                </StackPanel>
-
-                <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="25,20" Margin="30,10,30,25" BorderBrush="#CBD5E1" BorderThickness="1">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="12" Direction="270" Opacity="0.04" ShadowDepth="2"/>
-                    </Border.Effect>
-                    <StackPanel>
-                        <TextBlock Text="CRITERIO DE BÚSQUEDA" FontSize="10" FontWeight="Black" Foreground="#64748B" Margin="2,0,0,8"/>
-                        <Border Background="#F8FAFC" CornerRadius="6" Height="42" BorderBrush="#E2E8F0" BorderThickness="1" MaxWidth="500" HorizontalAlignment="Left">
-                            <Grid Margin="12,0">
-                                <TextBlock Text="Buscar por nombre o correo electrónico..." VerticalAlignment="Center" Foreground="#94A3B8" FontSize="12" IsHitTestVisible="False">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=TxtBuscar}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <TextBox x:Name="TxtBuscar" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" FontSize="13" TextChanged="TxtBuscar_TextChanged"/>
-                            </Grid>
-                        </Border>
-                    </StackPanel>
+                <Border Grid.Row="0" Padding="20,15" BorderBrush="#F1F5F9" BorderThickness="0,0,0,1">
+                    <Grid>
+                        <TextBlock Text="Expediente del Manita" FontWeight="Bold" FontSize="16" Foreground="#1E293B"/>
+                        <Button HorizontalAlignment="Right" Click="BtnCerrarDetalle_Click" 
+                            Background="Transparent" BorderThickness="0" Cursor="Hand">
+                            <TextBlock Text="✕" Foreground="#94A3B8" FontSize="16"/>
+                        </Button>
+                    </Grid>
                 </Border>
 
-                <Grid Grid.Row="2" Margin="15,0,15,15">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="ColTabla" Width="*"/>
-                        <ColumnDefinition x:Name="ColSpacer" Width="0"/>
-                        <ColumnDefinition x:Name="ColDetalle" Width="0"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0" BorderBrush="#F1F5F9" BorderThickness="1" CornerRadius="12" Margin="10,0" ClipToBounds="True">
-                        <DataGrid x:Name="DgManitas" AutoGenerateColumns="False" IsReadOnly="True" Background="Transparent" 
-                                  BorderThickness="0" RowHeight="65" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F1F5F9"
-                                  HeadersVisibility="Column" SelectionChanged="DgManitas_SelectionChanged">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="POSTULANTE" Width="2*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                                <Border Width="38" Height="38" CornerRadius="19" Background="#F1F5F9" ClipToBounds="True">
-                                                    <Image Source="{Binding FotoPerfilUrl, TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" Stretch="UniformToFill"/>
-                                                </Border>
-                                                <StackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                                    <TextBlock Text="{Binding NombreCompleto}" FontWeight="Bold" Foreground="#1E293B"/>
-                                                    <TextBlock Text="{Binding Correo}" FontSize="11" Foreground="#64748B"/>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="OFICIO" Binding="{Binding OficioNombre}" Width="1.2*" ElementStyle="{StaticResource CenterTextColumn}"/>
-                                <DataGridTemplateColumn Header="ESTADO" Width="130">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
-                                                <Ellipse Width="7" Height="7" Fill="#EA580C" Margin="0,0,8,0"/>
-                                                <TextBlock Text="PENDIENTE" FontSize="11" FontWeight="Bold" Foreground="#EA580C"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="ACCIONES" Width="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Click="BtnVerDetalles_Click" Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalAlignment="Center">
-                                                <TextBlock Text="👁️" FontSize="18" Foreground="#94A3B8"/>
-                                            </Button>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Border>
-                    <Border x:Name="PnlDetalles" Grid.Column="2" Margin="15,0,0,0" Style="{StaticResource Card}" Visibility="Collapsed">
-                        <Border.DataContext>
-                            <Binding ElementName="DgManitas" Path="SelectedItem"/>
-                        </Border.DataContext>
-                        <Border.RenderTransform>
-                            <TranslateTransform x:Name="TransDetalle" X="450"/>
-                        </Border.RenderTransform>
-
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <Border Grid.Row="0" Padding="20,15" BorderBrush="#F1F5F9" BorderThickness="0,0,0,1">
-                                <Grid>
-                                    <TextBlock Text="Expediente del Manita" FontWeight="Bold" FontSize="16" Foreground="#1E293B"/>
-                                    <Button HorizontalAlignment="Right" Click="BtnCerrarDetalle_Click" Background="Transparent" BorderThickness="0" Cursor="Hand">
-                                        <TextBlock Text="✕" Foreground="#94A3B8" FontSize="16"/>
-                                    </Button>
-                                </Grid>
+                <ScrollViewer x:Name="ScvDetalles" Grid.Row="1" 
+                          VerticalScrollBarVisibility="Hidden" CanContentScroll="False">
+                    <StackPanel Margin="24">
+                        <!-- REEMPLAZA el Border Width="90" Height="90" con la foto de perfil -->
+                        <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
+                            <Border Background="#F1F5F9" CornerRadius="45">
+                                <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+ FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
                             </Border>
-
-                            <ScrollViewer x:Name="ScvDetalles" Grid.Row="1" VerticalScrollBarVisibility="Hidden" CanContentScroll="False">
-                                <StackPanel Margin="24">
-                                    <Border Width="90" Height="90" CornerRadius="45" ClipToBounds="True" HorizontalAlignment="Center" BorderBrush="#EA580C" BorderThickness="2" Margin="0,0,0,15">
-                                        <Image Source="{Binding FotoPerfilUrl, TargetNullValue='pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png'}" Stretch="UniformToFill"/>
-                                    </Border>
-                                    <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Black" HorizontalAlignment="Center" TextAlignment="Center"/>
-                                    <Border CornerRadius="12" Padding="12,3" HorizontalAlignment="Center" Margin="0,8,0,0" BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
-                                        <TextBlock Text="{Binding OficioNombre}" Foreground="#C2410C" FontSize="11" FontWeight="Black"/>
-                                    </Border>
-                                    <TextBlock Text="POSTULANTE A MANITAS" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,5,0,20"/>
-
-                                    <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
-
-                                    <Grid Margin="0,0,0,25">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Margin="0,0,10,0">
-                                            <TextBlock Text="TELÉFONO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
-                                            <TextBlock Text="{Binding Telefono}" FontWeight="Bold" Foreground="#1E293B" FontSize="13"/>
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="1">
-                                            <TextBlock Text="CORREO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
-                                            <TextBlock Text="{Binding Correo}" FontWeight="Bold" Foreground="#1E293B" FontSize="11"/>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <TextBlock Text="SOLICITUD DE OFICIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,8"/>
-                                    <Border Background="#F8FAFC" CornerRadius="8" Padding="15" Margin="0,0,0,24" BorderBrush="#E2E8F0" BorderThickness="1">
-                                        <TextBlock Text="{Binding OficioDescripcion, FallbackValue='Sin descripción de oficio'}" FontSize="13" Foreground="#1E293B" TextWrapping="Wrap"/>
-                                    </Border>
-
-                                    <TextBlock Text="DOCUMENTACIÓN INE" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
-                                    <UniformGrid Columns="2" Height="110" Margin="0,0,0,20">
-                                        <Border Margin="0,0,5,0" CornerRadius="8" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
-                                            <Image Source="{Binding IneFrenteUrl}"/>
-                                        </Border>
-                                        <Border Margin="5,0,0,0" CornerRadius="8" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
-                                            <Image Source="{Binding IneReversoUrl}"/>
-                                        </Border>
-                                    </UniformGrid>
-
-                                    <TextBlock Text="COMPROBANTE DE DOMICILIO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,10"/>
-                                    <Border Background="White" Height="150" CornerRadius="8" BorderBrush="#E2E8F0" BorderThickness="1">
-                                        <Image Source="{Binding DocumentoExtraUrl}"/>
-                                    </Border>
-
-                                    <StackPanel x:Name="PnlRechazo" Visibility="Collapsed" Margin="0,20,0,0">
-                                        <TextBlock Text="MOTIVO DEL RECHAZO" FontSize="10" FontWeight="Bold" Foreground="#EF4444" Margin="0,0,0,8"/>
-                                        <TextBox x:Name="TxtMotivoRechazo" Height="80" TextWrapping="Wrap" AcceptsReturn="True" BorderBrush="#EF4444" Padding="10"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </ScrollViewer>
-
-                            <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0" Background="White" CornerRadius="0,0,16,16">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0" Content="Rechazar" Click="BtnRechazar_Click" Background="#FEE2E2" Foreground="#EF4444" Height="40" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
-                                        <Button.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="CornerRadius" Value="8"/>
-                                            </Style>
-                                        </Button.Resources>
-                                    </Button>
-                                    <Button Grid.Column="2" Content="Aprobar" Click="BtnAprobar_Click" Background="#EA580C" Foreground="White" Height="40" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
-                                        <Button.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="CornerRadius" Value="8"/>
-                                            </Style>
-                                        </Button.Resources>
-                                    </Button>
-                                </Grid>
+                            <Border CornerRadius="45" ClipToBounds="True">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TieneFotoValida}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
                             </Border>
                         </Grid>
-                    </Border>
-                </Grid>
+                        <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Black" 
+                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                        <Border CornerRadius="12" Padding="12,3" HorizontalAlignment="Center" 
+                            Margin="0,8,0,0" BorderBrush="#EA580C" BorderThickness="1" Background="#FFF7ED">
+                            <TextBlock Text="{Binding OficioNombre}" Foreground="#C2410C" FontSize="11" FontWeight="Black"/>
+                        </Border>
+                        <TextBlock Text="POSTULANTE A MANITAS" FontSize="10" FontWeight="Bold" 
+                               Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,5,0,20"/>
+
+                        <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+
+                        <Grid Margin="0,0,0,25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="TELÉFONO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding Telefono}" FontWeight="Bold" Foreground="#1E293B" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="CORREO" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding Correo}" FontWeight="Bold" Foreground="#1E293B" FontSize="11"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="SOLICITUD DE OFICIO" FontSize="10" FontWeight="Black" 
+                               Foreground="#94A3B8" Margin="0,0,0,8"/>
+                        <Border Background="#F8FAFC" CornerRadius="8" Padding="15" Margin="0,0,0,24" 
+                            BorderBrush="#E2E8F0" BorderThickness="1">
+                            <TextBlock Text="{Binding OficioDescripcion, FallbackValue='Sin descripción de oficio'}" 
+                                   FontSize="13" Foreground="#1E293B" TextWrapping="Wrap"/>
+                        </Border>
+
+                        <TextBlock Text="DOCUMENTACIÓN INE" FontSize="10" FontWeight="Black" 
+                               Foreground="#94A3B8" Margin="0,0,0,10"/>
+                        <UniformGrid Columns="2" Height="110" Margin="0,0,0,20">
+                            <Border Margin="0,0,5,0" CornerRadius="8" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <Image Source="{Binding IneFrenteUrl}"/>
+                            </Border>
+                            <Border Margin="5,0,0,0" CornerRadius="8" Background="White" BorderBrush="#E2E8F0" BorderThickness="1">
+                                <Image Source="{Binding IneReversoUrl}"/>
+                            </Border>
+                        </UniformGrid>
+
+                        <TextBlock Text="COMPROBANTE DE DOMICILIO" FontSize="10" FontWeight="Black" 
+                               Foreground="#94A3B8" Margin="0,0,0,10"/>
+                        <Border Background="White" Height="150" CornerRadius="8" BorderBrush="#E2E8F0" BorderThickness="1">
+                            <Image Source="{Binding DocumentoExtraUrl}"/>
+                        </Border>
+
+                        <StackPanel x:Name="PnlRechazo" Visibility="Collapsed" Margin="0,20,0,0">
+                            <TextBlock Text="MOTIVO DEL RECHAZO" FontSize="10" FontWeight="Bold" 
+                                   Foreground="#EF4444" Margin="0,0,0,8"/>
+                            <TextBox x:Name="TxtMotivoRechazo" Height="80" TextWrapping="Wrap" 
+                                 AcceptsReturn="True" BorderBrush="#EF4444" Padding="10"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0" 
+                    Background="White" CornerRadius="0,0,16,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Rechazar" Click="BtnRechazar_Click" 
+                            Background="#FEE2E2" Foreground="#EF4444" Height="40" 
+                            FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                        <Button Grid.Column="2" Content="Aprobar" Click="BtnAprobar_Click" 
+                            Background="#EA580C" Foreground="White" Height="40" 
+                            FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
+                </Border>
             </Grid>
         </Border>
     </Grid>

@@ -125,24 +125,24 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
+                            <!-- REEMPLAZA el Grid Width="36" Height="36" del sidebar -->
                             <Grid Width="36" Height="36">
                                 <Border Background="#F1F5F9" CornerRadius="18">
-                                    <TextBlock Text="{Binding Iniciales}" 
-                           VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           FontSize="12" FontWeight="Bold" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                   FontSize="12" FontWeight="Bold" Foreground="#64748B"/>
                                 </Border>
                                 <Border CornerRadius="18" ClipToBounds="True">
-                                    <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill">
-                                        <Image.Style>
-                                            <Style TargetType="Image">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Image.Style>
-                                    </Image>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding TieneFotoValida}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
                                 </Border>
                             </Grid>
                             <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">

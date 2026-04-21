@@ -72,17 +72,19 @@ namespace Manitas_WPF_Admin.Views.Modules
 
             if (manita != null)
             {
-                ColDetalle.Width = new GridLength(450);
                 PnlDetalles.Visibility = Visibility.Visible;
                 PnlDetalles.DataContext = manita;
+                ColTabla.Width = new GridLength(1.3, GridUnitType.Star);
+                ColSpacer.Width = new GridLength(20);
+                ColDetalle.Width = new GridLength(1.7, GridUnitType.Star);
+
                 DoubleAnimation slideAnim = new DoubleAnimation
                 {
                     From = 450,
-                    To = 0,     
+                    To = 0,
                     Duration = TimeSpan.FromSeconds(0.4),
                     EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
                 };
-
                 TransDetalle.BeginAnimation(TranslateTransform.XProperty, slideAnim);
             }
         }
@@ -90,14 +92,17 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             DoubleAnimation slideAnim = new DoubleAnimation
             {
-                To = 450, 
+                To = 450,
                 Duration = TimeSpan.FromSeconds(0.3),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
             };
             slideAnim.Completed += (s, ev) =>
             {
                 PnlDetalles.Visibility = Visibility.Collapsed;
-                ColDetalle.Width = new GridLength(0); 
+                ColTabla.Width = new GridLength(1, GridUnitType.Star);
+                ColSpacer.Width = new GridLength(0);
+                ColDetalle.Width = new GridLength(0);
+                DgManitas.SelectedItem = null;
             };
             TransDetalle.BeginAnimation(TranslateTransform.XProperty, slideAnim);
         }
@@ -176,11 +181,19 @@ namespace Manitas_WPF_Admin.Views.Modules
             {
                 ScvDetalles.ScrollToHome();
                 PnlDetalles.Visibility = Visibility.Visible;
-                ColTabla.Width = new GridLength(2, GridUnitType.Star);
-                ColSpacer.Width = new GridLength(30);
-                ColDetalle.Width = new GridLength(1.2, GridUnitType.Star);
+                PnlDetalles.DataContext = manita;
+
+                // Panel más ancho: tabla ocupa menos, detalle ocupa más
+                ColTabla.Width = new GridLength(1.3, GridUnitType.Star);
+                ColSpacer.Width = new GridLength(20);
+                ColDetalle.Width = new GridLength(1.7, GridUnitType.Star);
+
                 if (PnlRechazo != null) PnlRechazo.Visibility = Visibility.Collapsed;
-                var anim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
+
+                var anim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300))
+                {
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
                 TransDetalle.BeginAnimation(TranslateTransform.XProperty, anim);
             }
         }

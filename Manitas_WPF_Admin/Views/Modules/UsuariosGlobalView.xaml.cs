@@ -59,17 +59,18 @@ namespace Manitas_WPF_Admin.Views.Modules
         private void DgUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var usuario = DgUsuarios.SelectedItem as UsuarioDTO;
-
             if (usuario != null)
             {
                 PanelDetalle.DataContext = usuario;
                 PanelDetalle.Visibility = Visibility.Visible;
-                ColTabla.Width = new GridLength(2, GridUnitType.Star);
-                ColSpacer.Width = new GridLength(30);
-                ColDetalle.Width = new GridLength(1, GridUnitType.Star);
+
+                ColTabla.Width = new GridLength(1.3, GridUnitType.Star);
+                ColSpacer.Width = new GridLength(20);
+                ColDetalle.Width = new GridLength(1.7, GridUnitType.Star);
+
                 SecOficio.Visibility = (usuario.RolNombre?.ToLower().Contains("manita") == true)
                                         ? Visibility.Visible : Visibility.Collapsed;
-                BtnCambiarEstado.IsEnabled = Manitas.Logic.Security.SesionUsuario.EsAdmin();
+                BtnCambiarEstado.IsEnabled = SesionUsuario.EsAdmin();
             }
         }
         private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)

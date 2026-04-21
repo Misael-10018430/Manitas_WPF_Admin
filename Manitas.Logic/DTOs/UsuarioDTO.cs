@@ -19,9 +19,10 @@ namespace Manitas.Logic.DTOs
         private string _ineFrenteUrl;
         private string _ineReversoUrl;
         private string _documentoExtraUrl;
-        public string FotoPerfilUrl
+        
+         public string FotoPerfilUrl
         {
-            get => string.IsNullOrWhiteSpace(_fotoPerfilUrl) ? "no-image" : _fotoPerfilUrl;
+            get => string.IsNullOrWhiteSpace(_fotoPerfilUrl) ? null : _fotoPerfilUrl;
             set => _fotoPerfilUrl = value;
         }
         public string IneFrenteUrl
@@ -63,5 +64,11 @@ namespace Manitas.Logic.DTOs
                 return "#6366F1";
             }
         }
+        public bool TieneFotoValida =>
+    !string.IsNullOrWhiteSpace(_fotoPerfilUrl) &&
+    !_fotoPerfilUrl.Contains("no-image") &&
+    !_fotoPerfilUrl.StartsWith("pack://");
+
+       
     }
 }

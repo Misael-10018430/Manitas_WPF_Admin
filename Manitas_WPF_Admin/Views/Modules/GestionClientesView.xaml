@@ -7,234 +7,248 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1080">
     <UserControl.Resources>
-        <Style TargetType="DataGridRow">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Style.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#F8FAFC"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1E293B"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#F8FAFC"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#1E293B"/>
-            </Style.Resources>
-        </Style>
-        <Style TargetType="DataGridCell">
-            <Setter Property="Padding" Value="15,0"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/TailwindStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="CenterTextColumn" TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="15,0"/>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid Background="#F8FAFC">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition x:Name="ColumnExpediente" Width="0"/>
-        </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Margin="25" Background="White" CornerRadius="16">
+        <Border Margin="25" Background="White" CornerRadius="16">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Margin="25,25,25,15">
-                    <TextBlock Text="Gestión de Clientes" FontSize="22" FontWeight="Black" Foreground="#1E293B"/>
-                    <TextBlock Text="Administra y supervisa las cuentas de los usuarios consumidores." Foreground="#64748B" FontSize="12"/>
+
+                <!-- TÍTULO -->
+                <StackPanel Margin="30,25,30,10">
+                    <TextBlock Text="Gestión de Clientes" FontSize="24" FontWeight="Black" Foreground="#1E293B"/>
+                    <TextBlock Text="Administra y supervisa las cuentas de los usuarios consumidores." 
+                               Style="{StaticResource TextMuted}" Margin="0,5,0,0"/>
                 </StackPanel>
-                <Border Grid.Row="1" 
-                    Margin="25,0,25,15" 
-                    Background="#F1F5F9" 
-                    CornerRadius="8" 
-                    Height="40" 
-                    MaxWidth="600" 
-                    HorizontalAlignment="Left">
-                    <Grid>
-                        <TextBlock  VerticalAlignment="Center" Margin="12,0,0,0" Foreground="#94A3B8" FontSize="13"/>
-                        <TextBlock Text="Buscar por nombre, correo o ID de cliente..." 
-                               VerticalAlignment="Center" 
-                               Margin="35,0,15,0" 
-                               Foreground="#94A3B8" 
-                               IsHitTestVisible="False">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=txtBusqueda}" Value="">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBox x:Name="txtBusqueda" 
-                             Background="Transparent" 
-                             BorderThickness="0" 
-                             VerticalContentAlignment="Center" 
-                             Margin="32,0,10,0" 
-                             FontSize="13"
-                             TextChanged="txtBusqueda_TextChanged"/>
-                    </Grid>
-                </Border>
-                <DataGrid x:Name="dgClientes" Grid.Row="2" Margin="15" 
-                          AutoGenerateColumns="False" IsReadOnly="True" 
-                          SelectionChanged="dgClientes_SelectionChanged"
-                          Background="Transparent" BorderThickness="0" 
-                          RowHeight="50" GridLinesVisibility="None" HeadersVisibility="Column">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="CLIENTE" Width="2*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                                        <Border Width="34" Height="34" CornerRadius="17" Background="#F1F5F9" ClipToBounds="True">
-                                            <Image Stretch="UniformToFill">
-                                                <Image.Style>
-                                                    <Style TargetType="Image">
-                                                        <Setter Property="Source" Value="{Binding FotoPerfilUrl}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
-                                                                <Setter Property="Source" Value="pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png"/>
-                                                                <Setter Property="Opacity" Value="0.6"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="{x:Null}">
-                                                                <Setter Property="Source" Value="pack://application:,,,/Manitas_WPF_Admin;component/Assets/Images/no-image.png"/>
-                                                                <Setter Property="Opacity" Value="0.6"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                        </Border>
-                                        <TextBlock Text="{Binding NombreCompleto}" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#1E293B"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="CORREO" Binding="{Binding Correo}" Width="*">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Padding" Value="5,0"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="TELÉFONO" Binding="{Binding Telefono}" Width="120">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Padding" Value="5,0"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTemplateColumn Header="ESTADO" Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Border Padding="8,4" CornerRadius="8" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Background" Value="#F1F5F9"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsActivo}" Value="True">
-                                                        <Setter Property="Background" Value="#DCFCE7"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                        <TextBlock Text="{Binding Estado}" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center">
+
+                <!-- GRID CON BUSCADOR + TABLA + PANEL (filas 1 y 2) -->
+                <Grid Grid.Row="1" Grid.RowSpan="2" Margin="15,10,15,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColTabla" Width="*"/>
+                        <ColumnDefinition x:Name="ColSpacer" Width="0"/>
+                        <ColumnDefinition x:Name="ColDetalle" Width="0"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- COLUMNA IZQUIERDA: buscador + tabla -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- BUSCADOR -->
+                        <Border Grid.Row="0" Background="White" CornerRadius="8" Padding="25,20"
+                                Margin="0,0,0,15" BorderBrush="#CBD5E1" BorderThickness="1">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" Direction="270" Opacity="0.04" ShadowDepth="2"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="CRITERIO DE BÚSQUEDA" FontSize="10" FontWeight="Black" 
+                                           Foreground="#64748B" Margin="2,0,0,8"/>
+                                <Border Background="#F8FAFC" CornerRadius="6" Height="40" 
+                                        BorderBrush="#E2E8F0" BorderThickness="1">
+                                    <Grid Margin="12,0">
+                                        <TextBlock Text="Buscar por nombre, correo o ID de cliente..." 
+                                                   VerticalAlignment="Center" Foreground="#94A3B8" 
+                                                   FontSize="12" IsHitTestVisible="False">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="#64748B"/>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsActivo}" Value="True">
-                                                            <Setter Property="Foreground" Value="#166534"/>
+                                                        <DataTrigger Binding="{Binding Text, ElementName=txtBusqueda}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                    </Border>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </Border>
-        <Border Grid.Column="1" x:Name="PanelExpediente" Margin="0,25,25,25" Background="White" CornerRadius="16" Visibility="Collapsed">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Button Content="✕" HorizontalAlignment="Right" Margin="15" Background="Transparent" BorderThickness="0" Click="BtnCerrarPanel_Click"/>
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="25,0,25,25">
-                        <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
-                            <Border Background="#F1F5F9" CornerRadius="45">
-                                <TextBlock Text="{Binding Iniciales}" 
-                           VerticalAlignment="Center" 
-                           HorizontalAlignment="Center" 
-                           FontSize="28" 
-                           FontWeight="Bold" 
-                           Foreground="#94A3B8"/>
+                                        <TextBox x:Name="txtBusqueda" Background="Transparent" BorderThickness="0" 
+                                                 VerticalContentAlignment="Center" FontSize="13" Foreground="#1E293B"
+                                                 TextChanged="txtBusqueda_TextChanged"/>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- TABLA -->
+                        <Border Grid.Row="1" Style="{StaticResource Card}" Padding="0" ClipToBounds="True">
+                            <DataGrid x:Name="dgClientes" 
+                                      Style="{StaticResource DataGridPro}"
+                                      AutoGenerateColumns="False" 
+                                      IsReadOnly="True" 
+                                      RowHeight="60"
+                                      SelectionChanged="dgClientes_SelectionChanged"
+                                      BorderThickness="0">
+                                <DataGrid.Resources>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#F8FAFC"/>
+                                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1E293B"/>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="CLIENTE" Width="2*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                                                    <TextBlock Text="{Binding NombreCompleto}" Margin="12,0,0,0" 
+                                                               VerticalAlignment="Center" FontWeight="Bold" Foreground="#1E293B"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="CORREO ELECTRÓNICO" 
+                                                        Binding="{Binding Correo}" Width="1.5*"
+                                                        ElementStyle="{StaticResource CenterTextColumn}"/>
+                                    <DataGridTextColumn Header="TELÉFONO" 
+                                                        Binding="{Binding Telefono}" Width="1*"
+                                                        ElementStyle="{StaticResource CenterTextColumn}"/>
+                                    <DataGridTemplateColumn Header="ESTADO" Width="1*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                                                    <Ellipse Width="8" Height="8" Margin="0,0,8,0">
+                                                        <Ellipse.Style>
+                                                            <Style TargetType="Ellipse">
+                                                                <Setter Property="Fill" Value="#64748B"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsActivo}" Value="True">
+                                                                        <Setter Property="Fill" Value="#16A34A"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Ellipse.Style>
+                                                    </Ellipse>
+                                                    <TextBlock Text="{Binding Estado}" VerticalAlignment="Center" FontWeight="Medium">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="#64748B"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsActivo}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#16A34A"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+
+                    <!-- PANEL EXPEDIENTE -->
+                    <Border x:Name="PanelExpediente" Grid.Column="2" Margin="15,0,0,0"
+                            Style="{StaticResource Card}" Visibility="Collapsed">
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="TransExpediente" X="450"/>
+                        </Border.RenderTransform>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- HEADER -->
+                            <Border Grid.Row="0" Padding="20,15" BorderBrush="#F1F5F9" BorderThickness="0,0,0,1">
+                                <Grid>
+                                    <TextBlock Text="Perfil del Cliente" FontWeight="Bold" FontSize="16" Foreground="#1E293B"/>
+                                    <Button HorizontalAlignment="Right" Click="BtnCerrarPanel_Click"
+                                            Background="Transparent" BorderThickness="0" Cursor="Hand">
+                                        <TextBlock Text="✕" Foreground="#94A3B8" FontSize="16"/>
+                                    </Button>
+                                </Grid>
                             </Border>
-                            <Border CornerRadius="45" ClipToBounds="True" BorderBrush="#F1F5F9" BorderThickness="3">
-                                <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill">
-                                    <Image.Style>
-                                        <Style TargetType="Image">
+
+                            <!-- CONTENIDO -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <StackPanel Margin="25,20,25,25">
+                                    <!-- REEMPLAZA el Grid Width="90" Height="90" en el ScrollViewer del PanelExpediente -->
+                                    <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
+                                        <Border Background="#F1F5F9" CornerRadius="45">
+                                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                         FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
+                                        </Border>
+                                        <Border CornerRadius="45" ClipToBounds="True">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TieneFotoValida}" Value="False">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Bold" 
+                                               HorizontalAlignment="Center" TextAlignment="Center" Foreground="#1E293B"/>
+                                    <TextBlock Text="PERFIL CLIENTE" Foreground="#94A3B8" FontSize="10" 
+                                               FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,25"/>
+
+                                    <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
+
+                                    <StackPanel Margin="0,0,0,15">
+                                        <TextBlock Text="CORREO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Correo}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="0,0,0,15">
+                                        <TextBlock Text="TELÉFONO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Telefono}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="REGISTRADO EL" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding FechaRegistro, StringFormat=\{0:dd/MM/yyyy\}}" 
+                                                   FontSize="13" Foreground="#1E293B" Margin="0,2"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <!-- BOTÓN -->
+                            <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
+                                <Button x:Name="btnToggleEstado" Height="40" FontWeight="Bold" 
+                                        BorderThickness="0" Click="BtnCambiarEstado_Click">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="8"/>
+                                        </Style>
+                                    </Button.Resources>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Content" Value="Desactivar Cuenta"/>
+                                            <Setter Property="Background" Value="#FEE2E2"/>
+                                            <Setter Property="Foreground" Value="#EF4444"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="{x:Null}">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                <DataTrigger Binding="{Binding IsActivo}" Value="False">
+                                                    <Setter Property="Content" Value="Reactivar Cuenta"/>
+                                                    <Setter Property="Background" Value="#DCFCE7"/>
+                                                    <Setter Property="Foreground" Value="#166534"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </Image.Style>
-                                </Image>
+                                    </Button.Style>
+                                </Button>
                             </Border>
                         </Grid>
-                        <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Bold" 
-                   HorizontalAlignment="Center" TextAlignment="Center" Foreground="#1E293B"/>
-                        <TextBlock Text="PERFIL CLIENTE" Foreground="#94A3B8" FontSize="10" 
-                   FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,25"/>
-                        <Separator Background="#F1F5F9" Margin="0,0,0,20"/>
-                        <StackPanel Margin="0,0,0,15">
-                            <TextBlock Text="CORREO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Correo}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
-                        </StackPanel>
-                        <StackPanel Margin="0,0,0,15">
-                            <TextBlock Text="TELÉFONO" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Telefono}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="REGISTRADO EL" FontSize="10" Foreground="#94A3B8" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding FechaRegistro, StringFormat=\{0:dd/MM/yyyy\}}" FontSize="13" Foreground="#1E293B" Margin="0,2"/>
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
-                <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
-                    <Button x:Name="btnToggleEstado" Height="40" FontWeight="Bold" BorderThickness="0" Click="BtnCambiarEstado_Click">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="8"/>
-                            </Style>
-                        </Button.Resources>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Content" Value="Desactivar Cuenta"/>
-                                <Setter Property="Background" Value="#FEE2E2"/>
-                                <Setter Property="Foreground" Value="#EF4444"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsActivo}" Value="False">
-                                        <Setter Property="Content" Value="Reactivar Cuenta"/>
-                                        <Setter Property="Background" Value="#DCFCE7"/>
-                                        <Setter Property="Foreground" Value="#166534"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </Border>
+                    </Border>
+                </Grid>
             </Grid>
         </Border>
     </Grid>
