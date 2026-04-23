@@ -57,10 +57,10 @@ namespace Manitas.Logic.DTOs
         {
             get
             {
-                string rol = RolNombre?.ToLower() ?? ""; 
+                string rol = RolNombre?.ToLower() ?? "";
                 if (rol == "administrador") return "#EF4444";
-                if (rol == "moderador") return "#F59E0B";
-                if (rol == "soporte") return "#10B981";
+                if (rol == "agente_operativo") return "#F59E0B";
+                if (rol == "agente_disputas") return "#10B981";
                 return "#6366F1";
             }
         }

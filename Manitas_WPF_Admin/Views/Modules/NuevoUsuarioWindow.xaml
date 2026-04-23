@@ -24,9 +24,9 @@
                 <PasswordBox x:Name="TxtPass" Height="40" Padding="10,0" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
                 <TextBlock Text="ROL DE ACCESO" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,8"/>
                 <ComboBox x:Name="CboRol" Height="40" VerticalContentAlignment="Center">
-                    <ComboBoxItem Content="Administrador" IsSelected="True"/>
-                    <ComboBoxItem Content="Moderador"/>
-                    <ComboBoxItem Content="Soporte"/>
+                    <ComboBoxItem Content="administrador" IsSelected="True"/>
+                    <ComboBoxItem Content="agente_operativo"/>
+                    <ComboBoxItem Content="agente_disputas"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">

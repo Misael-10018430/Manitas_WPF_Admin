@@ -10,7 +10,7 @@ namespace Manitas.Logic.Security
     {
         public static UsuarioDTO UsuarioActual { get; set; }
         public static bool EsAdmin()
-            => UsuarioActual?.RolNombre == "administrador" || UsuarioActual?.RolNombre == "Super Admin";
+    => UsuarioActual?.RolNombre == "administrador";
         public static void Logout()
         {
             UsuarioActual = null;

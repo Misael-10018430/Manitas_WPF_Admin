@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BCrypt.Net;
 namespace Manitas_WPF_Admin.Views.Modules
 {
     /// <summary>
@@ -41,24 +42,37 @@ namespace Manitas_WPF_Admin.Views.Modules
                 MessageBox.Show("Por favor, selecciona un rol para el nuevo miembro.");
                 return;
             }
+
             var nuevo = new usuario
             {
                 id = Guid.NewGuid(),
-                nombre_completo = TxtNombre.Text,
-                correo = TxtCorreo.Text,
-                contrasena_hash = TxtPass.Password,
+                nombre_completo = TxtNombre.Text.Trim(),
+                correo = TxtCorreo.Text.Trim(),
+                contrasena_hash = BCrypt.Net.BCrypt.HashPassword(TxtPass.Password),
+                telefono = "0000000000",
                 fecha_registro = DateTime.Now,
-                activo = true
+                activo = true,
+                correo_verificado = true,
+                terminos_aceptados = true
             };
+
             string rolSeleccionado = (CboRol.SelectedItem as ComboBoxItem).Content.ToString();
-            if (_service.CrearUsuarioStaff(nuevo, rolSeleccionado))
+
+            try
             {
-                this.DialogResult = true;
-                this.Close();
+                if (_service.CrearUsuarioStaff(nuevo, rolSeleccionado))
+                {
+                    this.DialogResult = true;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró el rol seleccionado en la base de datos.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Hubo un problema al guardar en la base de datos. Verifica la conexión.");
+                MessageBox.Show("Error detallado: " + ex.InnerException?.Message ?? ex.Message);
             }
         }
     }

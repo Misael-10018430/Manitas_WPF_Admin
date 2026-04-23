@@ -84,10 +84,26 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             var seleccionado = DgStaff.SelectedItem as UsuarioDTO;
             if (seleccionado == null) return;
-            if (_service.ActualizarRolSistema(seleccionado.Id, "soporte"))
+
+            // Ventana simple para elegir el nuevo rol
+            var opciones = new[] { "administrador", "agente_operativo", "agente_disputas" };
+            string rolActual = seleccionado.RolNombre;
+
+            // Cicla al siguiente rol como lógica simple
+            int indexActual = Array.IndexOf(opciones, rolActual);
+            string nuevoRol = opciones[(indexActual + 1) % opciones.Length];
+
+            var confirm = MessageBox.Show(
+                $"¿Cambiar el rol de {seleccionado.NombreCompleto} a '{nuevoRol}'?",
+                "Cambiar Rol", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (confirm == MessageBoxResult.Yes)
             {
-                CargarStaff();
-                MessageBox.Show("Rol actualizado correctamente.");
+                if (_service.ActualizarRolSistema(seleccionado.Id, nuevoRol))
+                {
+                    CargarStaff();
+                    MessageBox.Show("Rol actualizado correctamente.");
+                }
             }
         }
         private void AplicarSeguridad()
@@ -96,15 +112,11 @@ namespace Manitas_WPF_Admin.Views.Modules
             {
                 string rol = SesionUsuario.UsuarioActual.RolNombre.ToLower();
 
-                if (rol == "soporte")
+                if (rol == "agente_operativo" || rol == "agente_disputas")
                 {
                     BtnNuevoUsuario.Visibility = Visibility.Collapsed;
                     BtnResetPassword.Visibility = Visibility.Collapsed;
                     BtnCambiarRol.Visibility = Visibility.Collapsed;
-                }
-                if (rol == "moderador")
-                {
-                    BtnResetPassword.Visibility = Visibility.Collapsed;
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Manitas.Data.Models;
 using Manitas.Logic.DTOs;
+using BCrypt.Net;
 
 namespace Manitas.Logic.Services
 {
@@ -25,19 +26,39 @@ namespace Manitas.Logic.Services
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var usuarioEncontrado = db.usuarios
-                    .FirstOrDefault(u => u.correo == correo && u.contrasena_hash == password && u.activo == true);
+                    .FirstOrDefault(u => u.correo == correo && u.activo == true);
 
-                if (usuarioEncontrado != null)
+                if (usuarioEncontrado == null) return null;
+
+                // Verifica si el hash es BCrypt o texto plano (legacy)
+                bool passwordValida = false;
+                string hash = usuarioEncontrado.contrasena_hash ?? "";
+
+                if (hash.StartsWith("$2a$") || hash.StartsWith("$2b$"))
+                    passwordValida = BCrypt.Net.BCrypt.Verify(password, hash);
+                else
+                    passwordValida = hash == password; // legacy temporal
+
+                if (!passwordValida) return null;
+
+                // Solo roles internos pueden entrar al WPF Admin
+                var rol = usuarioEncontrado.usuario_roles
+                    .FirstOrDefault(r => r.activo == true);
+
+                string nombreRol = rol?.role?.nombre ?? "";
+                bool esInterno = nombreRol == "administrador" ||
+                                 nombreRol == "agente_operativo" ||
+                                 nombreRol == "agente_disputas";
+
+                if (!esInterno) return null;
+
+                return new UsuarioDTO
                 {
-                    return new UsuarioDTO
-                    {
-                        Id = usuarioEncontrado.id,
-                        Correo = usuarioEncontrado.correo,
-                        NombreCompleto = usuarioEncontrado.nombre_completo,
-                        RolNombre = usuarioEncontrado.usuario_roles.FirstOrDefault()?.role.nombre ?? "Sin Rol"
-                    };
-                }
-                return null;
+                    Id = usuarioEncontrado.id,
+                    Correo = usuarioEncontrado.correo,
+                    NombreCompleto = usuarioEncontrado.nombre_completo,
+                    RolNombre = nombreRol
+                };
             }
         }
 
@@ -157,7 +178,9 @@ namespace Manitas.Logic.Services
             using (var db = new Manitas_DBPilotoEntities())
             {
                 return db.usuarios
-                    .Where(u => u.usuario_roles.Any(r => r.role.nombre != "administrador" && r.role.nombre != "encargado"))
+                    .Where(u => u.usuario_roles.Any(r =>
+                        r.role.nombre == "cliente" ||
+                        r.role.nombre == "manitas"))
                     .OrderByDescending(u => u.fecha_registro)
                     .Take(6)
                     .AsEnumerable()
@@ -166,7 +189,6 @@ namespace Manitas.Logic.Services
                         NombreCompleto = u.nombre_completo,
                         RolNombre = u.usuario_roles.FirstOrDefault()?.role?.nombre ?? "Sin Rol",
                         Telefono = u.telefono,
-                        // Sin placeholder — el DTO maneja el null con TieneFotoValida
                         FotoPerfilUrl = u.perfiles_manitas.FirstOrDefault()?.foto_perfil_url,
                         IsActivo = u.usuario_roles.FirstOrDefault().activo == true
                     }).ToList();
@@ -177,17 +199,15 @@ namespace Manitas.Logic.Services
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
-                var query = db.usuarios.Where(u =>
-                    u.usuario_roles.Any(r => r.role.nombre != "administrador" &&
-                                             r.role.nombre != "encargado"));
+                // Solo clientes y manitas — excluye roles internos
+                var query = db.usuarios.Where(u => u.usuario_roles.Any(r =>
+                    r.role.nombre == "cliente" ||
+                    r.role.nombre == "manitas"));
 
                 return query.ToList().Select(u =>
                 {
                     var rol = u.usuario_roles.FirstOrDefault();
                     var perfilManitas = u.perfiles_manitas.FirstOrDefault();
-                    var perfilCliente = u.perfiles_clientes.FirstOrDefault();
-
-                    // JERARQUÍA: si tiene perfil manitas, se trata como Manitas
                     bool esManitas = perfilManitas != null;
 
                     return new UsuarioDTO
@@ -199,31 +219,23 @@ namespace Manitas.Logic.Services
                         FechaRegistro = u.fecha_registro,
                         IsActivo = rol?.activo == true,
                         Estado = rol?.activo == true ? "Activo" : "Inactivo",
-
-                        // Rol visual: si tiene perfil manitas, mostrar como Manita
                         RolNombre = esManitas
-                            ? (rol?.role?.nombre ?? "Manita")
+                            ? (rol?.role?.nombre ?? "manitas")
                             : "Cliente",
-
-                        // Oficio: solo si es Manitas
                         OficioNombre = esManitas
                             ? (perfilManitas.manitas_servicios.FirstOrDefault()?.tipos_servicio?.nombre
                                ?? "Oficio no seleccionado")
                             : "Cliente",
-
                         OficioDescripcion = esManitas
                             ? (perfilManitas.descripcion ?? "Sin descripción")
                             : null,
-
                         Apodo = esManitas ? perfilManitas.apodo : null,
                         AniosExperiencia = esManitas ? perfilManitas.anios_experiencia : null,
                         DisponibilidadHorario = esManitas ? perfilManitas.disponibilidad_texto : null,
                         ServiciosCompletados = esManitas
-                        ? (perfilManitas.servicios_completados_total) : 0,
-                                            CalificacionesNegativas = esManitas
-                        ? (perfilManitas.calificaciones_neg_consecutivas) : 0,
-
-                        // Fotos: solo Manitas tiene documentos
+                            ? (perfilManitas.servicios_completados_total) : 0,
+                        CalificacionesNegativas = esManitas
+                            ? (perfilManitas.calificaciones_neg_consecutivas) : 0,
                         FotoPerfilUrl = esManitas ? BuildUrl(perfilManitas.foto_perfil_url) : null,
                         IneFrenteUrl = esManitas ? BuildUrl(perfilManitas.ine_frente_url) : null,
                         IneReversoUrl = esManitas ? BuildUrl(perfilManitas.ine_reverso_url) : null,
@@ -323,9 +335,9 @@ namespace Manitas.Logic.Services
             {
                 var query = db.usuarios.Where(u => u.usuario_roles.Any(r =>
                     r.activo && (
-                        r.role.nombre.ToLower() == "administrador" ||
-                        r.role.nombre.ToLower() == "moderador" ||
-                        r.role.nombre.ToLower() == "soporte"
+                        r.role.nombre == "administrador" ||
+                        r.role.nombre == "agente_operativo" ||
+                        r.role.nombre == "agente_disputas"
                     )
                 ));
 
@@ -342,7 +354,7 @@ namespace Manitas.Logic.Services
                     Username = u.correo,
                     NombreCompleto = u.nombre_completo,
                     Correo = u.correo,
-                    RolNombre = u.usuario_roles.FirstOrDefault(r => r.activo)?.role?.nombre ?? "Staff",
+                    RolNombre = u.usuario_roles.FirstOrDefault(r => r.activo)?.role?.nombre ?? "Sin Rol",
                     IsActivo = u.usuario_roles.FirstOrDefault(r => r.activo)?.activo ?? false,
                     UltimaConexion = u.fecha_registro
                 }).ToList();
@@ -355,7 +367,7 @@ namespace Manitas.Logic.Services
             {
                 var user = db.usuarios.Find(usuarioId);
                 if (user == null) return false;
-                user.contrasena_hash = nuevaPassword;
+                user.contrasena_hash = BCrypt.Net.BCrypt.HashPassword(nuevaPassword);
                 return db.SaveChanges() > 0;
             }
         }
