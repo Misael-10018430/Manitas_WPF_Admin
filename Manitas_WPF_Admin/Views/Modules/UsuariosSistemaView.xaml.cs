@@ -44,7 +44,23 @@ namespace Manitas_WPF_Admin.Views.Modules
             {
                 PanelDetalle.DataContext = seleccionado;
                 PanelDetalle.Visibility = Visibility.Visible;
-                ColDetalle.Width = new GridLength(350); 
+                ColDetalle.Width = new GridLength(350);
+
+                bool esAdmin = SesionUsuario.EsAdmin();
+                bool seleccionadoEsAdmin = seleccionado.RolNombre == "administrador";
+
+                // Resetear y cambiar rol: solo admin
+                BtnResetPassword.IsEnabled = esAdmin;
+                BtnCambiarRol.IsEnabled = esAdmin;
+
+                // Estilo visual para indicar que están deshabilitados
+                BtnResetPassword.Opacity = esAdmin ? 1.0 : 0.4;
+                BtnCambiarRol.Opacity = esAdmin ? 1.0 : 0.4;
+
+                // Eliminar: solo admin, y solo si el seleccionado NO es admin
+                BtnEliminarUsuario.Visibility = (esAdmin && !seleccionadoEsAdmin)
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
             }
         }
         private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)
@@ -110,13 +126,57 @@ namespace Manitas_WPF_Admin.Views.Modules
         {
             if (SesionUsuario.UsuarioActual != null)
             {
-                string rol = SesionUsuario.UsuarioActual.RolNombre.ToLower();
+                bool esAdmin = SesionUsuario.EsAdmin();
 
-                if (rol == "agente_operativo" || rol == "agente_disputas")
+                // Solo admin puede crear nuevos miembros
+                BtnNuevoUsuario.Visibility = esAdmin ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        private void BtnEliminarUsuario_Click(object sender, RoutedEventArgs e)
+        {
+            if (!SesionUsuario.EsAdmin())
+            {
+                MessageBox.Show("Solo los administradores pueden eliminar usuarios.",
+                                "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+
+            var seleccionado = DgStaff.SelectedItem as UsuarioDTO;
+            if (seleccionado == null) return;
+
+            if (seleccionado.RolNombre == "administrador")
+            {
+                MessageBox.Show("No se puede eliminar a un administrador.",
+                                "Operación no permitida", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"¿Estás seguro de eliminar a {seleccionado.NombreCompleto}?\nEsta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (confirm == MessageBoxResult.Yes)
+            {
+                try
                 {
-                    BtnNuevoUsuario.Visibility = Visibility.Collapsed;
-                    BtnResetPassword.Visibility = Visibility.Collapsed;
-                    BtnCambiarRol.Visibility = Visibility.Collapsed;
+                    bool exito = _service.EliminarUsuarioInterno(seleccionado.Id);
+                    if (exito)
+                    {
+                        MessageBox.Show("Usuario eliminado correctamente.",
+                                        "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        CargarStaff();
+                        BtnCerrarDetalle_Click(null, null);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se pudo eliminar el usuario.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.InnerException?.Message ?? ex.Message);
                 }
             }
         }

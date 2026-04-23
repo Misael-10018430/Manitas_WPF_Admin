@@ -1,24 +1,12 @@
-﻿using Manitas.Logic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using BCrypt.Net;
+using Manitas.Logic.Services;
 using Manitas.Data.Models;
+using System;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using BCrypt.Net;
+
 namespace Manitas_WPF_Admin.Views.Modules
 {
-    /// <summary>
-    /// Lógica de interacción para NuevoUsuarioWindow.xaml
-    /// </summary>
     public partial class NuevoUsuarioWindow : Window
     {
         private readonly UsuarioService _service = new UsuarioService();
@@ -26,8 +14,13 @@ namespace Manitas_WPF_Admin.Views.Modules
         public NuevoUsuarioWindow()
         {
             InitializeComponent();
+            // Selecciona el primer item por defecto
+            if (CboRol.Items.Count > 0)
+                (CboRol.Items[0] as ComboBoxItem).IsSelected = true;
         }
+
         private void BtnCancelar_Click(object sender, RoutedEventArgs e) => this.Close();
+
         private void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtNombre.Text) ||
@@ -37,11 +30,22 @@ namespace Manitas_WPF_Admin.Views.Modules
                 MessageBox.Show("Por favor, llena todos los campos obligatorios.");
                 return;
             }
+
             if (CboRol.SelectedItem == null)
             {
-                MessageBox.Show("Por favor, selecciona un rol para el nuevo miembro.");
+                MessageBox.Show("Por favor, selecciona un rol.");
                 return;
             }
+
+            // Validar que el correo no esté registrado
+            if (_service.CorreoYaExiste(TxtCorreo.Text))
+            {
+                MessageBox.Show("Este correo electrónico ya está registrado en el sistema. Usa uno diferente.",
+                                "Correo duplicado", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string rolSeleccionado = (CboRol.SelectedItem as ComboBoxItem).Content.ToString();
 
             var nuevo = new usuario
             {
@@ -55,8 +59,6 @@ namespace Manitas_WPF_Admin.Views.Modules
                 correo_verificado = true,
                 terminos_aceptados = true
             };
-
-            string rolSeleccionado = (CboRol.SelectedItem as ComboBoxItem).Content.ToString();
 
             try
             {

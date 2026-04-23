@@ -419,6 +419,31 @@ namespace Manitas.Logic.Services
                     }
                 }
             }
+
+        }
+        public bool CorreoYaExiste(string correo)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                return db.usuarios.Any(u => u.correo.ToLower() == correo.ToLower().Trim());
+            }
+        }
+        public bool EliminarUsuarioInterno(Guid usuarioId)
+        {
+            using (var db = new Manitas_DBPilotoEntities())
+            {
+                var rol = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
+                if (rol == null) return false;
+
+                // No permite eliminar administradores
+                if (rol.role.nombre == "administrador") return false;
+
+                db.usuario_roles.Remove(rol);
+                var usuario = db.usuarios.Find(usuarioId);
+                if (usuario != null) db.usuarios.Remove(usuario);
+
+                return db.SaveChanges() > 0;
+            }
         }
     }
 }

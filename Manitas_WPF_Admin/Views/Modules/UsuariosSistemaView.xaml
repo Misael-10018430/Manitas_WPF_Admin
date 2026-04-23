@@ -161,42 +161,56 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Button Content="✕" HorizontalAlignment="Right" Margin="15" Background="Transparent" BorderThickness="0" Click="BtnCerrarDetalle_Click"/>
+
+                <!-- BOTÓN CERRAR -->
+                <Button Content="✕" HorizontalAlignment="Right" Margin="15" 
+                Background="Transparent" BorderThickness="0" 
+                Click="BtnCerrarDetalle_Click"/>
+
+                <!-- CONTENIDO -->
                 <StackPanel Grid.Row="1" Margin="25">
                     <Grid Width="90" Height="90" HorizontalAlignment="Center" Margin="0,0,0,15">
                         <Border Background="#F1F5F9" CornerRadius="45">
-                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                               FontSize="28" FontWeight="Bold" Foreground="#94A3B8"/>
+                            <TextBlock Text="{Binding Iniciales}" VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" FontSize="28" 
+                               FontWeight="Bold" Foreground="#94A3B8"/>
                         </Border>
                         <Border CornerRadius="45" ClipToBounds="True">
-                            <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding FotoPerfilUrl}" Value="no-image">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding TieneFotoValida}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Image Source="{Binding FotoPerfilUrl}" Stretch="UniformToFill"/>
                         </Border>
                     </Grid>
-                    <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding RolNombre}" Foreground="#EA580C" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,30"/>
-                    <TextBlock Text="CONFIGURACIÓN DE CUENTA" FontSize="10" FontWeight="Black" Foreground="#94A3B8" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="{Binding NombreCompleto}" FontSize="18" FontWeight="Bold" 
+                       HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding RolNombre}" Foreground="#EA580C" FontSize="11" 
+                       FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,30"/>
+
+                    <TextBlock Text="CONFIGURACIÓN DE CUENTA" FontSize="10" FontWeight="Black" 
+                       Foreground="#94A3B8" Margin="0,0,0,15"/>
                     <Button x:Name="BtnResetPassword" 
-                        Content="Resetear Contraseña" 
-                        Margin="0,0,0,10" 
-                        Style="{StaticResource ButtonOutlineStyle}"
-                        Click="BtnResetPassword_Click"/>
+                    Content="Resetear Contraseña" 
+                    Margin="0,0,0,10" 
+                    Style="{StaticResource ButtonOutlineStyle}"
+                    Click="BtnResetPassword_Click"/>
                     <Button x:Name="BtnCambiarRol" 
-                        Content="Cambiar Rol de Acceso" 
-                        Margin="0,0,0,10" 
-                        Style="{StaticResource ButtonOutlineStyle}"
-                        Click="BtnCambiarRol_Click"/>
+                    Content="Cambiar Rol de Acceso" 
+                    Margin="0,0,0,10" 
+                    Style="{StaticResource ButtonOutlineStyle}"
+                    Click="BtnCambiarRol_Click"/>
                 </StackPanel>
-                <Border Grid.Row="2" Padding="20" BorderBrush="#F1F5F9" BorderThickness="0,1,0,0">
+
+                <!-- BOTONES INFERIORES -->
+                <StackPanel Grid.Row="2" Margin="20" >
                     <Button Content="Suspender Acceso" 
                     Background="#FEE2E2" 
                     Foreground="#EF4444" 
@@ -211,7 +225,25 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                </Border>
+                    <Button x:Name="BtnEliminarUsuario"
+                    Content="Eliminar Usuario" 
+                    Background="#FEE2E2"
+                    Foreground="#DC2626"
+                    FontWeight="Bold"
+                    Height="45"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    Margin="0,10,0,0"
+                    FocusVisualStyle="{x:Null}"
+                    Visibility="Collapsed"
+                    Click="BtnEliminarUsuario_Click">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>
