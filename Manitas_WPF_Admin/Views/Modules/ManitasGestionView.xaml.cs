@@ -14,6 +14,7 @@ namespace Manitas_WPF_Admin.Views.Modules
     {
         public ObservableCollection<UsuarioDTO> ListaManitas { get; set; }
         private readonly UsuarioService _usuarioService;
+        //Funcionalidad de esta vista: mostrar una lista de los usuarios que tienen el rol de 'Manita' y permitir gestionar sus detalles.
         public ManitasGestionView()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace Manitas_WPF_Admin.Views.Modules
                 e.Handled = true;
             };
         }
+        // En esta sección se encuentran los métodos relacionados con la carga de datos desde la base de datos y la funcionalidad de búsqueda en la lista de Manitas, lo que permite a los administradores encontrar rápidamente perfiles específicos y gestionar sus detalles de manera eficiente.
         #region
         private void CargarDatosDesdeBD()
         {
@@ -46,6 +48,7 @@ namespace Manitas_WPF_Admin.Views.Modules
                 MessageBox.Show("Error al cargar: " + ex.Message);
             }
         }
+        // Funcionalidad de búsqueda en tiempo real: filtra la lista de Manitas a medida que el usuario escribe en el cuadro de búsqueda, mostrando solo aquellos perfiles que coinciden con el nombre o correo ingresados.
         private void TxtBuscar_TextChanged(object sender, TextChangedEventArgs e)
         {
             string filtro = TxtBuscar.Text.ToLower().Trim();
@@ -63,8 +66,10 @@ namespace Manitas_WPF_Admin.Views.Modules
                 DgManitas.ItemsSource = filtrados;
             }
         }
+
         #endregion
         #region
+        // En esta sección se encuentran los métodos relacionados con la visualización de detalles de cada Manita, así como las acciones de aprobación y rechazo. Al hacer clic en "Ver Detalles", se muestra un panel lateral con información detallada del perfil seleccionado, y se ofrecen opciones para aprobar o rechazar la solicitud, con animaciones suaves para mejorar la experiencia del usuario.
         private void BtnVerDetalles_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
@@ -88,6 +93,7 @@ namespace Manitas_WPF_Admin.Views.Modules
                 TransDetalle.BeginAnimation(TranslateTransform.XProperty, slideAnim);
             }
         }
+        // Funcionalidad de cierre del panel de detalles: al hacer clic en "Cerrar Detalles", se ejecuta una animación que desliza el panel hacia la derecha y luego lo oculta, restableciendo el diseño de la tabla para mostrar la lista completa de Manitas.
         private void BtnCerrarDetalle_Click(object sender, RoutedEventArgs e)
         {
             DoubleAnimation slideAnim = new DoubleAnimation
@@ -106,6 +112,7 @@ namespace Manitas_WPF_Admin.Views.Modules
             };
             TransDetalle.BeginAnimation(TranslateTransform.XProperty, slideAnim);
         }
+        // Funcionalidad de aprobación de perfiles: al hacer clic en "Aprobar", se muestra un mensaje de confirmación, y si el administrador confirma, se actualiza el estado del usuario en la base de datos para marcarlo como aprobado, permitiéndole recibir trabajos en la plataforma web.
         private void BtnAprobar_Click(object sender, RoutedEventArgs e)
         {
             if (!SesionUsuario.EsAdmin())
@@ -128,6 +135,7 @@ namespace Manitas_WPF_Admin.Views.Modules
                 }
             }
         }
+        // Funcionalidad de rechazo de perfiles: al hacer clic en "Rechazar", se despliega un panel para ingresar el motivo del rechazo, y al confirmar, se actualiza el estado del usuario en la base de datos para marcarlo como rechazado, informando al usuario del motivo a través de un mensaje claro.
         private void BtnRechazar_Click(object sender, RoutedEventArgs e)
         {
             if (!Manitas.Logic.Security.SesionUsuario.EsAdmin())
@@ -173,6 +181,7 @@ namespace Manitas_WPF_Admin.Views.Modules
                 MessageBox.Show($"Error técnico al rechazar: {ex.Message}", "Error");
             }
         }
+        // Funcionalidad de selección de Manitas: al seleccionar un perfil en la tabla, se despliega automáticamente el panel de detalles con la información del usuario seleccionado, permitiendo a los administradores revisar rápidamente los detalles y tomar decisiones de gestión sin necesidad de hacer clic adicionalmente en "Ver Detalles".
         #endregion
         private void DgManitas_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

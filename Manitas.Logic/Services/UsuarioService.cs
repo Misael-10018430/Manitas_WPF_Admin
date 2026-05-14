@@ -10,37 +10,42 @@ namespace Manitas.Logic.Services
     public class UsuarioService
     {
         private const string BaseUrl = "http://localhost:44355";
-
-        // helper privado para construir URLs
         private string BuildUrl(string rutaRelativa)
         {
             if (string.IsNullOrWhiteSpace(rutaRelativa)) return null;
-
+            if (rutaRelativa.StartsWith("https://") || rutaRelativa.StartsWith("http://"))
+                return rutaRelativa;
             if (rutaRelativa.StartsWith("/App_Data/"))
                 return BaseUrl + "/Archivo/Servir?ruta=" + Uri.EscapeDataString(rutaRelativa);
-
             return BaseUrl + rutaRelativa;
         }
+        // helper privado para construir URLs
+        //Funcionalidad : Construye la URL completa para acceder a un recurso, manejando rutas relativas y casos especiales como archivos en App_Data, lo que facilita la gestión de recursos y mejora la experiencia del usuario al mostrar imágenes o documentos relacionados con el perfil del usuario.
+        // private string BuildUrl(string rutaRelativa)
+        // {
+        //    if (string.IsNullOrWhiteSpace(rutaRelativa)) return null;
+
+        //    if (rutaRelativa.StartsWith("/App_Data/"))
+        //        return BaseUrl + "/Archivo/Servir?ruta=" + Uri.EscapeDataString(rutaRelativa);
+
+        //    return BaseUrl + rutaRelativa;
+        //  }
+        //Funcionalidad: Autentica a un usuario verificando su correo y contraseña, asegurando que solo los usuarios con roles internos activos puedan acceder al sistema, lo que mejora la seguridad de la aplicación al restringir el acceso a funciones administrativas solo a usuarios autorizados.
         public UsuarioDTO Autenticar(string correo, string password)
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var usuarioEncontrado = db.usuarios
                     .FirstOrDefault(u => u.correo == correo && u.activo == true);
-
                 if (usuarioEncontrado == null) return null;
-
                 // Verifica si el hash es BCrypt o texto plano (legacy)
                 bool passwordValida = false;
                 string hash = usuarioEncontrado.contrasena_hash ?? "";
-
                 if (hash.StartsWith("$2a$") || hash.StartsWith("$2b$"))
                     passwordValida = BCrypt.Net.BCrypt.Verify(password, hash);
                 else
                     passwordValida = hash == password; // legacy temporal
-
                 if (!passwordValida) return null;
-
                 // Solo roles internos pueden entrar al WPF Admin
                 var rol = usuarioEncontrado.usuario_roles
                     .FirstOrDefault(r => r.activo == true);
@@ -51,7 +56,6 @@ namespace Manitas.Logic.Services
                                  nombreRol == "agente_disputas";
 
                 if (!esInterno) return null;
-
                 return new UsuarioDTO
                 {
                     Id = usuarioEncontrado.id,
@@ -61,10 +65,11 @@ namespace Manitas.Logic.Services
                 };
             }
         }
-
         /// <summary>
         /// Obtiene los usuarios que ya tienen el rol de 'Manita' con su info completa
         /// </summary>
+        /// 
+        // Funcionalidad: Recupera una lista de usuarios con el rol de 'Manita' desde la base de datos, incluyendo detalles como su nombre completo, correo, teléfono, oficio, experiencia y enlaces a sus fotos y documentos, lo que permite a los administradores gestionar y revisar la información de los manitas registrados en la plataforma de manera eficiente.
         public List<UsuarioDTO> ObtenerManitas()
         {
             List<UsuarioDTO> listaDTO = new List<UsuarioDTO>();
@@ -74,12 +79,10 @@ namespace Manitas.Logic.Services
                     .Where(u => u.activo == true &&
                                 u.usuario_roles.Any(r => r.role.nombre == "Manita"))
                     .ToList();
-
                 foreach (var u in manitasBD)
                 {
                     var perfil = u.perfiles_manitas.FirstOrDefault();
                     var registroServicio = perfil?.manitas_servicios.FirstOrDefault();
-
                     listaDTO.Add(new UsuarioDTO
                     {
                         Id = u.id,
@@ -101,22 +104,21 @@ namespace Manitas.Logic.Services
             }
             return listaDTO;
         }
-
         /// <summary>
         /// Cambia el rol de un usuario a 'Manita' en la base de datos SQL
         /// </summary>
+        /// 
+        // Funcionalidad: Actualiza el rol de un usuario específico a 'Manita' en la base de datos, activando su cuenta y cambiando su estado a "Activo
         public bool AprobarUsuarioComoManita(Guid usuarioId)
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var relacionActual = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
                 var rolManita = db.roles.FirstOrDefault(r => r.nombre == "manitas");
-
                 if (relacionActual != null && rolManita != null)
                 {
                     relacionActual.rol_id = rolManita.id;
                     relacionActual.activo = true;
-
                     var perfil = db.perfiles_manitas.FirstOrDefault(p => p.usuario_id == usuarioId);
                     if (perfil != null)
                         perfil.estado = "Activo";
@@ -127,10 +129,11 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
-
         /// <summary>
         /// Desactiva a un usuario en la base de datos (Borrado Lógico)
         /// </summary>
+        /// 
+        // Funcionalidad: Desactiva a un usuario específico en la base de datos mediante un borrado lógico, estableciendo su relación de rol como inactiva, lo que impide que el usuario acceda a la plataforma sin eliminar completamente su información, permitiendo así una posible reactivación futura o conservación de datos para auditorías.
         public bool RechazarUsuario(Guid usuarioId)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -144,7 +147,7 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
-
+        // Funcionalidad: Actualiza el estado de un usuario con rol de 'Manita' en la base de datos, permitiendo establecer un nuevo estado (como "Rechazado" o "En revisión") y registrar un motivo de rechazo, lo que facilita la gestión de las solicitudes de manitas y proporciona transparencia sobre las decisiones tomadas respecto a su aprobación o rechazo en la plataforma.
         public bool ActualizarEstadoManitas(Guid usuarioId, string nuevoEstado, string motivo)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -159,7 +162,7 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
-
+        // Funcionalidad: Actualiza el estado activo de un usuario específico en la base de datos, permitiendo activar o desactivar su cuenta según sea necesario, lo que facilita la gestión de usuarios y el control de acceso a la plataforma sin eliminar completamente su información.
         public void ActualizarEstadoUsuario(Guid usuarioId, bool activo)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -172,7 +175,7 @@ namespace Manitas.Logic.Services
                 }
             }
         }
-
+        // Funcionalidad: Obtiene una lista de los usuarios más recientes con roles de 'cliente' o 'manitas' desde la base de datos, ordenados por fecha de registro, lo que permite a los administradores visualizar rápidamente las nuevas incorporaciones a la plataforma y gestionar su información de manera eficiente.
         public List<UsuarioDTO> ObtenerActividadReciente()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -194,7 +197,7 @@ namespace Manitas.Logic.Services
                     }).ToList();
             }
         }
-
+        // Funcionalidad: Recupera una lista de usuarios con roles
         public List<UsuarioDTO> ObtenerUsuariosGlobal(string busqueda, string filtroRol)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -232,10 +235,11 @@ namespace Manitas.Logic.Services
                         Apodo = esManitas ? perfilManitas.apodo : null,
                         AniosExperiencia = esManitas ? perfilManitas.anios_experiencia : null,
                         DisponibilidadHorario = esManitas ? perfilManitas.disponibilidad_texto : null,
+                        // ✅ Después
                         ServiciosCompletados = esManitas
-                            ? (perfilManitas.servicios_completados_total) : 0,
+                        ? db.servicios.Count(s => s.manitas_id == u.id && s.estado == "completado") : 0,
                         CalificacionesNegativas = esManitas
-                            ? (perfilManitas.calificaciones_neg_consecutivas) : 0,
+                        ? db.calificaciones_manitas.Count(c => c.manitas_id == u.id && c.es_negativa == true) : 0,
                         FotoPerfilUrl = esManitas ? BuildUrl(perfilManitas.foto_perfil_url) : null,
                         IneFrenteUrl = esManitas ? BuildUrl(perfilManitas.ine_frente_url) : null,
                         IneReversoUrl = esManitas ? BuildUrl(perfilManitas.ine_reverso_url) : null,
@@ -244,7 +248,7 @@ namespace Manitas.Logic.Services
                 }).ToList();
             }
         }
-
+        // Funcionalidad: Obtiene una lista de usuarios que tienen solicitudes pendientes para convertirse en 'Manita', incluyendo detalles relevantes como su nombre completo, correo, teléfono, oficio solicitado, experiencia y enlaces a sus fotos y documentos, lo que permite a los administradores revisar y gestionar
         public List<UsuarioDTO> ObtenerSolicitudesPendientes()
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -279,7 +283,7 @@ namespace Manitas.Logic.Services
     }).ToList();
             }
         }
-
+        // Funcionalidad: Cambia el estado activo de un usuario específico en la base de datos, permitiendo activar o desactivar su cuenta según sea necesario, lo que facilita la gestión de usuarios y el control de acceso a la plataforma sin eliminar completamente su información.
         public bool CambiarEstatusUsuario(Guid usuarioId, bool nuevoEstado)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -293,6 +297,7 @@ namespace Manitas.Logic.Services
                 return false;
             }
         }
+        // Funcionalidad: Obtiene una lista de usuarios con el rol de 'cliente' que no
 
         public List<UsuarioDTO> ObtenerClientes(string busqueda = "")
         {
@@ -305,12 +310,10 @@ namespace Manitas.Logic.Services
                 if (!string.IsNullOrEmpty(busqueda))
                     query = query.Where(u => u.nombre_completo.Contains(busqueda) ||
                                              u.correo.Contains(busqueda));
-
                 return query.ToList().Select(u =>
                 {
                     var rol = u.usuario_roles.FirstOrDefault();
                     var perfilCliente = u.perfiles_clientes.FirstOrDefault();
-
                     return new UsuarioDTO
                     {
                         Id = u.id,
@@ -328,7 +331,7 @@ namespace Manitas.Logic.Services
                 }).ToList();
             }
         }
-
+        // Funcionalidad: Obtiene una lista de usuarios con roles internos (administrador, agente operativo, agente de disputas) desde la base de datos, permitiendo filtrar por nombre completo o correo, lo que facilita a los administradores gestionar y revisar la información de los usuarios que tienen acceso a funciones administrativas en la plataforma.
         public List<UsuarioDTO> ObtenerUsuariosSistema(string busqueda)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -340,14 +343,12 @@ namespace Manitas.Logic.Services
                         r.role.nombre == "agente_disputas"
                     )
                 ));
-
                 if (!string.IsNullOrEmpty(busqueda))
                 {
                     string b = busqueda.ToLower();
                     query = query.Where(u => u.nombre_completo.ToLower().Contains(b) ||
                                              u.correo.ToLower().Contains(b));
                 }
-
                 return query.ToList().Select(u => new UsuarioDTO
                 {
                     Id = u.id,
@@ -360,7 +361,7 @@ namespace Manitas.Logic.Services
                 }).ToList();
             }
         }
-
+        // Funcionalidad: Actualiza la contraseña de un usuario específico en la base de datos, aplicando un hash seguro utilizando BCrypt, lo que mejora la seguridad de las cuentas de usuario al almacenar contraseñas de manera segura y protegerlas contra accesos no autorizados.
         public bool ActualizarPassword(Guid usuarioId, string nuevaPassword)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -371,7 +372,7 @@ namespace Manitas.Logic.Services
                 return db.SaveChanges() > 0;
             }
         }
-
+        // Funcionalidad: Actualiza el rol de un usuario específico en la base de datos, permitiendo cambiar su rol a uno nuevo (como "administrador", "agente_operativo" o "agente_disputas"), lo que facilita la gestión de permisos y accesos de los usuarios dentro de la plataforma según sus responsabilidades y funciones asignadas.
         public bool ActualizarRolSistema(Guid usuarioId, string nuevoRolNombre)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -383,7 +384,7 @@ namespace Manitas.Logic.Services
                 return db.SaveChanges() > 0;
             }
         }
-
+        // Funcionalidad: Crea un nuevo usuario con un rol específico en la base de datos, asegurando que el proceso de creación y asignación de rol se realice de manera atómica mediante una transacción, lo que garantiza la integridad de los datos y evita inconsistencias en caso de errores durante la operación.
         public bool CrearUsuarioStaff(usuario nuevoU, string nombreRol)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -421,6 +422,7 @@ namespace Manitas.Logic.Services
             }
 
         }
+        // Funcionalidad: Verifica si un correo electrónico ya existe en la base de datos, lo que ayuda a prevenir la creación de cuentas duplicadas y mejora la experiencia del usuario al proporcionar retroalimentación inmediata sobre la disponibilidad del correo durante el proceso de registro.
         public bool CorreoYaExiste(string correo)
         {
             using (var db = new Manitas_DBPilotoEntities())
@@ -428,20 +430,18 @@ namespace Manitas.Logic.Services
                 return db.usuarios.Any(u => u.correo.ToLower() == correo.ToLower().Trim());
             }
         }
+        // Funcionalidad: Elimina un usuario específico de la base de datos, asegurando que solo los usuarios sin roles administrativos puedan
         public bool EliminarUsuarioInterno(Guid usuarioId)
         {
             using (var db = new Manitas_DBPilotoEntities())
             {
                 var rol = db.usuario_roles.FirstOrDefault(ur => ur.usuario_id == usuarioId);
                 if (rol == null) return false;
-
                 // No permite eliminar administradores
                 if (rol.role.nombre == "administrador") return false;
-
                 db.usuario_roles.Remove(rol);
                 var usuario = db.usuarios.Find(usuarioId);
                 if (usuario != null) db.usuarios.Remove(usuario);
-
                 return db.SaveChanges() > 0;
             }
         }
